@@ -37,7 +37,7 @@ public class GameRunner extends GameApplication {
                 .buildAndAttach(getGameWorld());
 
         Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player, 300-(25/2), 300-(25/2));
+        viewport.bindToEntity(player, (getWidth()/2)-(player.getWidth()/2), (getHeight()/2)-(player.getHeight()/2));
     }
 
     @Override
