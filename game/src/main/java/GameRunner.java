@@ -41,7 +41,8 @@ public class GameRunner extends GameApplication {
     @Override
     protected void initGame() {
 
-        Rectangle bg0 = new Rectangle(getWidth() * 1000, getHeight() * 1000, Color.color(0.2, 0.2, 0.2, 1));
+        Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500, getWidth() * 1000, getHeight() * 1000);
+        bg0.setFill(Color.color(0.2, 0.2, 0.2, 1));
         bg0.setBlendMode(BlendMode.DARKEN);
 
         EntityView bg = new EntityView();
