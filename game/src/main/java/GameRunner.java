@@ -3,12 +3,21 @@ package game;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.view.EntityView;
+import com.almasb.fxgl.entity.RenderLayer;
+import com.almasb.fxgl.entity.component.IrremovableComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.scene.Viewport;
+import javafx.geometry.Point2D;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import java.util.Map;
@@ -31,6 +40,20 @@ public class GameRunner extends GameApplication {
 
     @Override
     protected void initGame() {
+
+        Rectangle bg0 = new Rectangle(getWidth() * 1000, getHeight() * 1000, Color.color(0.2, 0.2, 0.2, 1));
+        bg0.setBlendMode(BlendMode.DARKEN);
+
+        EntityView bg = new EntityView();
+        bg.addNode(bg0);
+
+        // we add IrremovableComponent because regardless of the level
+        // the background and screen bounds stay in the game world
+        Entities.builder()
+                .viewFromNode(bg)
+                .with(new IrremovableComponent())
+                .buildAndAttach(getGameWorld());
+
         player = Entities.builder()
                 .at(300, 300)
                 .viewFromNode(new Rectangle(25, 25, Color.BLUE))
