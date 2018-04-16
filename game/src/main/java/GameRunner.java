@@ -117,6 +117,6 @@ public class GameRunner extends GameApplication {
     }
 
     protected void drawBG() {
-
+        // TODO: draw grid lines every ~50 units in a slightly lighter gray to telegraph movement to the player
     }
 }
