@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.settings.GameSettings;
+import com.almasb.fxgl.scene.Viewport;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -34,6 +35,9 @@ public class GameRunner extends GameApplication {
                 .at(300, 300)
                 .viewFromNode(new Rectangle(25, 25, Color.BLUE))
                 .buildAndAttach(getGameWorld());
+
+        Viewport viewport = getGameScene().getViewport();
+        viewport.bindToEntity(player, 300-(25/2), 300-(25/2));
     }
 
     @Override
@@ -86,5 +90,9 @@ public class GameRunner extends GameApplication {
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("pixelsMoved", 0);
+    }
+
+    protected void drawBG() {
+
     }
 }
