@@ -19,6 +19,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import java.util.Map;
 
@@ -47,6 +48,8 @@ public class GameRunner extends GameApplication {
 
         EntityView bg = new EntityView();
         bg.addNode(bg0);
+
+        drawBgGrid(bg, bg0);
 
         // we add IrremovableComponent because regardless of the level
         // the background and screen bounds stay in the game world
@@ -116,7 +119,23 @@ public class GameRunner extends GameApplication {
         vars.put("pixelsMoved", 0);
     }
 
-    protected void drawBG() {
-        // TODO: draw grid lines every ~50 units in a slightly lighter gray to telegraph movement to the player
+    private void drawBgGrid(EntityView bg, Rectangle background) {
+        int gridSize = 50;
+
+        for (double x = background.getX(); x < background.getX() + background.getWidth(); x += gridSize)
+        {
+            Line line = new Line(x, background.getY(), x, background.getY() + background.getHeight());
+            line.setStroke(Color.color(0.3, 0.3, 0.3, 1));
+            line.setStrokeWidth(1);
+            bg.addNode(line);
+        }
+
+        for (double y = background.getY(); y < background.getY() + background.getHeight(); y += gridSize)
+        {
+            Line line = new Line(background.getX(), y, background.getX() + background.getWidth(), y);
+            line.setStroke(Color.color(0.3, 0.3, 0.3, 1));
+            line.setStrokeWidth(1);
+            bg.addNode(line);
+        }
     }
 }
