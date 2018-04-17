@@ -3,6 +3,7 @@ package game;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.entity.view.EntityView;
 import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.component.IrremovableComponent;
@@ -75,7 +76,6 @@ public class GameRunner extends GameApplication {
             @Override
             protected void onAction() {
                 player.translateX(5); // move right 5 pixels
-                getGameState().increment("pixelsMoved", +5);
             }
         }, KeyCode.D);
 
@@ -83,7 +83,6 @@ public class GameRunner extends GameApplication {
             @Override
             protected void onAction() {
                 player.translateX(-5); // move left 5 pixels
-                getGameState().increment("pixelsMoved", +5);
             }
         }, KeyCode.A);
 
@@ -91,7 +90,6 @@ public class GameRunner extends GameApplication {
             @Override
             protected void onAction() {
                 player.translateY(-5); // move up 5 pixels
-                getGameState().increment("pixelsMoved", +5);
             }
         }, KeyCode.W);
 
@@ -99,24 +97,18 @@ public class GameRunner extends GameApplication {
             @Override
             protected void onAction() {
                 player.translateY(5); // move down 5 pixels
-                getGameState().increment("pixelsMoved", +5);
             }
         }, KeyCode.S);
     }
 
     @Override
     protected void initUI() {
-        Text textPixels = new Text();
-        textPixels.setTranslateX(50); // x = 50
-        textPixels.setTranslateY(100); // y = 100
-
-        textPixels.textProperty().bind(getGameState().intProperty("pixelsMoved").asString());
-        getGameScene().addUINode(textPixels); // add to the scene graph
+        
     }
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
-        vars.put("pixelsMoved", 0);
+
     }
 
     private void drawBgGrid(EntityView bg, Rectangle background) {
