@@ -23,6 +23,8 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import main.java.BossControl;
+
 import java.util.Map;
 
 public class GameRunner extends GameApplication {
@@ -71,6 +73,7 @@ public class GameRunner extends GameApplication {
                 .at(-50, -50)
                 .viewFromNode(new Rectangle(100, 100, Color.RED))
                 .with(new HealthComponent(100))
+                .with(new BossControl())
                 .buildAndAttach(getGameWorld());
 
         Viewport viewport = getGameScene().getViewport();
@@ -119,6 +122,17 @@ public class GameRunner extends GameApplication {
         pbarPlayerHealth.currentValueProperty().bind(player.getComponent(HealthComponent.class).valueProperty());
 
         getGameScene().addUINode(pbarPlayerHealth);
+
+        ProgressBar pbarBossHealth = new ProgressBar();
+        pbarBossHealth.setTranslateX(-100);
+        pbarBossHealth.setTranslateY(-100);
+        pbarBossHealth.makeHPBar();
+        pbarBossHealth.currentValueProperty().bind(boss.getComponent(HealthComponent.class).valueProperty());
+
+        Entities.builder()
+                .viewFromNode(pbarBossHealth)
+                .with(new IrremovableComponent())
+                .buildAndAttach(getGameWorld());
     }
 
     @Override
