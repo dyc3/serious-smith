@@ -39,6 +39,7 @@ public class GameRunner extends GameApplication {
     }
 
     private Entity player;
+    private Entity boss;
 
     @Override
     protected void initGame() {
@@ -60,8 +61,15 @@ public class GameRunner extends GameApplication {
                 .buildAndAttach(getGameWorld());
 
         player = Entities.builder()
-                .at(300, 300)
+                .at(-25/2, 300)
                 .viewFromNode(new Rectangle(25, 25, Color.BLUE))
+                .with(new HealthComponent(100))
+                .buildAndAttach(getGameWorld());
+
+        boss = Entities.builder()
+                .at(-50, -50)
+                .viewFromNode(new Rectangle(100, 100, Color.RED))
+                .with(new HealthComponent(100))
                 .buildAndAttach(getGameWorld());
 
         Viewport viewport = getGameScene().getViewport();
@@ -103,7 +111,7 @@ public class GameRunner extends GameApplication {
 
     @Override
     protected void initUI() {
-        
+
     }
 
     @Override
