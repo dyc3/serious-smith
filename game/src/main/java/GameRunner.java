@@ -11,6 +11,7 @@ import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.scene.Viewport;
+import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
@@ -111,7 +112,13 @@ public class GameRunner extends GameApplication {
 
     @Override
     protected void initUI() {
+        ProgressBar pbarPlayerHealth = new ProgressBar();
+        pbarPlayerHealth.setTranslateX(50);
+        pbarPlayerHealth.setTranslateY(100);
+        pbarPlayerHealth.makeHPBar();
+        pbarPlayerHealth.currentValueProperty().bind(player.getComponent(HealthComponent.class).valueProperty());
 
+        getGameScene().addUINode(pbarPlayerHealth);
     }
 
     @Override
