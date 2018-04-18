@@ -24,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.java.BossControl;
+import main.java.ParentFollowerControl;
 
 import java.util.Map;
 
@@ -124,14 +125,14 @@ public class GameRunner extends GameApplication {
         getGameScene().addUINode(pbarPlayerHealth);
 
         ProgressBar pbarBossHealth = new ProgressBar();
-        pbarBossHealth.setTranslateX(-100);
-        pbarBossHealth.setTranslateY(-100);
+        pbarBossHealth.setWidth(120);
         pbarBossHealth.makeHPBar();
         pbarBossHealth.currentValueProperty().bind(boss.getComponent(HealthComponent.class).valueProperty());
 
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
                 .with(new IrremovableComponent())
+                .with(new ParentFollowerControl(boss, -10, -20))
                 .buildAndAttach(getGameWorld());
     }
 
