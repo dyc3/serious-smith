@@ -23,6 +23,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import main.java.PlayerControl;
 import main.java.BossControl;
 import main.java.ParentFollowerControl;
 
@@ -68,6 +69,7 @@ public class GameRunner extends GameApplication {
                 .at(-25/2, 300)
                 .viewFromNode(new Rectangle(25, 25, Color.BLUE))
                 .with(new HealthComponent(100))
+                .with(new PlayerControl(getInput()))
                 .buildAndAttach(getGameWorld());
 
         boss = Entities.builder()
@@ -83,35 +85,7 @@ public class GameRunner extends GameApplication {
 
     @Override
     protected void initInput() {
-        Input input = getInput();
 
-        input.addAction(new UserAction("Move Right") {
-            @Override
-            protected void onAction() {
-                player.translateX(5); // move right 5 pixels
-            }
-        }, KeyCode.D);
-
-        input.addAction(new UserAction("Move Left") {
-            @Override
-            protected void onAction() {
-                player.translateX(-5); // move left 5 pixels
-            }
-        }, KeyCode.A);
-
-        input.addAction(new UserAction("Move Up") {
-            @Override
-            protected void onAction() {
-                player.translateY(-5); // move up 5 pixels
-            }
-        }, KeyCode.W);
-
-        input.addAction(new UserAction("Move Down") {
-            @Override
-            protected void onAction() {
-                player.translateY(5); // move down 5 pixels
-            }
-        }, KeyCode.S);
     }
 
     @Override
