@@ -5,7 +5,8 @@ import javafx.geometry.Point2D;
 
 public class ProjectileControl extends com.almasb.fxgl.entity.control.ProjectileControl
 {
-    final double DEFAULT_CRIT_CHANCE = 0.1;
+    /** Default value of critChance. **/
+    private final double DEFAULT_CRIT_CHANCE = 0.1;
 
     private int baseDamage = 2;
     /** Probability that this projectile is does critical damage. **/
@@ -42,6 +43,11 @@ public class ProjectileControl extends com.almasb.fxgl.entity.control.Projectile
     public int getBaseDamage()
     {
         return baseDamage;
+    }
+
+    public double getCritChance()
+    {
+        return critChance;
     }
 
     public int calcDamage()
