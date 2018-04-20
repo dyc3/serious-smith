@@ -112,7 +112,7 @@ public class GameRunner extends GameApplication {
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
                 .with(new IrremovableComponent())
-                .with(new ParentFollowerControl(boss, -10, -20))
+                .with(new ParentFollowerControl(boss, -60, -70))
                 .buildAndAttach(getGameWorld());
     }
 
