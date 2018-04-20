@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 public class ProjectileControl extends com.almasb.fxgl.entity.control.ProjectileControl
 {
     private int baseDamage = 2;
+    private double critChance = 0.1;
     private Entity target;
 
     public ProjectileControl(Entity target)
@@ -41,7 +42,7 @@ public class ProjectileControl extends com.almasb.fxgl.entity.control.Projectile
 
     public int calcDamage()
     {
-        int mul = Math.random() >= 0.95 ? 2 : 1;
+        int mul = Math.random() <= critChance ? 2 : 1;
         return baseDamage * mul;
     }
 }
