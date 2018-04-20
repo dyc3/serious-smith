@@ -41,6 +41,7 @@ public class ProjectileControl extends com.almasb.fxgl.entity.control.Projectile
 
     public int calcDamage()
     {
-        return baseDamage;
+        int mul = Math.random() >= 0.95 ? 2 : 1;
+        return baseDamage * mul;
     }
 }
