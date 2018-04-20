@@ -60,6 +60,7 @@ public class PlayerControl extends Control
         {
             timeToFire = fireInterval;
             Entities.builder()
+                    .type(EntType.PROJECTILE)
                     .at(entity.getPosition())
                     .viewFromNode(new Circle(-5, -5,5, Color.ORANGE))
                     .with(new ProjectileControl(boss))

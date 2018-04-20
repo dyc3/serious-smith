@@ -24,6 +24,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import main.java.EntType;
 import main.java.PlayerControl;
 import main.java.BossControl;
 import main.java.ParentFollowerControl;
@@ -69,6 +70,7 @@ public class GameRunner extends GameApplication {
         Rectangle rectPlayer = new Rectangle(-12.5, -12.5, 25, 25);
         rectPlayer.setFill(Color.BLUE);
         player = Entities.builder()
+                .type(EntType.PLAYER)
                 .at(0, 300)
                 .viewFromNode(rectPlayer)
                 .with(new HealthComponent(100))
@@ -78,6 +80,7 @@ public class GameRunner extends GameApplication {
         Rectangle rectBoss = new Rectangle(-50, -50, 100, 100);
         rectBoss.setFill(Color.RED);
         boss = Entities.builder()
+                .type(EntType.BOSS)
                 .at(0, 0)
                 .viewFromNode(rectBoss)
                 .with(new HealthComponent(100))
