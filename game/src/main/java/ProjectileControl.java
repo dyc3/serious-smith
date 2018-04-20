@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 
 public class ProjectileControl extends com.almasb.fxgl.entity.control.ProjectileControl
 {
+    private int baseDamage = 2;
     private Entity target;
 
     public ProjectileControl(Entity target)
@@ -26,5 +27,20 @@ public class ProjectileControl extends com.almasb.fxgl.entity.control.Projectile
     {
         Point2D targetPos = target.getCenter();
         return targetPos.subtract(getEntity().getPosition());
+    }
+
+    public void setBaseDamage(int damage)
+    {
+        baseDamage = damage;
+    }
+
+    public int getBaseDamage()
+    {
+        return baseDamage;
+    }
+
+    public int calcDamage()
+    {
+        return baseDamage;
     }
 }

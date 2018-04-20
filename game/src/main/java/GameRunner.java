@@ -26,10 +26,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import main.java.EntType;
-import main.java.PlayerControl;
-import main.java.BossControl;
-import main.java.ParentFollowerControl;
+import main.java.*;
 
 import java.util.Map;
 
@@ -86,7 +83,7 @@ public class GameRunner extends GameApplication {
                 .type(EntType.BOSS)
                 .at(0, 0)
                 .viewFromNodeWithBBox(rectBoss)
-                .with(new HealthComponent(100))
+                .with(new HealthComponent(10000))
                 .with(new BossControl())
                 .with(new IDComponent("boss", 0))
                 .with(new CollidableComponent(true))
@@ -155,7 +152,8 @@ public class GameRunner extends GameApplication {
             @Override
             protected void onCollisionBegin(Entity boss, Entity projectile) {
                 HealthComponent health = boss.getComponent(HealthComponent.class);
-                health.setValue(health.getValue() - 10);
+                ProjectileControl proj = projectile.getControl(ProjectileControl.class);
+                health.setValue(health.getValue() - proj.calcDamage());
                 projectile.removeFromWorld();
             }
         });
