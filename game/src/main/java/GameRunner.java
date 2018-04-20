@@ -3,6 +3,7 @@ package game;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.component.CollidableComponent;
 import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.entity.component.IDComponent;
 import com.almasb.fxgl.entity.view.EntityView;
@@ -10,6 +11,7 @@ import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.component.IrremovableComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.ui.ProgressBar;
@@ -72,9 +74,10 @@ public class GameRunner extends GameApplication {
         player = Entities.builder()
                 .type(EntType.PLAYER)
                 .at(0, 300)
-                .viewFromNode(rectPlayer)
+                .viewFromNodeWithBBox(rectPlayer)
                 .with(new HealthComponent(100))
                 .with(new PlayerControl(getInput()))
+                .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
         Rectangle rectBoss = new Rectangle(-50, -50, 100, 100);
@@ -82,10 +85,11 @@ public class GameRunner extends GameApplication {
         boss = Entities.builder()
                 .type(EntType.BOSS)
                 .at(0, 0)
-                .viewFromNode(rectBoss)
+                .viewFromNodeWithBBox(rectBoss)
                 .with(new HealthComponent(100))
                 .with(new BossControl())
                 .with(new IDComponent("boss", 0))
+                .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
         Viewport viewport = getGameScene().getViewport();
@@ -142,5 +146,18 @@ public class GameRunner extends GameApplication {
             line.setStrokeWidth(1);
             bg.addNode(line);
         }
+    }
+
+    @Override
+    protected void initPhysics()
+    {
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE) {
+            @Override
+            protected void onCollisionBegin(Entity boss, Entity projectile) {
+                HealthComponent health = boss.getComponent(HealthComponent.class);
+                health.setValue(health.getValue() - 10);
+                projectile.removeFromWorld();
+            }
+        });
     }
 }

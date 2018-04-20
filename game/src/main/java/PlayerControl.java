@@ -3,6 +3,7 @@ package main.java;
 import com.almasb.fxgl.entity.Control;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.component.CollidableComponent;
 import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
@@ -62,8 +63,9 @@ public class PlayerControl extends Control
             Entities.builder()
                     .type(EntType.PROJECTILE)
                     .at(entity.getPosition())
-                    .viewFromNode(new Circle(-5, -5,5, Color.ORANGE))
+                    .viewFromNodeWithBBox(new Circle(-5, -5,5, Color.ORANGE))
                     .with(new ProjectileControl(boss))
+                    .with(new CollidableComponent(true))
                     .buildAndAttach(entity.getWorld());
         }
     }
