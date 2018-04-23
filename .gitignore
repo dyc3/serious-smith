@@ -76,3 +76,4 @@ fabric.properties
 
 system/
 *.bundle
+system/fxgl.bundle
