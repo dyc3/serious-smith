@@ -30,17 +30,20 @@ import main.java.*;
 
 import java.util.Map;
 
-public class GameRunner extends GameApplication {
+public class GameRunner extends GameApplication
+{
 
     @Override
-    protected void initSettings(GameSettings settings) {
+    protected void initSettings(GameSettings settings)
+    {
         settings.setWidth(600);
         settings.setHeight(600);
         settings.setTitle("Basic Game App");
         settings.setVersion("0.1");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(args);
     }
 
@@ -94,12 +97,14 @@ public class GameRunner extends GameApplication {
     }
 
     @Override
-    protected void initInput() {
+    protected void initInput()
+    {
 
     }
 
     @Override
-    protected void initUI() {
+    protected void initUI()
+    {
         ProgressBar pbarPlayerHealth = new ProgressBar();
         pbarPlayerHealth.setTranslateX(50);
         pbarPlayerHealth.setTranslateY(100);
@@ -121,11 +126,13 @@ public class GameRunner extends GameApplication {
     }
 
     @Override
-    protected void initGameVars(Map<String, Object> vars) {
+    protected void initGameVars(Map<String, Object> vars)
+    {
 
     }
 
-    private void drawBgGrid(EntityView bg, Rectangle background) {
+    private void drawBgGrid(EntityView bg, Rectangle background)
+    {
         int gridSize = 50;
 
         for (double x = background.getX(); x < background.getX() + background.getWidth(); x += gridSize)
@@ -150,7 +157,8 @@ public class GameRunner extends GameApplication {
     {
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE) {
             @Override
-            protected void onCollisionBegin(Entity boss, Entity projectile) {
+            protected void onCollisionBegin(Entity boss, Entity projectile)
+            {
                 HealthComponent health = boss.getComponent(HealthComponent.class);
                 ProjectileControl proj = projectile.getControl(ProjectileControl.class);
                 health.setValue(health.getValue() - proj.calcDamage());

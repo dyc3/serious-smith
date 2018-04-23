@@ -3,7 +3,8 @@ package main.java;
 import com.almasb.fxgl.entity.Control;
 import com.almasb.fxgl.entity.Entity;
 
-public class BossControl extends Control {
+public class BossControl extends Control
+{
     private double time;
 
     /** The minimum amount of time between attacks in seconds. Actual attack intervals may vary
