@@ -32,6 +32,14 @@ import java.util.Map;
 
 public class GameRunner extends GameApplication
 {
+    private Entity player;
+    private Entity boss;
+
+    /** Program entry **/
+    public static void main(String[] args)
+    {
+        launch(args);
+    }
 
     @Override
     protected void initSettings(GameSettings settings)
@@ -42,17 +50,10 @@ public class GameRunner extends GameApplication
         settings.setVersion("0.1");
     }
 
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
-
-    private Entity player;
-    private Entity boss;
-
+    /** Initialize the game. Sets up background and builds player and boss entities. Binds camera to player. **/
     @Override
-    protected void initGame() {
-
+    protected void initGame()
+    {
         Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500, getWidth() * 1000, getHeight() * 1000);
         bg0.setFill(Color.color(0.2, 0.2, 0.2, 1));
         bg0.setBlendMode(BlendMode.DARKEN);
@@ -102,6 +103,7 @@ public class GameRunner extends GameApplication
 
     }
 
+    /** Initializes UI elements, including health bars hovering over entities in the world. **/
     @Override
     protected void initUI()
     {
@@ -131,6 +133,7 @@ public class GameRunner extends GameApplication
 
     }
 
+    /** Draws grid lines so the player can know that they are moving. **/
     private void drawBgGrid(EntityView bg, Rectangle background)
     {
         int gridSize = 50;
@@ -152,6 +155,8 @@ public class GameRunner extends GameApplication
         }
     }
 
+    /** Initialize physics settings.
+     * Specifies what can collide with what, and what happens when those collisions occur. **/
     @Override
     protected void initPhysics()
     {
