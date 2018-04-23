@@ -15,6 +15,10 @@ import main.java.ProjectileControl;
 
 public class PlayerControl extends Control
 {
+    private final static double DEFAULT_MOVE_SPEED = 200;
+    private final static double DEFAULT_FIRE_INTERVAL = 0.25;
+    private final static double DASH_DISTANCE = 200;
+
     private double speed;
     private Input input;
     private double timeToFire = 0;
@@ -24,9 +28,9 @@ public class PlayerControl extends Control
 
     public PlayerControl(Input input)
     {
-        speed = 200;
+        speed = DEFAULT_MOVE_SPEED;
+        fireInterval = DEFAULT_FIRE_INTERVAL;
         this.input = input;
-        fireInterval = 0.25;
     }
 
     @Override
