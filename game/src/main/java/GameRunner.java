@@ -136,7 +136,9 @@ public class GameRunner extends GameApplication
 
     }
 
-    /** Draws grid lines so the player can know that they are moving. **/
+    /** Draws grid lines so the player can know that they are moving.
+     * @param bg EntityView to add the lines to
+     * @param background Location and dimensions of the background to cover. **/
     private void drawBgGrid(EntityView bg, Rectangle background)
     {
         int gridSize = 50;
