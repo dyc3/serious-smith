@@ -1,6 +1,7 @@
 package main.java;
 
-public enum EntType {
+public enum EntType
+{
     PLAYER,
     PROJECTILE,
     BOSS

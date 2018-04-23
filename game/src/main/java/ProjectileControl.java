@@ -15,7 +15,7 @@ public class ProjectileControl extends com.almasb.fxgl.entity.control.Projectile
 
     public ProjectileControl(Entity target)
     {
-        super(new Point2D(0,0), 100);
+        super(new Point2D(0, 0), 100);
         this.target = target;
         this.critChance = DEFAULT_CRIT_CHANCE;
     }

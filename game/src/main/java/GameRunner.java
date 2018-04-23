@@ -30,27 +30,32 @@ import main.java.*;
 
 import java.util.Map;
 
-public class GameRunner extends GameApplication {
+public class GameRunner extends GameApplication
+{
+    private Entity player;
+    private Entity boss;
+
+    /** Program entry **/
+    public static void main(String[] args)
+    {
+        launch(args);
+    }
 
     @Override
-    protected void initSettings(GameSettings settings) {
+    protected void initSettings(GameSettings settings)
+    {
         settings.setWidth(600);
         settings.setHeight(600);
         settings.setTitle("Basic Game App");
         settings.setVersion("0.1");
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    private Entity player;
-    private Entity boss;
-
+    /** Initialize the game. Sets up background and builds player and boss entities. Binds camera to player. **/
     @Override
-    protected void initGame() {
-
-        Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500, getWidth() * 1000, getHeight() * 1000);
+    protected void initGame()
+    {
+        Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500,
+                getWidth() * 1000, getHeight() * 1000);
         bg0.setFill(Color.color(0.2, 0.2, 0.2, 1));
         bg0.setBlendMode(BlendMode.DARKEN);
 
@@ -90,16 +95,21 @@ public class GameRunner extends GameApplication {
                 .buildAndAttach(getGameWorld());
 
         Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player, (getWidth()/2)-(player.getWidth()/2), (getHeight()/2)-(player.getHeight()/2));
+        viewport.bindToEntity(player,
+                       (getWidth() / 2) - (player.getWidth() / 2),
+                       (getHeight() / 2) - (player.getHeight() / 2));
     }
 
     @Override
-    protected void initInput() {
+    protected void initInput()
+    {
 
     }
 
+    /** Initializes UI elements, including health bars hovering over entities in the world. **/
     @Override
-    protected void initUI() {
+    protected void initUI()
+    {
         ProgressBar pbarPlayerHealth = new ProgressBar();
         pbarPlayerHealth.setTranslateX(50);
         pbarPlayerHealth.setTranslateY(100);
@@ -121,11 +131,16 @@ public class GameRunner extends GameApplication {
     }
 
     @Override
-    protected void initGameVars(Map<String, Object> vars) {
+    protected void initGameVars(Map<String, Object> vars)
+    {
 
     }
 
-    private void drawBgGrid(EntityView bg, Rectangle background) {
+    /** Draws grid lines so the player can know that they are moving.
+     * @param bg EntityView to add the lines to
+     * @param background Location and dimensions of the background to cover. **/
+    private void drawBgGrid(EntityView bg, Rectangle background)
+    {
         int gridSize = 50;
 
         for (double x = background.getX(); x < background.getX() + background.getWidth(); x += gridSize)
@@ -145,12 +160,15 @@ public class GameRunner extends GameApplication {
         }
     }
 
+    /** Initialize physics settings.
+     * Specifies what can collide with what, and what happens when those collisions occur. **/
     @Override
     protected void initPhysics()
     {
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE) {
             @Override
-            protected void onCollisionBegin(Entity boss, Entity projectile) {
+            protected void onCollisionBegin(Entity boss, Entity projectile)
+            {
                 HealthComponent health = boss.getComponent(HealthComponent.class);
                 ProjectileControl proj = projectile.getControl(ProjectileControl.class);
                 health.setValue(health.getValue() - proj.calcDamage());

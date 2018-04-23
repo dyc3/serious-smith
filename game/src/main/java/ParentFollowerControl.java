@@ -3,7 +3,8 @@ package main.java;
 import com.almasb.fxgl.entity.Control;
 import com.almasb.fxgl.entity.Entity;
 
-public class ParentFollowerControl extends Control {
+public class ParentFollowerControl extends Control
+{
     private Entity following;
     private double offsetX;
     private double offsetY;
