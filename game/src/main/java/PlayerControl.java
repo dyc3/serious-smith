@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.component.CollidableComponent;
 import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -41,22 +42,23 @@ public class PlayerControl extends Control
             boss = getEntity().getWorld().getEntityByID("boss", 0).get();
         }
 
+        double moveDistance = speed * tpf;
         if (input.isHeld(KeyCode.W))
         {
-            entity.translateY(-speed * tpf);
+            entity.translateY(-moveDistance);
         }
         else if (input.isHeld(KeyCode.S))
         {
-            entity.translateY(speed * tpf);
+            entity.translateY(moveDistance);
         }
 
         if (input.isHeld(KeyCode.A))
         {
-            entity.translateX(-speed * tpf);
+            entity.translateX(-moveDistance);
         }
         else if (input.isHeld(KeyCode.D))
         {
-            entity.translateX(speed * tpf);
+            entity.translateX(moveDistance);
         }
 
         // projectile firing
