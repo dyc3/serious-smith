@@ -18,6 +18,12 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
         this.critChance = DEFAULT_CRIT_CHANCE;
     }
 
+    public BaseProjectileControl(Point2D direction, int speed, double critChance)
+    {
+        super(direction, speed);
+        this.critChance = critChance;
+    }
+
     @Override
     public void onUpdate(Entity entity, double tpf)
     {
