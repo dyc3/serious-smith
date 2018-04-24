@@ -71,7 +71,7 @@ public class GameRunner extends GameApplication
                 .with(new IrremovableComponent())
                 .buildAndAttach(getGameWorld());
 
-        Rectangle rectPlayer = new Rectangle(-12.5, -12.5, 25, 25);
+        Rectangle rectPlayer = new Rectangle(0, 0, 25, 25);
         rectPlayer.setFill(Color.BLUE);
         player = Entities.builder()
                 .type(EntType.PLAYER)
@@ -82,7 +82,7 @@ public class GameRunner extends GameApplication
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
-        Rectangle rectBoss = new Rectangle(-50, -50, 100, 100);
+        Rectangle rectBoss = new Rectangle(0, 0, 100, 100);
         rectBoss.setFill(Color.RED);
         boss = Entities.builder()
                 .type(EntType.BOSS)
@@ -126,7 +126,7 @@ public class GameRunner extends GameApplication
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
                 .with(new IrremovableComponent())
-                .with(new ParentFollowerControl(boss, -60, -70))
+                .with(new ParentFollowerControl(boss, -10, -20))
                 .buildAndAttach(getGameWorld());
     }
 

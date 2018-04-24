@@ -116,7 +116,7 @@ public class PlayerControl extends Control
             Entities.builder()
                     .type(EntType.PROJECTILE)
                     .at(entity.getPosition())
-                    .viewFromNodeWithBBox(new Circle(-5, -5, 5, Color.ORANGE))
+                    .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
                     .with(new ProjectileControl(boss))
                     .with(new CollidableComponent(true))
                     .buildAndAttach(entity.getWorld());
