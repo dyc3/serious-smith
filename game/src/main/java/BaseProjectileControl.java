@@ -8,7 +8,7 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
     /** Default value of critChance. **/
     private final static double DEFAULT_CRIT_CHANCE = 0.1;
 
-    private int baseDamage = 2;
+    private int baseDamage = 4;
     /** Probability that this projectile is does critical damage. **/
     private double critChance;
 
