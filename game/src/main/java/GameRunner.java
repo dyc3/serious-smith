@@ -1,4 +1,4 @@
-package game;
+package main.java;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
@@ -6,27 +6,16 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.CollidableComponent;
 import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.entity.component.IDComponent;
-import com.almasb.fxgl.entity.view.EntityView;
-import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.component.IrremovableComponent;
-import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.entity.view.EntityView;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.scene.Viewport;
+import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
-import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import main.java.*;
+import javafx.scene.shape.Rectangle;
 
 import java.util.Map;
 

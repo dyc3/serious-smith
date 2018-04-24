@@ -4,15 +4,11 @@ import com.almasb.fxgl.entity.Control;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.CollidableComponent;
-import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.input.UserAction;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import main.java.PlayerProjectileControl;
 
 public class PlayerControl extends Control
 {
