@@ -170,7 +170,7 @@ public class GameRunner extends GameApplication
             protected void onCollisionBegin(Entity boss, Entity projectile)
             {
                 HealthComponent health = boss.getComponent(HealthComponent.class);
-                ProjectileControl proj = projectile.getControl(ProjectileControl.class);
+                BaseProjectileControl proj = projectile.getControl(PlayerProjectileControl.class);
                 health.setValue(health.getValue() - proj.calcDamage());
                 projectile.removeFromWorld();
             }

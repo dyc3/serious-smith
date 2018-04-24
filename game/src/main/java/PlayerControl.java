@@ -12,7 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import main.java.ProjectileControl;
+import main.java.PlayerProjectileControl;
 
 public class PlayerControl extends Control
 {
@@ -117,7 +117,7 @@ public class PlayerControl extends Control
                     .type(EntType.PROJECTILE)
                     .at(entity.getPosition())
                     .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
-                    .with(new ProjectileControl(boss))
+                    .with(new PlayerProjectileControl(boss))
                     .with(new CollidableComponent(true))
                     .buildAndAttach(entity.getWorld());
         }
