@@ -4,5 +4,6 @@ public enum EntType
 {
     PLAYER,
     PROJECTILE,
-    BOSS
+    BOSS,
+    BOSS_PROJECTILE
 }
