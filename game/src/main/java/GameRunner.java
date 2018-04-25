@@ -1,4 +1,4 @@
-package game;
+package main.java;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
@@ -6,27 +6,16 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.CollidableComponent;
 import com.almasb.fxgl.entity.component.HealthComponent;
 import com.almasb.fxgl.entity.component.IDComponent;
-import com.almasb.fxgl.entity.view.EntityView;
-import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.component.IrremovableComponent;
-import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.entity.view.EntityView;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.scene.Viewport;
+import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
-import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import main.java.*;
+import javafx.scene.shape.Rectangle;
 
 import java.util.Map;
 
@@ -165,15 +154,28 @@ public class GameRunner extends GameApplication
     @Override
     protected void initPhysics()
     {
-        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE) {
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE)
+		{
             @Override
             protected void onCollisionBegin(Entity boss, Entity projectile)
             {
                 HealthComponent health = boss.getComponent(HealthComponent.class);
-                ProjectileControl proj = projectile.getControl(ProjectileControl.class);
+                BaseProjectileControl proj = projectile.getControl(PlayerProjectileControl.class);
                 health.setValue(health.getValue() - proj.calcDamage());
                 projectile.removeFromWorld();
             }
         });
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_PROJECTILE)
+		{
+			@Override
+			protected void onCollisionBegin(Entity player, Entity projectile)
+			{
+				HealthComponent health = player.getComponent(HealthComponent.class);
+				BaseProjectileControl proj = projectile.getControl(BaseProjectileControl.class);
+				health.setValue(health.getValue() - proj.calcDamage());
+				projectile.removeFromWorld();
+			}
+		});
     }
 }
