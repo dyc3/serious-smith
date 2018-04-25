@@ -11,7 +11,10 @@ import javafx.scene.shape.Circle;
 /** Controls the boss. **/
 public class BossControl extends Control
 {
+	/** Speed of star attack projectiles. **/
 	private static final int STAR_ATTACK_PROJECTILE_SPEED = 200;
+	/** Size of star attack projectiles. **/
+	private static final int STAR_ATTACK_PROJECTILE_SIZE = 5;
 
     private double time;
 
@@ -65,8 +68,10 @@ public class BossControl extends Control
 				Entities.builder()
 						.type(EntType.BOSS_PROJECTILE)
 						.at(getEntity().getCenter())
-						.viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
-						.with(new BaseProjectileControl(new Point2D(x, y), STAR_ATTACK_PROJECTILE_SPEED))
+						.viewFromNodeWithBBox(new Circle(0, 0,
+								STAR_ATTACK_PROJECTILE_SIZE, Color.ORANGE))
+						.with(new BaseProjectileControl(new Point2D(x, y),
+								STAR_ATTACK_PROJECTILE_SPEED))
 						.with(new CollidableComponent(true))
 						.buildAndAttach(getEntity().getWorld());
 			}

@@ -6,8 +6,10 @@ import javafx.geometry.Point2D;
 /** A projectile control that homes in on it's target. **/
 public class PlayerProjectileControl extends BaseProjectileControl
 {
+	/** Speed of the player's projectiles. **/
     private static final int PLAYER_PROJECTILE_SPEED = 1000;
 
+    /** The entity that the projectile will move toward. **/
     private Entity target;
 
     /** A projectile control that homes in on it's target.

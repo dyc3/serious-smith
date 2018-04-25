@@ -11,11 +11,12 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
 	/** Default value of critChance. **/
 	private static final double DEFAULT_CRIT_CHANCE = 0.1;
 
+	/** The base damage the projectile will deal on collision. **/
     private int baseDamage;
     /** Probability that this projectile does critical damage. **/
     private double critChance;
 
-	/** Creates a new instance of BaseProjectileControl
+	/** Creates a new instance of BaseProjectileControl.
 	 * @param direction The direction to move the projectile.
 	 * @param speed How many units to move the projectile every second. **/
 	public BaseProjectileControl(Point2D direction, int speed)
@@ -25,7 +26,7 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
         this.critChance = DEFAULT_CRIT_CHANCE;
     }
 
-	/** Creates a new instance of BaseProjectileControl
+	/** Creates a new instance of BaseProjectileControl.
 	 * @param direction The direction to move the projectile.
 	 * @param speed How many units to move the projectile every second.
 	 * @param critChance A probability of getting a critical hit. **/
