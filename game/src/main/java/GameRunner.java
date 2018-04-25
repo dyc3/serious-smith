@@ -154,7 +154,8 @@ public class GameRunner extends GameApplication
     @Override
     protected void initPhysics()
     {
-        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE) {
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.BOSS, EntType.PROJECTILE)
+		{
             @Override
             protected void onCollisionBegin(Entity boss, Entity projectile)
             {
@@ -164,5 +165,17 @@ public class GameRunner extends GameApplication
                 projectile.removeFromWorld();
             }
         });
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_PROJECTILE)
+		{
+			@Override
+			protected void onCollisionBegin(Entity player, Entity projectile)
+			{
+				HealthComponent health = player.getComponent(HealthComponent.class);
+				BaseProjectileControl proj = projectile.getControl(BaseProjectileControl.class);
+				health.setValue(health.getValue() - proj.calcDamage());
+				projectile.removeFromWorld();
+			}
+		});
     }
 }
