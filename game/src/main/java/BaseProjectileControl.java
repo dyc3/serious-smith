@@ -36,6 +36,9 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
         this.critChance = critChance;
     }
 
+	/** Update the projectile every tick.
+	 * @param entity The projectile entity.
+	 * @param tpf Time per frame. **/
     @Override
     public void onUpdate(Entity entity, double tpf)
     {

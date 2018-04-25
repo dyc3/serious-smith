@@ -29,6 +29,9 @@ public class PlayerProjectileControl extends BaseProjectileControl
         this.target = target;
     }
 
+    /** Update the projectile every tick.
+	 * @param entity The projectile entity.
+	 * @param tpf Time per frame. **/
     @Override
     public void onUpdate(Entity entity, double tpf)
     {
@@ -38,6 +41,8 @@ public class PlayerProjectileControl extends BaseProjectileControl
         this.setSpeed(PLAYER_PROJECTILE_SPEED);
     }
 
+	/** Calculate the direction the projectile will go in every tick.
+	 * @return The direction the projectile will go in relative to itself. **/
     @Override
     public Point2D calcVector()
     {
