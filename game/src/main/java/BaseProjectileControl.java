@@ -61,7 +61,8 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
         baseDamage = damage;
     }
 
-    /** Gets the base damage that this projectile does on collision. **/
+    /** Gets the base damage that this projectile does on collision.
+	 * @return Base damage. **/
     public int getBaseDamage()
     {
         return baseDamage;
