@@ -3,21 +3,32 @@ package main.java;
 import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 
+/** Base projectile class, from which all other projectiles should be extended from. **/
 public class BaseProjectileControl extends com.almasb.fxgl.entity.control.ProjectileControl
 {
-    /** Default value of critChance. **/
-    private final static double DEFAULT_CRIT_CHANCE = 0.1;
+    /** Default value of baseDamage. **/
+    private static final int DEFAULT_BASE_DAMAGE = 4;
+	/** Default value of critChance. **/
+	private static final double DEFAULT_CRIT_CHANCE = 0.1;
 
-    private int baseDamage = 4;
+    private int baseDamage;
     /** Probability that this projectile does critical damage. **/
     private double critChance;
 
-    public BaseProjectileControl(Point2D direction, int speed)
+	/** Creates a new instance of BaseProjectileControl
+	 * @param direction The direction to move the projectile.
+	 * @param speed How many units to move the projectile every second. **/
+	public BaseProjectileControl(Point2D direction, int speed)
     {
         super(direction, speed);
+        this.baseDamage = DEFAULT_BASE_DAMAGE;
         this.critChance = DEFAULT_CRIT_CHANCE;
     }
 
+	/** Creates a new instance of BaseProjectileControl
+	 * @param direction The direction to move the projectile.
+	 * @param speed How many units to move the projectile every second.
+	 * @param critChance A probability of getting a critical hit. **/
     public BaseProjectileControl(Point2D direction, int speed, double critChance)
     {
         super(direction, speed);
@@ -32,7 +43,8 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
         this.setDirection(calcVector());
     }
 
-    /** Calculate the direction the projectile will go in every tick. **/
+    /** Calculate the direction the projectile will go in every tick.
+	 * @return The direction the projectile will go in relative to itself. **/
     public Point2D calcVector()
     {
         return this.getDirection();
@@ -58,13 +70,15 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
         critChance = chance;
     }
 
-    /** Gets the chance that this projectile does critical damage on collision. **/
+    /** Gets the chance that this projectile does critical damage on collision.
+	 * @return Probability of critical hit. **/
     public double getCritChance()
     {
         return critChance;
     }
 
-    /** Calculate the damage this projectile will do on collision. **/
+    /** Calculate the damage this projectile will do on collision.
+	 * @return Amount of damage to deal. **/
     public int calcDamage()
     {
         int mul = Math.random() <= getCritChance() ? 2 : 1;

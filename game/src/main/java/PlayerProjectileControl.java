@@ -6,13 +6,15 @@ import javafx.geometry.Point2D;
 /** A projectile control that homes in on it's target. **/
 public class PlayerProjectileControl extends BaseProjectileControl
 {
+    private static final int PLAYER_PROJECTILE_SPEED = 1000;
+
     private Entity target;
 
     /** A projectile control that homes in on it's target.
      * @param target The entity to target. **/
     public PlayerProjectileControl(Entity target)
     {
-        super(new Point2D(0, 0), 1000);
+        super(new Point2D(0, 0), PLAYER_PROJECTILE_SPEED);
         this.target = target;
     }
 
@@ -21,7 +23,7 @@ public class PlayerProjectileControl extends BaseProjectileControl
      * @param critChance Probability that this projectile does critical damage. **/
     public PlayerProjectileControl(Entity target, double critChance)
     {
-        super(new Point2D(0, 0), 1000, critChance);
+        super(new Point2D(0, 0), PLAYER_PROJECTILE_SPEED, critChance);
         this.target = target;
     }
 
@@ -31,7 +33,7 @@ public class PlayerProjectileControl extends BaseProjectileControl
         super.onUpdate(entity, tpf);
 
         this.setDirection(calcVector());
-        this.setSpeed(1000);
+        this.setSpeed(PLAYER_PROJECTILE_SPEED);
     }
 
     @Override

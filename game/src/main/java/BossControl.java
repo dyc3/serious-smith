@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/** Controls the boss. **/
 public class BossControl extends Control
 {
 	private static final int STAR_ATTACK_PROJECTILE_SPEED = 200;
@@ -49,6 +50,7 @@ public class BossControl extends Control
         }
     }
 
+    /** Fires 8 dumb projectiles around the boss. **/
     public void attackStar()
 	{
 		for (int y = -1; y <= 1; y++)
