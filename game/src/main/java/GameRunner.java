@@ -3,10 +3,10 @@ package main.java;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.component.CollidableComponent;
-import com.almasb.fxgl.entity.component.HealthComponent;
-import com.almasb.fxgl.entity.component.IDComponent;
-import com.almasb.fxgl.entity.component.IrremovableComponent;
+import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.extra.entity.components.HealthComponent;
+import com.almasb.fxgl.entity.components.IDComponent;
+import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.entity.view.EntityView;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.scene.Viewport;
@@ -43,6 +43,10 @@ public class GameRunner extends GameApplication
     @Override
     protected void initGame()
     {
+        // set up factories
+		getGameWorld().addEntityFactory(new ProjectileFactory());
+
+		// set up background
         Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500,
                 getWidth() * 1000, getHeight() * 1000);
         bg0.setFill(Color.color(0.2, 0.2, 0.2, 1));
@@ -67,7 +71,7 @@ public class GameRunner extends GameApplication
                 .at(0, 300)
                 .viewFromNodeWithBBox(rectPlayer)
                 .with(new HealthComponent(100))
-                .with(new PlayerControl(getInput()))
+                .with(new PlayerComponent(getInput()))
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
@@ -78,7 +82,7 @@ public class GameRunner extends GameApplication
                 .at(0, 0)
                 .viewFromNodeWithBBox(rectBoss)
                 .with(new HealthComponent(10000))
-                .with(new BossControl())
+                .with(new BossComponent())
                 .with(new IDComponent("boss", 0))
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
@@ -115,7 +119,7 @@ public class GameRunner extends GameApplication
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
                 .with(new IrremovableComponent())
-                .with(new ParentFollowerControl(boss, -10, -20))
+                .with(new ParentFollowerComponent(boss, -10, -20))
                 .buildAndAttach(getGameWorld());
     }
 
@@ -160,7 +164,7 @@ public class GameRunner extends GameApplication
             protected void onCollisionBegin(Entity boss, Entity projectile)
             {
                 HealthComponent health = boss.getComponent(HealthComponent.class);
-                BaseProjectileControl proj = projectile.getControl(PlayerProjectileControl.class);
+                BaseProjectileComponent proj = projectile.getComponent(PlayerProjectileComponent.class);
                 health.setValue(health.getValue() - proj.calcDamage());
                 projectile.removeFromWorld();
             }
@@ -172,7 +176,7 @@ public class GameRunner extends GameApplication
 			protected void onCollisionBegin(Entity player, Entity projectile)
 			{
 				HealthComponent health = player.getComponent(HealthComponent.class);
-				BaseProjectileControl proj = projectile.getControl(BaseProjectileControl.class);
+				BaseProjectileComponent proj = projectile.getComponent(BaseProjectileComponent.class);
 				health.setValue(health.getValue() - proj.calcDamage());
 				projectile.removeFromWorld();
 			}

@@ -1,16 +1,12 @@
 package main.java;
 
-import com.almasb.fxgl.entity.Entities;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.component.CollidableComponent;
-import javafx.geometry.Point2D;
+import com.almasb.fxgl.entity.*;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /** Should be used to spawn projectiles. **/
-public class ProjectileFactory
+public class ProjectileFactory implements EntityFactory
 {
 	/** Size of the player's projectiles. **/
 	private static final int PLAYER_PROJECTILE_SIZE = 5;
@@ -26,7 +22,7 @@ public class ProjectileFactory
 					.from(data)
 					.type(EntType.PROJECTILE)
 					.viewFromNodeWithBBox(new Circle(0, 0, PLAYER_PROJECTILE_SIZE, Color.ORANGE))
-					.with(new PlayerProjectileControl(data.get("target")))
+					.with(new PlayerProjectileComponent(data.get("target")))
 					.with(new CollidableComponent(true))
 					.build();
 	}
@@ -44,7 +40,7 @@ public class ProjectileFactory
 				.from(data)
 				.type(EntType.BOSS_PROJECTILE)
 				.viewFromNodeWithBBox(new Circle(0, 0, data.get("size"), Color.ORANGE))
-				.with(new BaseProjectileControl(data.get("direction"), data.get("speed")))
+				.with(new BaseProjectileComponent(data.get("direction"), data.get("speed")))
 				.with(new CollidableComponent(true))
 				.build();
 	}

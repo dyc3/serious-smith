@@ -4,7 +4,7 @@ import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 
 /** A projectile control that homes in on it's target. **/
-public class PlayerProjectileControl extends BaseProjectileControl
+public class PlayerProjectileComponent extends BaseProjectileComponent
 {
 	/** Speed of the player's projectiles. **/
     private static final int PLAYER_PROJECTILE_SPEED = 1000;
@@ -14,7 +14,7 @@ public class PlayerProjectileControl extends BaseProjectileControl
 
     /** A projectile control that homes in on it's target.
      * @param target The entity to target. **/
-    public PlayerProjectileControl(Entity target)
+    public PlayerProjectileComponent(Entity target)
     {
         super(new Point2D(0, 0), PLAYER_PROJECTILE_SPEED);
         this.target = target;
@@ -23,19 +23,18 @@ public class PlayerProjectileControl extends BaseProjectileControl
     /** A projectile control that homes in on it's target.
      * @param target The entity to target.
      * @param critChance Probability that this projectile does critical damage. **/
-    public PlayerProjectileControl(Entity target, double critChance)
+    public PlayerProjectileComponent(Entity target, double critChance)
     {
         super(new Point2D(0, 0), PLAYER_PROJECTILE_SPEED, critChance);
         this.target = target;
     }
 
     /** Update the projectile every tick.
-	 * @param entity The projectile entity.
 	 * @param tpf Time per frame. **/
     @Override
-    public void onUpdate(Entity entity, double tpf)
+    public void onUpdate(double tpf)
     {
-        super.onUpdate(entity, tpf);
+        super.onUpdate(tpf);
 
         this.setDirection(calcVector());
         this.setSpeed(PLAYER_PROJECTILE_SPEED);

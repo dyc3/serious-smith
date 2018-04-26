@@ -1,10 +1,11 @@
 package main.java;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.extra.entity.components.ProjectileComponent;
 import javafx.geometry.Point2D;
 
 /** Base projectile class, from which all other projectiles should be extended from. **/
-public class BaseProjectileControl extends com.almasb.fxgl.entity.control.ProjectileControl
+public class BaseProjectileComponent extends ProjectileComponent
 {
     /** Default value of baseDamage. **/
     private static final int DEFAULT_BASE_DAMAGE = 4;
@@ -16,33 +17,32 @@ public class BaseProjectileControl extends com.almasb.fxgl.entity.control.Projec
     /** Probability that this projectile does critical damage. **/
     private double critChance;
 
-	/** Creates a new instance of BaseProjectileControl.
+	/** Creates a new instance of BaseProjectileComponent.
 	 * @param direction The direction to move the projectile.
 	 * @param speed How many units to move the projectile every second. **/
-	public BaseProjectileControl(Point2D direction, int speed)
+	public BaseProjectileComponent(Point2D direction, int speed)
     {
         super(direction, speed);
         this.baseDamage = DEFAULT_BASE_DAMAGE;
         this.critChance = DEFAULT_CRIT_CHANCE;
     }
 
-	/** Creates a new instance of BaseProjectileControl.
+	/** Creates a new instance of BaseProjectileComponent.
 	 * @param direction The direction to move the projectile.
 	 * @param speed How many units to move the projectile every second.
 	 * @param critChance A probability of getting a critical hit. **/
-    public BaseProjectileControl(Point2D direction, int speed, double critChance)
+    public BaseProjectileComponent(Point2D direction, int speed, double critChance)
     {
         super(direction, speed);
         this.critChance = critChance;
     }
 
 	/** Update the projectile every tick.
-	 * @param entity The projectile entity.
 	 * @param tpf Time per frame. **/
     @Override
-    public void onUpdate(Entity entity, double tpf)
+    public void onUpdate(double tpf)
     {
-        super.onUpdate(entity, tpf);
+        super.onUpdate(tpf);
 
         this.setDirection(calcVector());
     }
