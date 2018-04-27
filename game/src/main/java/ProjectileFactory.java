@@ -15,7 +15,7 @@ public class ProjectileFactory implements EntityFactory
 	 * Specify target using `data.put("target", Entity);`
 	 * @param data Attributes to spawn the projectile with, eg. position.
 	 * @return Projectile entity. **/
-	@Spawns("player projectile")
+	@Spawns("proj_player")
 	public Entity spawnPlayerProjectile(SpawnData data)
 	{
 		return Entities.builder()
@@ -33,13 +33,14 @@ public class ProjectileFactory implements EntityFactory
 	 * Specify speed using `data.put("speed", int);`
 	 * @param data Attributes to spawn the projectile with, eg. position.
 	 * @return Projectile entity. **/
-	@Spawns("dumb projectile")
+	@Spawns("proj_dumb")
 	public Entity spawnDumbProjectile(SpawnData data)
 	{
+		int size = data.get("size");
 		return Entities.builder()
 				.from(data)
 				.type(EntType.BOSS_PROJECTILE)
-				.viewFromNodeWithBBox(new Circle(0, 0, data.get("size"), Color.ORANGE))
+				.viewFromNodeWithBBox(new Circle(0, 0, size, Color.ORANGE))
 				.with(new BaseProjectileComponent(data.get("direction"), data.get("speed")))
 				.with(new CollidableComponent(true))
 				.build();

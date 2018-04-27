@@ -44,7 +44,8 @@ public class GameRunner extends GameApplication
     protected void initGame()
     {
         // set up factories
-		getGameWorld().addEntityFactory(new ProjectileFactory());
+		ProjectileFactory projectileFactory = new ProjectileFactory();
+		getGameWorld().addEntityFactory(projectileFactory);
 
 		// set up background
         Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500,
@@ -82,7 +83,7 @@ public class GameRunner extends GameApplication
                 .at(0, 0)
                 .viewFromNodeWithBBox(rectBoss)
                 .with(new HealthComponent(10000))
-                .with(new BossComponent())
+                .with(new BossComponent(projectileFactory))
                 .with(new IDComponent("boss", 0))
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());

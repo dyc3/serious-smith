@@ -2,6 +2,7 @@ package main.java;
 
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
@@ -23,14 +24,18 @@ public class BossComponent extends Component
     private double baseAttackInterval;
     private double timeUntilAttack;
 
-    public BossComponent()
+    private ProjectileFactory projFactory;
+
+    public BossComponent(ProjectileFactory factory)
     {
+    	this.projFactory = factory;
         this.baseAttackInterval = 2;
         this.timeUntilAttack = baseAttackInterval;
     }
 
-    public BossComponent(double baseAttackInterval)
+    public BossComponent(ProjectileFactory factory, double baseAttackInterval)
     {
+		this.projFactory = factory;
         this.baseAttackInterval = baseAttackInterval;
         this.timeUntilAttack = baseAttackInterval;
     }
@@ -67,15 +72,21 @@ public class BossComponent extends Component
 					continue;
 				}
 
-				Entities.builder()
-						.type(EntType.BOSS_PROJECTILE)
-						.at(getEntity().getCenter())
-						.viewFromNodeWithBBox(new Circle(0, 0,
-								STAR_ATTACK_PROJECTILE_SIZE, Color.ORANGE))
-						.with(new BaseProjectileComponent(new Point2D(x, y),
-								STAR_ATTACK_PROJECTILE_SPEED))
-						.with(new CollidableComponent(true))
-						.buildAndAttach(getEntity().getWorld());
+//				Entities.builder()
+//						.type(EntType.BOSS_PROJECTILE)
+//						.at(getEntity().getCenter())
+//						.viewFromNodeWithBBox(new Circle(0, 0,
+//								STAR_ATTACK_PROJECTILE_SIZE, Color.ORANGE))
+//						.with(new BaseProjectileComponent(new Point2D(x, y),
+//								STAR_ATTACK_PROJECTILE_SPEED))
+//						.with(new CollidableComponent(true))
+//						.buildAndAttach(getEntity().getWorld());
+				SpawnData data = new SpawnData(getEntity().getCenter());
+				data.put("direction", new Point2D(x, y));
+				data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
+				data.put("speed", STAR_ATTACK_PROJECTILE_SPEED);
+//				getEntity().getWorld().spawn("proj_dumb", data);
+				getEntity().getWorld().addEntity(projFactory.spawnDumbProjectile(data));
 			}
 		}
 	}
