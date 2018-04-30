@@ -110,18 +110,8 @@ public class PlayerComponent extends Component
         if (input.isHeld(KeyCode.SPACE) && timeToFire <= 0)
         {
             timeToFire = fireInterval;
-//            Entities.builder()
-//                    .type(EntType.PROJECTILE)
-//                    .at(entity.getPosition())
-//                    .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
-//                    .with(new PlayerProjectileComponent(boss))
-//                    .with(new CollidableComponent(true))
-//                    .buildAndAttach(entity.getWorld());
             SpawnData data = new SpawnData(getEntity().getCenter());
-//            data.put("direction", new Point2D(x, y));
-//            data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
             data.put("target", boss);
-//             getEntity().getWorld().spawn("proj_player", data);
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
     }

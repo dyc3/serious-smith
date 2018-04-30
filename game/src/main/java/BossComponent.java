@@ -67,20 +67,10 @@ public class BossComponent extends Component
 					continue;
 				}
 
-//				Entities.builder()
-//						.type(EntType.BOSS_PROJECTILE)
-//						.at(getEntity().getCenter())
-//						.viewFromNodeWithBBox(new Circle(0, 0,
-//								STAR_ATTACK_PROJECTILE_SIZE, Color.ORANGE))
-//						.with(new BaseProjectileComponent(new Point2D(x, y),
-//								STAR_ATTACK_PROJECTILE_SPEED))
-//						.with(new CollidableComponent(true))
-//						.buildAndAttach(getEntity().getWorld());
 				SpawnData data = new SpawnData(getEntity().getCenter());
 				data.put("direction", new Point2D(x, y));
 				data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
 				data.put("speed", STAR_ATTACK_PROJECTILE_SPEED);
-//				getEntity().getWorld().spawn("proj_dumb", data);
 				getEntity().getWorld().addEntity(projFactory.spawnDumbProjectile(data));
 			}
 		}
