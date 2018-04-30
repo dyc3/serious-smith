@@ -21,6 +21,9 @@ import java.util.Map;
 
 public class GameRunner extends GameApplication
 {
+	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
+	private static final int BOSS_HEALTH_BAR_OFFSET_Y = -20;
+
     private Entity player;
     private Entity boss;
 
@@ -120,7 +123,7 @@ public class GameRunner extends GameApplication
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
                 .with(new IrremovableComponent())
-                .with(new ParentFollowerComponent(boss, -10, -20))
+                .with(new ParentFollowerComponent(boss, BOSS_HEALTH_BAR_OFFSET_X, BOSS_HEALTH_BAR_OFFSET_Y))
                 .buildAndAttach(getGameWorld());
     }
 
