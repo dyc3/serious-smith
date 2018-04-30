@@ -72,7 +72,7 @@ public class GameRunner extends GameApplication
                 .at(0, 300)
                 .viewFromNodeWithBBox(rectPlayer)
                 .with(new HealthComponent(100))
-                .with(new PlayerComponent(getInput()))
+                .with(new PlayerComponent(getInput(), projectileFactory))
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 

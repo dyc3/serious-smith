@@ -2,6 +2,7 @@ package main.java;
 
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.Input;
@@ -25,7 +26,8 @@ public class PlayerComponent extends Component
 
     private double speed;
     private Input input;
-    private double timeToFire = 0;
+	private ProjectileFactory projFactory;
+	private double timeToFire = 0;
     private double fireInterval; // seconds between firing projectiles
 
     private Entity boss;
@@ -34,11 +36,12 @@ public class PlayerComponent extends Component
     private Point2D dashTarget;
     private double dashCooldown = 0;
 
-    public PlayerComponent(Input input)
+    public PlayerComponent(Input input, ProjectileFactory factory)
     {
         speed = DEFAULT_MOVE_SPEED;
         fireInterval = DEFAULT_FIRE_INTERVAL;
         this.input = input;
+		this.projFactory = factory;
     }
 
     private Point2D getMoveDirection()
@@ -111,13 +114,19 @@ public class PlayerComponent extends Component
         if (input.isHeld(KeyCode.SPACE) && timeToFire <= 0)
         {
             timeToFire = fireInterval;
-            Entities.builder()
-                    .type(EntType.PROJECTILE)
-                    .at(entity.getPosition())
-                    .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
-                    .with(new PlayerProjectileComponent(boss))
-                    .with(new CollidableComponent(true))
-                    .buildAndAttach(entity.getWorld());
+//            Entities.builder()
+//                    .type(EntType.PROJECTILE)
+//                    .at(entity.getPosition())
+//                    .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
+//                    .with(new PlayerProjectileComponent(boss))
+//                    .with(new CollidableComponent(true))
+//                    .buildAndAttach(entity.getWorld());
+            SpawnData data = new SpawnData(getEntity().getCenter());
+//            data.put("direction", new Point2D(x, y));
+//            data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
+            data.put("target", boss);
+//             getEntity().getWorld().spawn("proj_player", data);
+            getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
     }
 }
