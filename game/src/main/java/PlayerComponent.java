@@ -10,15 +10,17 @@ import javafx.scene.input.KeyCode;
 public class PlayerComponent extends Component
 {
     /** Movement speed. **/
-    private final static double DEFAULT_MOVE_SPEED = 200;
+    private static final double DEFAULT_MOVE_SPEED = 200;
     /** Time between auto fire in seconds. **/
-    private final static double DEFAULT_FIRE_INTERVAL = 0.25;
+    private static final double DEFAULT_FIRE_INTERVAL = 0.25;
     /** Distance to travel while dashing. **/
-    private final static double DASH_DISTANCE = 200;
+    private static final double DASH_DISTANCE = 200;
     /** Speed while dashing. **/
-    private final static double DASH_SPEED = 1200;
+    private static final double DASH_SPEED = 1200;
     /** Minimum time between dashes in seconds. **/
-    private final static double DASH_COOLDOWN = 1;
+    private static final double DASH_COOLDOWN = 1;
+    /** Multiply the fire rate by this number while dashing. **/
+    private static final double DASH_FIRE_INTERVAL_MULTIPLIER = 0.1;
 
     private double speed;
     private Input input;
@@ -80,6 +82,9 @@ public class PlayerComponent extends Component
             double dashX = entity.getPosition().getX() + move.getX();
             double dashY = entity.getPosition().getY() + move.getY();
             dashTarget = new Point2D(dashX, dashY);
+
+			// reset time to fire so that the increased fire rate when dashing is consistent
+            timeToFire = 0;
         }
 
         if (dashing)
@@ -110,6 +115,10 @@ public class PlayerComponent extends Component
         if (input.isHeld(KeyCode.SPACE) && timeToFire <= 0)
         {
             timeToFire = fireInterval;
+            if (dashing)
+			{
+				timeToFire *= DASH_FIRE_INTERVAL_MULTIPLIER;
+			}
             SpawnData data = new SpawnData(getEntity().getCenter());
             data.put("target", boss);
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
