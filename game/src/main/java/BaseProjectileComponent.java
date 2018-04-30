@@ -1,6 +1,5 @@
 package main.java;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.extra.entity.components.ProjectileComponent;
 import javafx.geometry.Point2D;
 

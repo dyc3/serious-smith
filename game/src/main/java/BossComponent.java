@@ -1,13 +1,8 @@
 package main.java;
 
-import com.almasb.fxgl.entity.Entities;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 /** Controls the boss. **/
 public class BossComponent extends Component
