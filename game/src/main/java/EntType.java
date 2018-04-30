@@ -1,5 +1,6 @@
 package main.java;
 
+/** All types of entities in the game. **/
 public enum EntType
 {
     /** Indicates the entity is the player. **/
