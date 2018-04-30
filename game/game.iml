@@ -7,6 +7,6 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="fxgl-0.4.3-uber" level="project" />
+    <orderEntry type="library" exported="" name="fxgl-0.5.0-uber" level="project" />
   </component>
 </module>

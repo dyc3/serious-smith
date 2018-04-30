@@ -1,16 +1,13 @@
 package main.java;
 
-import com.almasb.fxgl.entity.Control;
-import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.component.CollidableComponent;
+import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.input.Input;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
-public class PlayerControl extends Control
+public class PlayerComponent extends Component
 {
     /** Movement speed. **/
     private final static double DEFAULT_MOVE_SPEED = 200;
@@ -25,7 +22,8 @@ public class PlayerControl extends Control
 
     private double speed;
     private Input input;
-    private double timeToFire = 0;
+	private ProjectileFactory projFactory;
+	private double timeToFire = 0;
     private double fireInterval; // seconds between firing projectiles
 
     private Entity boss;
@@ -34,11 +32,12 @@ public class PlayerControl extends Control
     private Point2D dashTarget;
     private double dashCooldown = 0;
 
-    public PlayerControl(Input input)
+    public PlayerComponent(Input input, ProjectileFactory factory)
     {
         speed = DEFAULT_MOVE_SPEED;
         fireInterval = DEFAULT_FIRE_INTERVAL;
         this.input = input;
+		this.projFactory = factory;
     }
 
     private Point2D getMoveDirection()
@@ -64,8 +63,10 @@ public class PlayerControl extends Control
         return new Point2D(x, y);
     }
 
+    /** Update every tick.
+     * @param tpf Time per frame. **/
     @Override
-    public void onUpdate(Entity entity, double tpf)
+    public void onUpdate(double tpf)
     {
         if (boss == null)
         {
@@ -109,13 +110,19 @@ public class PlayerControl extends Control
         if (input.isHeld(KeyCode.SPACE) && timeToFire <= 0)
         {
             timeToFire = fireInterval;
-            Entities.builder()
-                    .type(EntType.PROJECTILE)
-                    .at(entity.getPosition())
-                    .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
-                    .with(new PlayerProjectileControl(boss))
-                    .with(new CollidableComponent(true))
-                    .buildAndAttach(entity.getWorld());
+//            Entities.builder()
+//                    .type(EntType.PROJECTILE)
+//                    .at(entity.getPosition())
+//                    .viewFromNodeWithBBox(new Circle(0, 0, 5, Color.ORANGE))
+//                    .with(new PlayerProjectileComponent(boss))
+//                    .with(new CollidableComponent(true))
+//                    .buildAndAttach(entity.getWorld());
+            SpawnData data = new SpawnData(getEntity().getCenter());
+//            data.put("direction", new Point2D(x, y));
+//            data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
+            data.put("target", boss);
+//             getEntity().getWorld().spawn("proj_player", data);
+            getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
     }
 }
