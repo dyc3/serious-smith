@@ -21,7 +21,9 @@ import java.util.Map;
 
 public class GameRunner extends GameApplication
 {
+	/** Boss health bar offset on the x axis. **/
 	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
+	/** Boss health bar offset on the y axis. **/
 	private static final int BOSS_HEALTH_BAR_OFFSET_Y = -20;
 
     private Entity player;
@@ -33,7 +35,8 @@ public class GameRunner extends GameApplication
         launch(args);
     }
 
-    @Override
+	/** Initialize the game window and load settings. **/
+	@Override
     protected void initSettings(GameSettings settings)
     {
         settings.setWidth(600);
