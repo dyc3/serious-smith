@@ -2,6 +2,7 @@ package main.java;
 
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
+import java.util.ArrayList;
 
 /** Misc helper functions. **/
 public final class Utils
@@ -44,5 +45,20 @@ public final class Utils
 	public static Pair<Double, Double> cartesianToPolar(Point2D point)
 	{
 		return cartesianToPolar(point.getX(), point.getY());
+	}
+
+	/** Generate a set of evenly spaced points on a circle.
+	 * @param radius Radius of the circle.
+	 * @param parts Number of points to return.
+	 * @return List of `parts` cartesian coordinates. **/
+	public static ArrayList<Point2D> pointsOnCircle(double radius, int parts)
+	{
+		ArrayList<Point2D> points = new ArrayList<Point2D>();
+		for (int i = 0; i < parts; i++)
+		{
+			double angle = i * (360.0 / parts);
+			points.add(polarToCartesian(radius, angle));
+		}
+		return points;
 	}
 }
