@@ -7,6 +7,8 @@ import java.util.ArrayList;
 /** Misc helper functions. **/
 public final class Utils
 {
+	private static final int FULL_CIRCLE = 360;
+
 	/** This constructor should not be used. **/
 	private Utils()
 	{
@@ -56,7 +58,7 @@ public final class Utils
 		ArrayList<Point2D> points = new ArrayList<Point2D>();
 		for (int i = 0; i < parts; i++)
 		{
-			double angle = i * (360.0 / parts);
+			double angle = i * ((double)FULL_CIRCLE / parts);
 			points.add(polarToCartesian(radius, angle));
 		}
 		return points;
