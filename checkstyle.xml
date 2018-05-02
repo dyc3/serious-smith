@@ -117,7 +117,7 @@
             <property name="allowLineBreaks" value="true"/>
         </module>
         <module name="NoWhitespaceAfter">
-            <property name="tokens" value="DOT"/>
+            <property name="tokens" value="DOT, TYPECAST"/>
             <property name="allowLineBreaks" value="false"/>
         </module>
         <module name="NoWhitespaceBefore"/>
