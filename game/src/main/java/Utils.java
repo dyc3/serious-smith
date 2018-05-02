@@ -7,6 +7,7 @@ import java.util.ArrayList;
 /** Misc helper functions. **/
 public final class Utils
 {
+	/** Number of degrees in a circle. **/
 	private static final int FULL_CIRCLE = 360;
 
 	/** This constructor should not be used. **/
