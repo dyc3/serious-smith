@@ -12,8 +12,6 @@ public class BossComponent extends Component
 	/** Size of star attack projectiles. **/
 	private static final int STAR_ATTACK_PROJECTILE_SIZE = 5;
 
-    private double time;
-
     /** The minimum amount of time between attacks in seconds. Actual attack intervals may vary
      * depending on previous attack performed. **/
     private double baseAttackInterval;
@@ -40,13 +38,9 @@ public class BossComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
-        time += tpf;
-        entity.translateX(Math.sin(time));
-
         if (timeUntilAttack <= 0)
         {
-            // TODO: do attack
-			attackStar();
+            doAttack();
             timeUntilAttack = baseAttackInterval;
         }
         else
@@ -54,6 +48,12 @@ public class BossComponent extends Component
             timeUntilAttack -= tpf;
         }
     }
+
+    /** Determines which attack to perform, then executes it. **/
+    public void doAttack()
+	{
+		attackStar();
+	}
 
     /** Fires 8 dumb projectiles around the boss. **/
     public void attackStar()
