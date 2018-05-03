@@ -14,6 +14,9 @@ public class BossComponent extends Component
 	/** Size of star attack projectiles. **/
 	private static final int STAR_ATTACK_PROJECTILE_SIZE = 5;
 
+	/** The probability of doing a big attack. **/
+	private static final double BIG_ATTACK_CHANCE = 0.1;
+
     /** The minimum amount of time between attacks in seconds. Actual attack intervals may vary
      * depending on previous attack performed. **/
     private double baseAttackInterval;
@@ -54,7 +57,15 @@ public class BossComponent extends Component
     /** Determines which attack to perform, then executes it. **/
     public void doAttack()
 	{
-		attackStar();
+		double p_doBigAttack = Math.random();
+		if (p_doBigAttack < BIG_ATTACK_CHANCE)
+		{
+
+		}
+		else
+		{
+			attackStar();
+		}
 	}
 
     /** Fires 8 dumb projectiles around the boss. **/
