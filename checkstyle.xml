@@ -117,7 +117,7 @@
             <property name="allowLineBreaks" value="true"/>
         </module>
         <module name="NoWhitespaceAfter">
-            <property name="tokens" value="DOT"/>
+            <property name="tokens" value="DOT, TYPECAST"/>
             <property name="allowLineBreaks" value="false"/>
         </module>
         <module name="NoWhitespaceBefore"/>
@@ -130,7 +130,9 @@
             <!--<property name="option" value="space"/>-->
         </module>
         <module name="TypecastParenPad"/>
-        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="COMMA, SEMI, LITERAL_IF, LITERAL_ELSE, LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, DO_WHILE"/>
+        </module>
         <module name="WhitespaceAround"/>
 
         <!-- Modifier Checks                                    -->
