@@ -7,6 +7,8 @@ import javafx.geometry.Point2D;
 /** Controls the boss. **/
 public class BossComponent extends Component
 {
+	/** The default interval (in seconds) between attacks. **/
+	private static final double DEFAULT_BASE_ATTACK_INTERVAL = 2;
 	/** Speed of star attack projectiles. **/
 	private static final int STAR_ATTACK_PROJECTILE_SPEED = 200;
 	/** Size of star attack projectiles. **/
@@ -22,7 +24,7 @@ public class BossComponent extends Component
     public BossComponent(ProjectileFactory factory)
     {
     	this.projFactory = factory;
-        this.baseAttackInterval = 2;
+        this.baseAttackInterval = DEFAULT_BASE_ATTACK_INTERVAL;
         this.timeUntilAttack = baseAttackInterval;
     }
 
