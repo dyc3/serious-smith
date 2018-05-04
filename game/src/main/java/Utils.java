@@ -64,4 +64,15 @@ public final class Utils
 		}
 		return points;
 	}
+
+	/** Offsets the point randomly inside the range specified.
+	 * @param point The point.
+	 * @param range The maximum range from the coordinate's original value.
+	 * @return A randomized point. **/
+	public static Point2D randomizePoint(Point2D point, double range)
+	{
+		Point2D offset = new Point2D((Math.random() * (range * 2)  - range),
+				(Math.random() * (range * 2)  - range));
+		return point.add(offset);
+	}
 }
