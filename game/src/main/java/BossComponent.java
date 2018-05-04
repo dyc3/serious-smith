@@ -23,6 +23,8 @@ public class BossComponent extends Component
 	private static final int BURST_ATTACK_PROJECTILE_SPEED = 400;
 	/** Size of burst attack projectiles. **/
 	private static final int BURST_ATTACK_PROJECTILE_SIZE = 7;
+	/** Spread of burst attack projectiles. **/
+	private static final int BURST_ATTACK_PROJECTILE_SPREAD = 20;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.1;
@@ -134,9 +136,11 @@ public class BossComponent extends Component
 		Entity target = getPlayer();
 		for (int i = 0; i < BURST_ATTACK_PROJECTILE_COUNT; i++)
 		{
-			Point2D dir = target.getCenter().subtract(entity.getCenter());
+			Point2D targetPos = Utils.randomizePoint(target.getCenter(), BURST_ATTACK_PROJECTILE_SPREAD);
+			Point2D dir = targetPos.subtract(entity.getCenter());
 
-			SpawnData data = new SpawnData(getEntity().getCenter());
+			Point2D spawnAt = Utils.randomizePoint(getEntity().getCenter(), BURST_ATTACK_PROJECTILE_SPREAD);
+			SpawnData data = new SpawnData(spawnAt);
 			data.put("direction", dir);
 			data.put("size", BURST_ATTACK_PROJECTILE_SIZE);
 			data.put("speed", BURST_ATTACK_PROJECTILE_SPEED);

@@ -71,7 +71,8 @@ public final class Utils
 	 * @return A randomized point. **/
 	public static Point2D randomizePoint(Point2D point, double range)
 	{
-		Point2D offset = new Point2D((Math.random() * (range * 2)  - range), (Math.random() * (range * 2)  - range));
+		Point2D offset = new Point2D((Math.random() * (range * 2)  - range),
+				(Math.random() * (range * 2)  - range));
 		return point.add(offset);
 	}
 }
