@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /** Controls the boss. **/
 public class BossComponent extends Component
@@ -149,11 +148,13 @@ public class BossComponent extends Component
 		return closest;
 	}
 
+	/** Gets the current attack. **/
 	public BossAttack getCurrentAttack()
 	{
 		return currentAttack;
 	}
 
+	/** Gets Ram attack damages with any damage modifiers applied. **/
 	public int getRamAttackDamage()
 	{
 		return RAM_ATTACK_DAMAGE;
@@ -257,6 +258,7 @@ public class BossComponent extends Component
 		endAttack();
 	}
 
+	/** The direction the boss will ram towards. **/
 	private Point2D _ramDirection = null;
 
 	/** Attempts to ram the player.
