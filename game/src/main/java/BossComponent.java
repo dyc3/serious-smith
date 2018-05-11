@@ -139,9 +139,11 @@ public class BossComponent extends Component
 	{
 		final List<Method> methods = new ArrayList<Method>();
 		Class<?> klass = this.getClass();
-		while (klass != Object.class) // need to iterated thought hierarchy in order to retrieve methods from above the current instance
+		// iterate though hierarchy in order to retrieve methods from above the current instance
+		while (klass != Object.class)
 		{
-			// iterate though the list of methods declared in the class represented by klass variable, and add those annotated with the specified annotation
+			// iterate though the list of methods declared in the class represented by klass variable,
+			// and add those annotated with the specified annotation
 			final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getMethods()));
 			for (final Method method : allMethods)
 			{
