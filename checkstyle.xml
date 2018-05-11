@@ -79,7 +79,13 @@
         <module name="ConstantName"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
-        <module name="MemberName"/>
+        <module name="MemberName">
+            <property name="format" value="^(_|[a-z])[a-zA-Z0-9]*$"/>
+            <property name="applyToPrivate" value="true"/>
+            <property name="applyToPublic" value="false"/>
+            <property name="applyToPackage" value="false"/>
+            <property name="applyToProtected" value="false"/>
+        </module>
         <module name="MethodName"/>
         <module name="PackageName"/>
         <module name="ParameterName"/>
