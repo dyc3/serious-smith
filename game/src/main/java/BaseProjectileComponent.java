@@ -10,11 +10,15 @@ public class BaseProjectileComponent extends ProjectileComponent
     private static final int DEFAULT_BASE_DAMAGE = 4;
 	/** Default value of critChance. **/
 	private static final double DEFAULT_CRIT_CHANCE = 0.1;
+	/** Maximum lifetime of projectiles (in seconds). **/
+	private static final double MAX_LIFETIME = 60;
 
 	/** The base damage the projectile will deal on collision. **/
     private int baseDamage;
     /** Probability that this projectile does critical damage. **/
     private double critChance;
+    /** Time (in seconds) that this projectile has existed. **/
+    private double lifetime = 0;
 
 	/** Creates a new instance of BaseProjectileComponent.
 	 * @param direction The direction to move the projectile.
@@ -44,6 +48,12 @@ public class BaseProjectileComponent extends ProjectileComponent
         super.onUpdate(tpf);
 
         this.setDirection(calcVector());
+
+        lifetime += tpf;
+        if (lifetime > MAX_LIFETIME)
+		{
+			entity.removeFromWorld();
+		}
     }
 
     /** Calculate the direction the projectile will go in every tick.
