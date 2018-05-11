@@ -21,6 +21,10 @@ public class BossComponent extends Component
 	private static final int STAR_ATTACK_PROJECTILE_SPEED = 200;
 	/** Size of star attack projectiles. **/
 	private static final int STAR_ATTACK_PROJECTILE_SIZE = 5;
+	/** Time (in seconds) between firing stars. **/
+	private static final double STAR_ATTACK_INTERVAL = 0.5;
+	/** Maximum number of stars to fire when doing star attack. **/
+	private static final int STAR_ATTACK_MAX = 10;
 	/** Number of projectiles to fire in burst attack. **/
 	private static final int BURST_ATTACK_PROJECTILE_COUNT = 20;
 	/** Speed of burst attack projectiles. **/
@@ -151,8 +155,6 @@ public class BossComponent extends Component
 			klass = klass.getSuperclass();
 		}
 
-		System.out.println("found " + methods.size() + " methods");
-
 		// execute all handler methods
 		for (Method m : methods)
 		{
@@ -174,29 +176,43 @@ public class BossComponent extends Component
 		currentAttack = null;
 	}
 
-    /** Fires 8 dumb projectiles around the boss.
+	/** Used to keep track of how many stars have fired during the current star attack. **/
+	private int _starsFired = 0;
+
+	/** Fires 8 dumb projectiles around the boss at intervals.
 	 * @param tpf Time per frame. **/
     @HandlesAttack(attack = BossAttack.STAR)
     public void attackStar(double tpf)
 	{
-		for (int y = -1; y <= 1; y++)
-		{
-			for (int x = -1; x <= 1; x++)
-			{
-				if (x == 0 && y == 0)
-				{
-					continue;
-				}
+		int targetFired = (int)(attackTime / STAR_ATTACK_INTERVAL);
 
-				SpawnData data = new SpawnData(getEntity().getCenter());
-				data.put("direction", new Point2D(x, y));
-				data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
-				data.put("speed", STAR_ATTACK_PROJECTILE_SPEED);
-				getEntity().getWorld().addEntity(projFactory.spawnDumbProjectile(data));
+		while (_starsFired < targetFired)
+		{
+			for (int y = -1; y <= 1; y++)
+			{
+				for (int x = -1; x <= 1; x++)
+				{
+					if (x == 0 && y == 0)
+					{
+						continue;
+					}
+
+					SpawnData data = new SpawnData(getEntity().getCenter());
+					data.put("direction", new Point2D(x, y));
+					data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
+					data.put("speed", STAR_ATTACK_PROJECTILE_SPEED);
+					getEntity().getWorld().addEntity(projFactory.spawnDumbProjectile(data));
+				}
 			}
+
+			_starsFired++;
 		}
 
-		endAttack();
+		if (targetFired >= STAR_ATTACK_MAX)
+		{
+			endAttack();
+			_starsFired = 0;
+		}
 	}
 
 	/** Fires a shotgun blast of dumb projectiles in the direction of the player.
