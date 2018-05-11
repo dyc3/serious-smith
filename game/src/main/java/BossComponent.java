@@ -148,13 +148,15 @@ public class BossComponent extends Component
 		return closest;
 	}
 
-	/** Gets the current attack. **/
+	/** Gets the current attack.
+	 * @return The current attack **/
 	public BossAttack getCurrentAttack()
 	{
 		return currentAttack;
 	}
 
-	/** Gets Ram attack damages with any damage modifiers applied. **/
+	/** Gets Ram attack damages with any damage modifiers applied.
+	 * @return Ram attack damage **/
 	public int getRamAttackDamage()
 	{
 		return RAM_ATTACK_DAMAGE;
