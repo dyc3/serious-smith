@@ -57,10 +57,20 @@ public final class Utils
 	 * @return List of `parts` cartesian coordinates. **/
 	public static ArrayList<Point2D> pointsOnCircle(double radius, int parts)
 	{
+		return pointsOnCircle(radius, parts, 0);
+	}
+
+	/** Generate a set of evenly spaced points on a circle.
+	 * @param radius Radius of the circle.
+	 * @param parts Number of points to return.
+	 * @param angleOffset Offset the points by degrees.
+	 * @return List of `parts` cartesian coordinates. **/
+	public static ArrayList<Point2D> pointsOnCircle(double radius, int parts, double angleOffset)
+	{
 		ArrayList<Point2D> points = new ArrayList<Point2D>();
 		for (int i = 0; i < parts; i++)
 		{
-			double angle = i * (FULL_CIRCLE / parts);
+			double angle = i * (FULL_CIRCLE / parts) + angleOffset;
 			Point2D point = polarToCartesian(radius, angle);
 			points.add(point);
 		}
