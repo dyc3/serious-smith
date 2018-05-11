@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public final class Utils
 {
 	/** Number of degrees in a circle. **/
-	private static final int FULL_CIRCLE = 360;
+	private static final double FULL_CIRCLE = 360;
 
 	/** This constructor should not be used. **/
 	private Utils()
@@ -22,7 +22,8 @@ public final class Utils
 	 * @return Cartesian coordinate. **/
 	public static Point2D polarToCartesian(double radius, double theta)
 	{
-		return new Point2D(radius * Math.cos(theta), radius * Math.sin(theta));
+		double rad = Math.toRadians(theta);
+		return new Point2D(radius * Math.cos(rad), radius * Math.sin(rad));
 	}
 
 	/** Convert polar coordinates (r, theta) to cartesian coordinates (x, y).
@@ -59,8 +60,9 @@ public final class Utils
 		ArrayList<Point2D> points = new ArrayList<Point2D>();
 		for (int i = 0; i < parts; i++)
 		{
-			double angle = i * ((double)FULL_CIRCLE / parts);
-			points.add(polarToCartesian(radius, angle));
+			double angle = i * (FULL_CIRCLE / parts);
+			Point2D point = polarToCartesian(radius, angle);
+			points.add(point);
 		}
 		return points;
 	}
