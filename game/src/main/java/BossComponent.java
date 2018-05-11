@@ -35,6 +35,12 @@ public class BossComponent extends Component
 	private static final int BURST_ATTACK_PROJECTILE_SIZE = 7;
 	/** Spread of burst attack projectiles. **/
 	private static final int BURST_ATTACK_PROJECTILE_SPREAD = 20;
+	/** Speed of ram attack. **/
+	private static final int RAM_ATTACK_SPEED = 600;
+	/** Maximum duration (in seconds) of ram attack. **/
+	private static final int RAM_ATTACK_DURATION = 2;
+	/** Damage of ram attack. **/
+	public static final int RAM_ATTACK_DAMAGE = 40;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.1;
@@ -96,9 +102,9 @@ public class BossComponent extends Component
 	 * @return The next attack to perform. **/
     private BossAttack nextAttack()
 	{
-		if (Math.random() < BIG_ATTACK_CHANCE)
+		if (Math.random() < 0.5)
 		{
-			return BossAttack.BURST;
+			return BossAttack.RAM;
 		}
 		else
 		{
@@ -135,7 +141,17 @@ public class BossComponent extends Component
 		return closest;
 	}
 
-    /** Finds the method that the current attack uses, and execute it with parameters.
+	public BossAttack getCurrentAttack()
+	{
+		return currentAttack;
+	}
+
+	public int getRamAttackDamage()
+	{
+		return RAM_ATTACK_DAMAGE;
+	}
+
+	/** Finds the method that the current attack uses, and execute it with parameters.
 	 * @param tpf Time per frame. **/
     public void doAttack(double tpf)
 	{
@@ -174,7 +190,7 @@ public class BossComponent extends Component
 	}
 
 	/** Ends the current attack. Each attack calls this method when they are done. **/
-	private void endAttack()
+	public void endAttack()
 	{
 		timeUntilAttack = baseAttackInterval;
 		currentAttack = null;
@@ -231,5 +247,25 @@ public class BossComponent extends Component
 		}
 
 		endAttack();
+	}
+
+	private Point2D _ramDirection = null;
+
+	/** Attempts to ram the player.
+	 * @param tpf Time per frame. **/
+	@HandlesAttack(attack = BossAttack.RAM)
+	public void attackRam(double tpf)
+	{
+		if (_ramDirection == null)
+		{
+			_ramDirection = getPlayer().getCenter().subtract(entity.getCenter());
+		}
+		getEntity().translateTowards(entity.getPosition().add(_ramDirection), RAM_ATTACK_SPEED * tpf);
+
+		if (attackTime >= RAM_ATTACK_DURATION)
+		{
+			endAttack();
+			_ramDirection = null;
+		}
 	}
 }
