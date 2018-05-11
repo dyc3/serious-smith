@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /** Controls the boss. **/
 public class BossComponent extends Component
@@ -43,7 +44,7 @@ public class BossComponent extends Component
 	public static final int RAM_ATTACK_DAMAGE = 40;
 
 	/** The probability of doing a big attack. **/
-	private static final double BIG_ATTACK_CHANCE = 0.1;
+	private static final double BIG_ATTACK_CHANCE = 0.5;
 
     /** The minimum amount of time between attacks in seconds. Actual attack intervals may vary
      * depending on previous attack performed. **/
@@ -102,9 +103,16 @@ public class BossComponent extends Component
 	 * @return The next attack to perform. **/
     private BossAttack nextAttack()
 	{
-		if (Math.random() < 0.5)
+		if (Math.random() < BIG_ATTACK_CHANCE)
 		{
-			return BossAttack.RAM;
+			if (Math.random() <= 0.5)
+			{
+				return BossAttack.RAM;
+			}
+			else
+			{
+				return BossAttack.BURST;
+			}
 		}
 		else
 		{
