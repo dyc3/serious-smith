@@ -21,6 +21,8 @@ public class BossComponent extends Component
 	private static final int STAR_ATTACK_PROJECTILE_SPEED = 200;
 	/** Size of star attack projectiles. **/
 	private static final int STAR_ATTACK_PROJECTILE_SIZE = 5;
+	/** Number of star attack projectiles. **/
+	private static final int STAR_ATTACK_PROJECTILE_COUNT = 8;
 	/** Time (in seconds) between firing stars. **/
 	private static final double STAR_ATTACK_INTERVAL = 0.5;
 	/** Maximum number of stars to fire when doing star attack. **/
@@ -190,21 +192,13 @@ public class BossComponent extends Component
 
 		while (_starsFired < targetFired)
 		{
-			for (int y = -1; y <= 1; y++)
+			for (Point2D dir : Utils.pointsOnCircle(1, STAR_ATTACK_PROJECTILE_COUNT))
 			{
-				for (int x = -1; x <= 1; x++)
-				{
-					if (x == 0 && y == 0)
-					{
-						continue;
-					}
-
-					SpawnData data = new SpawnData(getEntity().getCenter());
-					data.put("direction", new Point2D(x, y));
-					data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
-					data.put("speed", STAR_ATTACK_PROJECTILE_SPEED);
-					getEntity().getWorld().addEntity(projFactory.spawnDumbProjectile(data));
-				}
+				SpawnData data = new SpawnData(getEntity().getCenter());
+				data.put("direction", dir);
+				data.put("size", STAR_ATTACK_PROJECTILE_SIZE);
+				data.put("speed", STAR_ATTACK_PROJECTILE_SPEED);
+				getEntity().getWorld().addEntity(projFactory.spawnDumbProjectile(data));
 			}
 
 			_starsFired++;
