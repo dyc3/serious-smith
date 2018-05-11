@@ -6,5 +6,7 @@ public enum BossAttack
 	/** See BossComponent. **/
 	STAR,
 	/** See BossComponent. **/
-	BURST
+	BURST,
+	/** See BossComponent. **/
+	RAM
 }

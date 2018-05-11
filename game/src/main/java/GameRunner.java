@@ -188,5 +188,20 @@ public class GameRunner extends GameApplication
 				projectile.removeFromWorld();
 			}
 		});
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS)
+		{
+			@Override
+			protected void onCollisionBegin(Entity player, Entity boss)
+			{
+				BossComponent b = boss.getComponent(BossComponent.class);
+				if (b.getCurrentAttack() == BossAttack.RAM)
+				{
+					b.endAttack();
+					HealthComponent health = player.getComponent(HealthComponent.class);
+					health.setValue(health.getValue() - b.getRamAttackDamage());
+				}
+			}
+		});
     }
 }
