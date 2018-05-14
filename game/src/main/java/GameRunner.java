@@ -217,5 +217,15 @@ public class GameRunner extends GameApplication
 				}
 			}
 		});
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.XP_ORB)
+		{
+			@Override
+			protected void onCollisionBegin(Entity entPlayer, Entity orb)
+			{
+				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
+				player.addXP((int)(Math.random() * 4 + 1));
+			}
+		});
     }
 }
