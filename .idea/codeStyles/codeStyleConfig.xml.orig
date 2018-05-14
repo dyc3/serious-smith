@@ -1,0 +1,9 @@
+<component name="ProjectCodeStyleConfiguration">
+  <state>
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+<<<<<<< 395a13ee62156475f17f46c56dc928e464e24f7c
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
+=======
+>>>>>>> fix intelij code style for imports
+  </state>
+</component>
