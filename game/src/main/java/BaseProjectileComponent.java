@@ -43,13 +43,16 @@ public class BaseProjectileComponent extends ProjectileComponent
 	/** Creates a new instance of BaseProjectileComponent.
 	 * @param direction The direction to move the projectile.
 	 * @param speed How many units to move the projectile every second.
-	 * @param critChance A probability of getting a critical hit. **/
-    public BaseProjectileComponent(Point2D direction, int speed, double critChance)
+	 * @param baseDamage Base damage to deal before any modifiers.
+	 * @param critChance A probability of getting a critical hit.
+	 * @param critMultiplier Multiply damage by this amount on critical hit. **/
+    public BaseProjectileComponent(Point2D direction, int speed, int baseDamage,
+								   double critChance, double critMultiplier)
     {
         super(direction, speed);
-		this.baseDamage = DEFAULT_BASE_DAMAGE;
+		this.baseDamage = baseDamage;
 		this.critChance = critChance;
-		this.critMultiplier = DEFAULT_CRIT_MULTIPLIER;
+		this.critMultiplier = critMultiplier;
 
 		this.isCritical = Math.random() < this.critChance;
 	}
@@ -98,7 +101,8 @@ public class BaseProjectileComponent extends ProjectileComponent
         return critChance;
     }
 
-    /** Gets if this projectile is a critical projectile or not. **/
+    /** Gets if this projectile is a critical projectile or not.
+	 * @return A boolean that determines if this projectile will deal critical damage. **/
     public boolean getIsCritical()
 	{
 		return isCritical;
