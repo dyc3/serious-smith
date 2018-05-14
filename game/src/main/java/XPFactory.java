@@ -30,6 +30,7 @@ public class XPFactory implements EntityFactory
 				.type(EntType.XP_ORB)
 				.viewFromNodeWithBBox(new Circle(0, 0, XP_ORB_SIZE, Color.LIMEGREEN))
 				.with(new CollidableComponent(true))
+				.with(new XpOrbComponent())
 				.build();
 	}
 
