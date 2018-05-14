@@ -140,27 +140,36 @@ public class PlayerComponent extends Component
         }
     }
 
+    /** Gets the player's experience.
+	 * @return 0 <= experience < XP_PER_LEVEL **/
     public int getXP()
 	{
 		return xp.getValue();
 	}
 
+	/** Gets the player's experience as a integer property.
+	 * @return player experience property. **/
 	public IntegerProperty getXpProperty()
 	{
 		return xp;
 	}
 
+	/** Gets the player's level.
+	 * @return integer > 0 **/
 	public int getLevel()
 	{
 		return level;
 	}
 
+	/** Gets the damage each player's projectiles deals.
+	 * @return integer >= INIT_DAMAGE **/
 	public int getDamage()
 	{
 		return damage;
 	}
 
-	/** Increase the player's . **/
+	/** Increase the player's experience and levels up when threashold is reached.
+	 * @param exp The amount of experience to add. **/
 	public void addXP(int exp)
 	{
 		// NOTE: add() and subtract() methods on SimpleIntegerProperty aren't used to modify the value.

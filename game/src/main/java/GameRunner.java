@@ -220,6 +220,7 @@ public class GameRunner extends GameApplication
 
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.XP_ORB)
 		{
+			/** Handle collisions between players and experience orbs. **/
 			@Override
 			protected void onCollisionBegin(Entity entPlayer, Entity orb)
 			{

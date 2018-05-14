@@ -9,9 +9,11 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/** Used to spawn experience orbs. **/
 public class XPFactory implements EntityFactory
 {
-	private int XP_ORB_SIZE = 3;
+	/** The size of the experience orbs. **/
+	private static final int XP_ORB_SIZE = 3;
 
 	/** Spawns an experience orb.
 	 * @param data Attributes to spawn the projectile with, eg. position.
