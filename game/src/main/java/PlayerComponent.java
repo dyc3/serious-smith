@@ -75,7 +75,8 @@ public class PlayerComponent extends Component
             boss = getEntity().getWorld().getEntityByID("boss", 0).get();
         }
 
-        if (input.isHeld(KeyCode.SHIFT) && !dashing && dashCooldown <= 0)
+        if (input.isHeld(KeyCode.SHIFT) && !dashing && dashCooldown <= 0 &&
+                !getMoveDirection().equals(new Point2D(0, 0)))
         {
             dashing = true;
             Point2D move = getMoveDirection().multiply(DASH_DISTANCE);
