@@ -41,7 +41,7 @@ public class GameRunner extends GameApplication
     {
         settings.setWidth(1280);
         settings.setHeight(720);
-        settings.setTitle("Basic Game App");
+        settings.setTitle("Serious Smith");
         settings.setVersion("0.1");
     }
 
