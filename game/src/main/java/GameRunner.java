@@ -1,6 +1,7 @@
 package main.java;
 
 import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -27,6 +28,9 @@ public class GameRunner extends GameApplication
 	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
 	/** Boss health bar offset on the y axis. **/
 	private static final int BOSS_HEALTH_BAR_OFFSET_Y = -20;
+
+	/** Chance to receive some experience when the player hits the boss. **/
+	private static final double XP_ON_HIT_CHANCE = 0.4;
 
     private Entity player;
     private Entity boss;
@@ -188,6 +192,11 @@ public class GameRunner extends GameApplication
                 BaseProjectileComponent proj = projectile.getComponent(PlayerProjectileComponent.class);
                 health.setValue(health.getValue() - proj.calcDamage());
                 projectile.removeFromWorld();
+
+                if (FXGLMath.randomBoolean(XP_ON_HIT_CHANCE))
+				{
+					player.getComponent(PlayerComponent.class).addXP(1);
+				}
             }
         });
 
