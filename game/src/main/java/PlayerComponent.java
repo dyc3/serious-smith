@@ -1,5 +1,6 @@
 package main.java;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
@@ -138,6 +139,12 @@ public class PlayerComponent extends Component
             data.put("target", boss);
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
+
+        // Spawn some xp orbs sometimes, in random positions near the player
+        if (FXGLMath.randomBoolean(0.1))
+		{
+			XPFactory.spawnRandomXpOrb(getEntity().getWorld(), getEntity().getCenter());
+		}
     }
 
     /** Gets the player's experience.

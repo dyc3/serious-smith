@@ -235,6 +235,7 @@ public class GameRunner extends GameApplication
 			{
 				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
 				player.addXP((int)(Math.random() * 4 + 1));
+				orb.removeFromWorld();
 			}
 		});
     }
