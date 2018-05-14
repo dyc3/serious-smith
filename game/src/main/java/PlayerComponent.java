@@ -161,13 +161,16 @@ public class PlayerComponent extends Component
 	}
 
 	/** Increase the player's . **/
-	public void addXP(int xp)
+	public void addXP(int exp)
 	{
-		this.xp.add(xp);
+		// NOTE: add() and subtract() methods on SimpleIntegerProperty aren't used to modify the value.
+		// Instead, they are used to create NEW bindings.
+		// See https://docs.oracle.com/javafx/2/api/javafx/beans/binding/NumberExpressionBase.html
+		this.xp.set(this.xp.getValue() + exp);
 
 		while (this.xp.getValue() >= XP_PER_LEVEL)
 		{
-			this.xp.subtract(XP_PER_LEVEL);
+			this.xp.set(this.xp.getValue() - XP_PER_LEVEL);
 			levelUp();
 		}
 	}
