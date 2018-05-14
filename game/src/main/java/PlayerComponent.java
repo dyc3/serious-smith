@@ -4,6 +4,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.input.Input;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
@@ -23,6 +25,8 @@ public class PlayerComponent extends Component
     private static final double DASH_FIRE_INTERVAL_MULTIPLIER = 0.1;
     /** Damage dealt per projectile at level 1. **/
     private static final int INIT_DAMAGE = 4;
+    /** Maximum amount damage can increase by on level up. **/
+    private static final int MAX_DAMAGE_CHANGE_PER_LEVEL = 4;
     /** XP required to level up. **/
     public static final int XP_PER_LEVEL = 100;
 
@@ -34,7 +38,7 @@ public class PlayerComponent extends Component
 
 	private int damage = INIT_DAMAGE;
 	/** Tracks the player's experience. **/
-	private int xp = 0;
+	private IntegerProperty xp = new SimpleIntegerProperty();
 	/** Tracks the player's level. **/
 	private int level = 1;
 
@@ -138,6 +142,11 @@ public class PlayerComponent extends Component
 
     public int getXP()
 	{
+		return xp.getValue();
+	}
+
+	public IntegerProperty getXpProperty()
+	{
 		return xp;
 	}
 
@@ -146,14 +155,19 @@ public class PlayerComponent extends Component
 		return level;
 	}
 
+	public int getDamage()
+	{
+		return damage;
+	}
+
 	/** Increase the player's . **/
 	public void addXP(int xp)
 	{
-		this.xp += xp;
+		this.xp.add(xp);
 
-		while (this.xp >= XP_PER_LEVEL)
+		while (this.xp.getValue() >= XP_PER_LEVEL)
 		{
-			this.xp -= XP_PER_LEVEL;
+			this.xp.subtract(XP_PER_LEVEL);
 			levelUp();
 		}
 	}
@@ -162,5 +176,6 @@ public class PlayerComponent extends Component
 	public void levelUp()
 	{
 		this.level++;
+		damage += Math.ceil(Math.random() * MAX_DAMAGE_CHANGE_PER_LEVEL);
 	}
 }

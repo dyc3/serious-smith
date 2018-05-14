@@ -80,7 +80,8 @@ public class GameRunner extends GameApplication
                 .at(0, 300)
                 .viewFromNodeWithBBox(rectPlayer)
                 .with(new HealthComponent(100))
-                .with(new PlayerComponent(getInput(), projectileFactory))
+				.with(new IDComponent("player", 0))
+				.with(new PlayerComponent(getInput(), projectileFactory))
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
@@ -118,7 +119,16 @@ public class GameRunner extends GameApplication
         pbarPlayerHealth.makeHPBar();
         pbarPlayerHealth.currentValueProperty().bind(player.getComponent(HealthComponent.class).valueProperty());
 
-        getGameScene().addUINode(pbarPlayerHealth);
+		ProgressBar pbarPlayerXP = new ProgressBar();
+		pbarPlayerXP.setTranslateX(50);
+		pbarPlayerXP.setTranslateY(120);
+		pbarPlayerXP.setFill(Color.color(0.2, 0.7, 1));
+		pbarPlayerXP.setMinValue(0);
+		pbarPlayerXP.setMaxValue(PlayerComponent.XP_PER_LEVEL);
+		pbarPlayerXP.currentValueProperty().bind(player.getComponent(PlayerComponent.class).getXpProperty());
+
+		getGameScene().addUINode(pbarPlayerHealth);
+		getGameScene().addUINode(pbarPlayerXP);
 
         ProgressBar pbarBossHealth = new ProgressBar();
         pbarBossHealth.setWidth(120);

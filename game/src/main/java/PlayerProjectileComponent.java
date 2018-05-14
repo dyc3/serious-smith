@@ -17,6 +17,8 @@ public class PlayerProjectileComponent extends BaseProjectileComponent
 
     /** The entity that the projectile will move toward. **/
     private Entity target;
+    /** The player's attributes. **/
+    private PlayerComponent player;
 
     /** A projectile that homes in on it's target.
      * @param target The entity to target. **/
@@ -28,6 +30,9 @@ public class PlayerProjectileComponent extends BaseProjectileComponent
 				PLAYER_PROJECTILE_CRIT_CHANCE,
 				PLAYER_PROJECTILE_CRIT_MULTIPLIER);
         this.target = target;
+
+        player = entity.getWorld().getEntityByID("player", 0).get().getComponent(PlayerComponent.class);
+        setBaseDamage(player.getDamage());
     }
 
     /** Update the projectile every tick.
