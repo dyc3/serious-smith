@@ -10,6 +10,8 @@ public class BaseProjectileComponent extends ProjectileComponent
     private static final int DEFAULT_BASE_DAMAGE = 4;
 	/** Default value of critChance. **/
 	private static final double DEFAULT_CRIT_CHANCE = 0.1;
+	/** Default value of critMultiplier. **/
+	private static final double DEFAULT_CRIT_MULTIPLIER = 2;
 	/** Maximum lifetime of projectiles (in seconds). **/
 	private static final double MAX_LIFETIME = 60;
 
@@ -17,8 +19,13 @@ public class BaseProjectileComponent extends ProjectileComponent
     private int baseDamage;
     /** Probability that this projectile does critical damage. **/
     private double critChance;
+	/** On critical hit, multiply the damage by this amount. **/
+	private double critMultiplier;
     /** Time (in seconds) that this projectile has existed. **/
     private double lifetime = 0;
+
+    /** Will the projectile deal critical damage? **/
+    private boolean isCritical = false;
 
 	/** Creates a new instance of BaseProjectileComponent.
 	 * @param direction The direction to move the projectile.
@@ -28,6 +35,9 @@ public class BaseProjectileComponent extends ProjectileComponent
         super(direction, speed);
         this.baseDamage = DEFAULT_BASE_DAMAGE;
         this.critChance = DEFAULT_CRIT_CHANCE;
+        this.critMultiplier = DEFAULT_CRIT_MULTIPLIER;
+
+        this.isCritical = Math.random() < this.critChance;
     }
 
 	/** Creates a new instance of BaseProjectileComponent.
@@ -37,8 +47,12 @@ public class BaseProjectileComponent extends ProjectileComponent
     public BaseProjectileComponent(Point2D direction, int speed, double critChance)
     {
         super(direction, speed);
-        this.critChance = critChance;
-    }
+		this.baseDamage = DEFAULT_BASE_DAMAGE;
+		this.critChance = critChance;
+		this.critMultiplier = DEFAULT_CRIT_MULTIPLIER;
+
+		this.isCritical = Math.random() < this.critChance;
+	}
 
 	/** Update the projectile every tick.
 	 * @param tpf Time per frame. **/
@@ -77,13 +91,6 @@ public class BaseProjectileComponent extends ProjectileComponent
         return baseDamage;
     }
 
-    /** Sets the chance that this projectile does critical damage on collision.
-     * @param chance A double from 0 to 1, representing a probability. **/
-    public void setCritChance(double chance)
-    {
-        critChance = chance;
-    }
-
     /** Gets the chance that this projectile does critical damage on collision.
 	 * @return Probability of critical hit. **/
     public double getCritChance()
@@ -91,11 +98,21 @@ public class BaseProjectileComponent extends ProjectileComponent
         return critChance;
     }
 
+    /** Gets if this projectile is a critical projectile or not. **/
+    public boolean getIsCritical()
+	{
+		return isCritical;
+	}
+
     /** Calculate the damage this projectile will do on collision.
 	 * @return Amount of damage to deal. **/
     public int calcDamage()
     {
-        int mul = Math.random() <= getCritChance() ? 2 : 1;
-        return baseDamage * mul;
+    	int damage = baseDamage;
+        if (isCritical)
+		{
+			damage *= critMultiplier;
+		}
+        return damage;
     }
 }
