@@ -21,12 +21,22 @@ public class PlayerComponent extends Component
     private static final double DASH_COOLDOWN = 1;
     /** Multiply the fire rate by this number while dashing. **/
     private static final double DASH_FIRE_INTERVAL_MULTIPLIER = 0.1;
+    /** Damage dealt per projectile at level 1. **/
+    private static final int INIT_DAMAGE = 4;
+    /** XP required to level up. **/
+    public static final int XP_PER_LEVEL = 100;
 
     private double speed;
     private Input input;
 	private ProjectileFactory projFactory;
 	private double timeToFire = 0;
     private double fireInterval; // seconds between firing projectiles
+
+	private int damage = INIT_DAMAGE;
+	/** Tracks the player's experience. **/
+	private int xp = 0;
+	/** Tracks the player's level. **/
+	private int level = 1;
 
     private Entity boss;
 
@@ -125,4 +135,32 @@ public class PlayerComponent extends Component
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
     }
+
+    public int getXP()
+	{
+		return xp;
+	}
+
+	public int getLevel()
+	{
+		return level;
+	}
+
+	/** Increase the player's . **/
+	public void addXP(int xp)
+	{
+		this.xp += xp;
+
+		while (this.xp >= XP_PER_LEVEL)
+		{
+			this.xp -= XP_PER_LEVEL;
+			levelUp();
+		}
+	}
+
+	/** Increase the player's level by one and buff stats. **/
+	public void levelUp()
+	{
+		this.level++;
+	}
 }
