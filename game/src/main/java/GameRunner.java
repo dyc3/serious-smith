@@ -117,6 +117,8 @@ public class GameRunner extends GameApplication
     @Override
     protected void initUI()
     {
+    	PlayerComponent p = player.getComponent(PlayerComponent.class);
+
         ProgressBar pbarPlayerHealth = new ProgressBar();
         pbarPlayerHealth.setTranslateX(50);
         pbarPlayerHealth.setTranslateY(100);
@@ -128,8 +130,8 @@ public class GameRunner extends GameApplication
 		pbarPlayerXP.setTranslateY(120);
 		pbarPlayerXP.setFill(Color.color(0.2, 0.7, 1));
 		pbarPlayerXP.setMinValue(0);
-		pbarPlayerXP.setMaxValue(PlayerComponent.XP_PER_LEVEL);
-		pbarPlayerXP.currentValueProperty().bind(player.getComponent(PlayerComponent.class).getXpProperty());
+		pbarPlayerXP.currentValueProperty().bind(p.getXpProperty());
+		pbarPlayerXP.maxValueProperty().bind(p.getXpToNextLevelBinding());
 
 		getGameScene().addUINode(pbarPlayerHealth);
 		getGameScene().addUINode(pbarPlayerXP);

@@ -5,6 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.input.Input;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
@@ -41,7 +42,7 @@ public class PlayerComponent extends Component
 	/** Tracks the player's experience. **/
 	private IntegerProperty xp = new SimpleIntegerProperty();
 	/** Tracks the player's level. **/
-	private int level = 1;
+	private IntegerProperty level = new SimpleIntegerProperty(1);
 
     private Entity boss;
 
@@ -165,6 +166,11 @@ public class PlayerComponent extends Component
 	 * @return integer > 0 **/
 	public int getLevel()
 	{
+		return level.getValue();
+	}
+
+	public IntegerProperty getLevelProperty()
+	{
 		return level;
 	}
 
@@ -175,18 +181,32 @@ public class PlayerComponent extends Component
 		return damage;
 	}
 
+	/** Calculates the required experience to level up.
+	 * @return integer > 0 **/
+	public int getXpToNextLevel()
+	{
+		return XP_PER_LEVEL * level.getValue();
+	}
+
+	/** Gets the required experience to level up as an IntegerBinding.
+	 * @return IntegerBinding equivalent to the result of getXpToNextLevel() **/
+	public IntegerBinding getXpToNextLevelBinding()
+	{
+		return getLevelProperty().multiply(XP_PER_LEVEL);
+	}
+
 	/** Increase the player's experience and levels up when threashold is reached.
 	 * @param exp The amount of experience to add. **/
 	public void addXP(int exp)
 	{
-		// NOTE: add() and subtract() methods on SimpleIntegerProperty aren't used to modify the value.
+		// NOTE: add(), subtract(), etc. methods on SimpleIntegerProperty aren't used to modify the value.
 		// Instead, they are used to create NEW bindings.
 		// See https://docs.oracle.com/javafx/2/api/javafx/beans/binding/NumberExpressionBase.html
 		this.xp.set(this.xp.getValue() + exp);
 
-		while (this.xp.getValue() >= XP_PER_LEVEL)
+		while (this.xp.getValue() >= getXpToNextLevel())
 		{
-			this.xp.set(this.xp.getValue() - XP_PER_LEVEL);
+			this.xp.set(this.xp.getValue() - getXpToNextLevel());
 			levelUp();
 		}
 	}
@@ -194,7 +214,7 @@ public class PlayerComponent extends Component
 	/** Increase the player's level by one and buff stats. **/
 	public void levelUp()
 	{
-		this.level++;
+		level.setValue(level.getValue() + 1);
 		damage += Math.ceil(Math.random() * MAX_DAMAGE_CHANGE_PER_LEVEL);
 	}
 }
