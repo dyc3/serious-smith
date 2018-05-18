@@ -7,7 +7,7 @@ import com.almasb.fxgl.entity.component.Component;
 public class XpOrbComponent extends Component
 {
 	/** Speed of experience orb movement. **/
-	private static final double XP_ORB_SPEED = 50;
+	private static final double XP_ORB_SPEED = 500;
 
 	private Entity player = null;
 
@@ -21,6 +21,7 @@ public class XpOrbComponent extends Component
 			player = getEntity().getWorld().getEntityByID("player", 0).get();
 		}
 
-		getEntity().translateTowards(player.getCenter(), XP_ORB_SPEED * tpf);
+		double dist = entity.getCenter().distance(player.getCenter());
+		getEntity().translateTowards(player.getCenter(), XP_ORB_SPEED / (dist / 2.0) * tpf);
 	}
 }
