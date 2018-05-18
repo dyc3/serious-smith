@@ -21,6 +21,8 @@ import java.util.Map;
 
 public class GameRunner extends GameApplication
 {
+	/** Boss starting health. **/
+	private static final int BOSS_HEALTH = 1000000;
 	/** Boss health bar offset on the x axis. **/
 	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
 	/** Boss health bar offset on the y axis. **/
@@ -88,7 +90,7 @@ public class GameRunner extends GameApplication
                 .type(EntType.BOSS)
                 .at(0, 0)
                 .viewFromNodeWithBBox(rectBoss)
-                .with(new HealthComponent(10000))
+                .with(new HealthComponent(BOSS_HEALTH))
                 .with(new BossComponent(projectileFactory))
                 .with(new IDComponent("boss", 0))
                 .with(new CollidableComponent(true))
@@ -121,6 +123,8 @@ public class GameRunner extends GameApplication
         ProgressBar pbarBossHealth = new ProgressBar();
         pbarBossHealth.setWidth(120);
         pbarBossHealth.makeHPBar();
+		pbarBossHealth.setMaxValue(BOSS_HEALTH);
+		pbarBossHealth.setLabelVisible(true);
         pbarBossHealth.currentValueProperty().bind(boss.getComponent(HealthComponent.class).valueProperty());
 
         Entities.builder()
