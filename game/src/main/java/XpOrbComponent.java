@@ -7,7 +7,7 @@ import com.almasb.fxgl.entity.component.Component;
 public class XpOrbComponent extends Component
 {
 	/** Speed of experience orb movement. **/
-	private static final double XP_ORB_SPEED = 500;
+	private static final double XP_ORB_SPEED = 5000;
 
 	private Entity player = null;
 
