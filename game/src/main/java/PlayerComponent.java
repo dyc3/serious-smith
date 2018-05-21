@@ -28,7 +28,8 @@ public class PlayerComponent extends Component
     /** Damage dealt per projectile at level 1. **/
     private static final int INIT_DAMAGE = 4;
     /** Maximum amount damage can increase by on level up. **/
-    private static final int MAX_DAMAGE_CHANGE_PER_LEVEL = 4;
+    private static final int MAX_DAMAGE_CHANGE_PER_LEVEL = 8;
+    private static final double FIRE_INTERVAL_MULTIPLIER = 0.95;
     /** XP required to level up. **/
     public static final int XP_PER_LEVEL = 100;
 
@@ -216,5 +217,6 @@ public class PlayerComponent extends Component
 	{
 		level.setValue(level.getValue() + 1);
 		damage += Math.ceil(Math.random() * MAX_DAMAGE_CHANGE_PER_LEVEL);
+		fireInterval *= FIRE_INTERVAL_MULTIPLIER;
 	}
 }
