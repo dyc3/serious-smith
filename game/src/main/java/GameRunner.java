@@ -233,11 +233,12 @@ public class GameRunner extends GameApplication
 		{
 			/** Handle collisions between players and experience orbs. **/
 			@Override
-			protected void onCollisionBegin(Entity entPlayer, Entity orb)
+			protected void onCollisionBegin(Entity entPlayer, Entity entOrb)
 			{
 				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
-				player.addXP((int)(Math.random() * 4 + 1));
-				orb.removeFromWorld();
+				XpOrbComponent orb = entOrb.getComponent(XpOrbComponent.class);
+				player.addXP(orb.getExperience());
+				entOrb.removeFromWorld();
 			}
 		});
     }
