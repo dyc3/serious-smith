@@ -157,7 +157,7 @@ public final class PlayerComponent extends Component
 		return xp.getValue();
 	}
 
-	/** Gets the player's experience as a integer property.
+	/** Gets the player's experience as an integer property.
 	 * @return player experience property. **/
 	public IntegerProperty getXpProperty()
 	{
@@ -171,6 +171,8 @@ public final class PlayerComponent extends Component
 		return level.getValue();
 	}
 
+	/** Gets the player's level as an integer property.
+	 * @return player level property. **/
 	public IntegerProperty getLevelProperty()
 	{
 		return level;
