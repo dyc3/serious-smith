@@ -15,7 +15,6 @@ import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -46,7 +45,7 @@ public class GameRunner extends GameApplication
     private Entity player;
     private Entity boss;
 
-    /** Program entry **/
+    /** Program entry. **/
     public static void main(String[] args)
     {
         launch(args);

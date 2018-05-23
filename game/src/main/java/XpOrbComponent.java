@@ -15,7 +15,7 @@ public class XpOrbComponent extends Component
 	/** Maximum amount of experience that an orb can hold. */
 	private static final int MAX_EXPERIENCE_PER_ORB = 20;
 	/** Initial speed of ejection. **/
-	private static final double XP_ORB_EJECTION_SPEED = 7 ;
+	private static final double XP_ORB_EJECTION_SPEED = 7;
 	/** Ejection speed is decreased every frame by an amount multiplied by this factor. **/
 	private static final double XP_ORB_EJECTION_DECAY = 10;
 

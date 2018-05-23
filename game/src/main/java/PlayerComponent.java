@@ -40,7 +40,7 @@ public final class PlayerComponent extends Component
 	private double timeToFire = 0;
 	/** Time (in seconds) between firing projectiles. **/
     private double fireInterval;
-
+	/** Damage that the player's projectiles will deal. **/
 	private int damage = INIT_DAMAGE;
 	/** Tracks the player's experience. **/
 	private IntegerProperty xp = new SimpleIntegerProperty();
