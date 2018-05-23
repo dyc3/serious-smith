@@ -27,25 +27,25 @@ public final class PlayerComponent extends Component
     private static final double DASH_COOLDOWN = 1;
     /** Multiply the fire rate by this number while dashing. **/
     private static final double DASH_FIRE_INTERVAL_MULTIPLIER = 0.1;
+
+	/** XP required to level up. **/
+	public static final int XP_PER_LEVEL = 100;
     /** Damage dealt per projectile at level 1. **/
     private static final int INIT_DAMAGE = 4;
     /** Maximum amount damage can increase by on level up. **/
     private static final int MAX_DAMAGE_CHANGE_PER_LEVEL = 8;
 	/** Multiply fireInterval by this value on level up. **/
 	private static final double FIRE_INTERVAL_MULTIPLIER = 0.95;
-    /** XP required to level up. **/
-    public static final int XP_PER_LEVEL = 100;
     /** Initial maximum health. **/
     private static final int INIT_MAX_HEALTH = 100;
 	/** Minimum amount damage can increase by on level up. **/
 	private static final int MIN_HEALTH_CHANGE_PER_LEVEL = 5;
 	/** Maximum amount damage can increase by on level up. **/
 	private static final int MAX_HEALTH_CHANGE_PER_LEVEL = 10;
-
-	/** Critical hit chance of the player's projectiles. **/
-	private static final double PLAYER_PROJECTILE_CRIT_CHANCE = 0.1;
-	/** Critical hit multiplier of the player's projectiles. **/
-	private static final double PLAYER_PROJECTILE_CRIT_MULTIPLIER = 2;
+	/** Initial critical hit chance of the player's projectiles. **/
+	private static final double INIT_CRIT_CHANCE = 0.1;
+	/** Initial critical hit multiplier of the player's projectiles. **/
+	private static final double INIT_CRIT_MULTIPLIER = 2;
 
     private double speed;
     private Input input;
@@ -55,8 +55,10 @@ public final class PlayerComponent extends Component
     private double fireInterval;
 	/** Damage that the player's projectiles will deal. **/
 	private int damage = INIT_DAMAGE;
-	private double critChance = PLAYER_PROJECTILE_CRIT_CHANCE;
-	private double critMultiplier = PLAYER_PROJECTILE_CRIT_MULTIPLIER;
+	/** Critical hit chance of the player's projectiles. **/
+	private double critChance = INIT_CRIT_CHANCE;
+	/** Critical hit multiplier of the player's projectiles. **/
+	private double critMultiplier = INIT_CRIT_MULTIPLIER;
 	/** Maximum health. **/
 	private IntegerProperty maxHealth = new SimpleIntegerProperty(INIT_MAX_HEALTH);
 	/** Tracks the player's experience. **/
@@ -259,9 +261,10 @@ public final class PlayerComponent extends Component
 	public void levelUp()
 	{
 		level.setValue(level.getValue() + 1);
-		damage += Math.ceil(Math.random() * MAX_DAMAGE_CHANGE_PER_LEVEL);
+		damage += FXGLMath.random(1, MAX_DAMAGE_CHANGE_PER_LEVEL);
 		fireInterval *= FIRE_INTERVAL_MULTIPLIER;
-		maxHealth.setValue(maxHealth.getValue() + FXGLMath.random(MIN_HEALTH_CHANGE_PER_LEVEL, MAX_HEALTH_CHANGE_PER_LEVEL));
+		int healthIncrease = FXGLMath.random(MIN_HEALTH_CHANGE_PER_LEVEL, MAX_HEALTH_CHANGE_PER_LEVEL);
+		maxHealth.setValue(maxHealth.getValue() + healthIncrease);
 		critChance += 0.1 / level.getValue();
 		critMultiplier += 0.1;
 		System.out.println("level up: crit chance: " + critChance + " multiplier: x" + critMultiplier);

@@ -9,14 +9,16 @@ public class PlayerProjectileComponent extends BaseProjectileComponent
     /** Speed of the player's projectiles. **/
     private static final int PLAYER_PROJECTILE_SPEED = 1000;
 
-
     /** The entity that the projectile will move toward. **/
     private Entity target;
     /** The player's attributes. **/
     private PlayerComponent player = null;
 
     /** A projectile that homes in on it's target.
-     * @param target The entity to target. **/
+     * @param target The entity to target.
+	 * @param damage How much damage to deal on collision.
+	 * @param critChance Probability of dealing critical damage.
+	 * @param critMultiplier Multiplier for critical damage. **/
     public PlayerProjectileComponent(Entity target, int damage, double critChance, double critMultiplier)
     {
         super(new Point2D(0, 0),
