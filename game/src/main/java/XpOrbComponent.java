@@ -23,9 +23,11 @@ public class XpOrbComponent extends Component
 	/** The player that the orb moves toward. **/
 	private Entity player = null;
 
-	/** When an orb spawns it gets "ejected" from it's spawn position. This is the speed the orb will travel. **/
+	/** When an orb spawns it gets "ejected" from it's spawn position.
+	 * This is the speed the orb will travel. **/
 	private double ejectionSpeed;
-	/** When an orb spawns it gets "ejected" from it's spawn position. This is the direction the orb will travel. **/
+	/** When an orb spawns it gets "ejected" from it's spawn position.
+	 * This is the direction the orb will travel. **/
 	private Point2D ejectionDirection;
 
 
@@ -44,7 +46,7 @@ public class XpOrbComponent extends Component
 	{
 		if (player == null)
 		{
-			player = getEntity().getWorld().getEntityByID("player", 0).get();
+			player = entity.getWorld().getEntityByID("player", 0).get();
 		}
 
 		if (ejectionSpeed > 0)
@@ -58,7 +60,7 @@ public class XpOrbComponent extends Component
 		}
 
 		double dist = entity.getCenter().distance(player.getCenter());
-		getEntity().translateTowards(player.getCenter(), XP_ORB_SPEED / (dist / 2.0) * tpf);
+		entity.translateTowards(player.getCenter(), XP_ORB_SPEED / (dist / 2.0) * tpf);
 	}
 
 	/** Gets how much experience this orb is worth.

@@ -1,6 +1,5 @@
 package main.java;
 
-import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
@@ -11,7 +10,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
-public class PlayerComponent extends Component
+/** Controls the player. Should not be extended. **/
+public final class PlayerComponent extends Component
 {
     /** Movement speed. **/
     private static final double DEFAULT_MOVE_SPEED = 200;
@@ -64,7 +64,7 @@ public class PlayerComponent extends Component
 
 	/**
 	 * Gets the direction the player is moving in based on input.
-	 * @return
+	 * @return The direction the player should move in.
 	 */
     private Point2D getMoveDirection()
     {
