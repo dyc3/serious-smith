@@ -33,12 +33,7 @@ public class BaseProjectileComponent extends ProjectileComponent
 	 * @param speed How many units to move the projectile every second. **/
 	public BaseProjectileComponent(Point2D direction, int speed)
     {
-        super(direction, speed);
-        this.baseDamage = DEFAULT_BASE_DAMAGE;
-        this.critChance = DEFAULT_CRIT_CHANCE;
-        this.critMultiplier = DEFAULT_CRIT_MULTIPLIER;
-
-        this.isCritical = Math.random() < this.critChance;
+        this(direction, speed, DEFAULT_BASE_DAMAGE, DEFAULT_CRIT_CHANCE, DEFAULT_CRIT_MULTIPLIER);
     }
 
 	/** Creates a new instance of BaseProjectileComponent.
