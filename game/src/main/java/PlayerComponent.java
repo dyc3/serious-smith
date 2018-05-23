@@ -42,6 +42,11 @@ public final class PlayerComponent extends Component
 	/** Maximum amount damage can increase by on level up. **/
 	private static final int MAX_HEALTH_CHANGE_PER_LEVEL = 10;
 
+	/** Critical hit chance of the player's projectiles. **/
+	private static final double PLAYER_PROJECTILE_CRIT_CHANCE = 0.1;
+	/** Critical hit multiplier of the player's projectiles. **/
+	private static final double PLAYER_PROJECTILE_CRIT_MULTIPLIER = 2;
+
     private double speed;
     private Input input;
 	private ProjectileFactory projFactory;
@@ -50,6 +55,8 @@ public final class PlayerComponent extends Component
     private double fireInterval;
 	/** Damage that the player's projectiles will deal. **/
 	private int damage = INIT_DAMAGE;
+	private double critChance = PLAYER_PROJECTILE_CRIT_CHANCE;
+	private double critMultiplier = PLAYER_PROJECTILE_CRIT_MULTIPLIER;
 	/** Maximum health. **/
 	private IntegerProperty maxHealth = new SimpleIntegerProperty(INIT_MAX_HEALTH);
 	/** Tracks the player's experience. **/
@@ -70,7 +77,6 @@ public final class PlayerComponent extends Component
         this.input = input;
 		this.projFactory = factory;
     }
-
 
 	/**
 	 * Gets the direction the player is moving in based on input.
@@ -156,6 +162,9 @@ public final class PlayerComponent extends Component
 			}
             SpawnData data = new SpawnData(getEntity().getCenter());
             data.put("target", boss);
+            data.put("damage", getDamage());
+			data.put("critChance", getCritChance());
+			data.put("critMultiplier", getCritMultiplier());
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
     }
@@ -193,6 +202,20 @@ public final class PlayerComponent extends Component
 	public int getDamage()
 	{
 		return damage;
+	}
+
+	/** Gets the chance for projectile critical damage.
+	 * @return double between 0 and 1 **/
+	public double getCritChance()
+	{
+		return critChance;
+	}
+
+	/** Gets the multiplier for projectile critical damage.
+	 * @return double > 1 **/
+	public double getCritMultiplier()
+	{
+		return critMultiplier;
 	}
 
 	/** Calculates the required experience to level up.
@@ -239,6 +262,9 @@ public final class PlayerComponent extends Component
 		damage += Math.ceil(Math.random() * MAX_DAMAGE_CHANGE_PER_LEVEL);
 		fireInterval *= FIRE_INTERVAL_MULTIPLIER;
 		maxHealth.setValue(maxHealth.getValue() + FXGLMath.random(MIN_HEALTH_CHANGE_PER_LEVEL, MAX_HEALTH_CHANGE_PER_LEVEL));
+		critChance += 0.1 / level.getValue();
+		critMultiplier += 0.1;
+		System.out.println("level up: crit chance: " + critChance + " multiplier: x" + critMultiplier);
 
 		// heal the player on level up
 		HealthComponent health = entity.getComponent(HealthComponent.class);
