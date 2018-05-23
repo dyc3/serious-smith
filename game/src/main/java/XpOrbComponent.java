@@ -10,6 +10,8 @@ public class XpOrbComponent extends Component
 {
 	/** Speed of experience orb movement. **/
 	private static final double XP_ORB_SPEED = 5000;
+	/** Minimum amount of experience that an orb can hold. */
+	private static final int MIN_EXPERIENCE_PER_ORB = 4;
 	/** Maximum amount of experience that an orb can hold. */
 	private static final int MAX_EXPERIENCE_PER_ORB = 20;
 	/** Initial speed of ejection. **/
@@ -34,7 +36,7 @@ public class XpOrbComponent extends Component
 	/** Creates a new experience orb and calculates it's worth. **/
 	public XpOrbComponent()
 	{
-		experience = FXGLMath.random(1, MAX_EXPERIENCE_PER_ORB);
+		experience = FXGLMath.random(MIN_EXPERIENCE_PER_ORB, MAX_EXPERIENCE_PER_ORB);
 		ejectionSpeed = XP_ORB_EJECTION_SPEED;
 		ejectionDirection = Utils.randomizePoint(new Point2D(0, 0), 2);
 	}
