@@ -148,12 +148,6 @@ public class PlayerComponent extends Component
             data.put("target", boss);
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
         }
-
-        // Spawn some xp orbs sometimes, in random positions near the player
-        if (FXGLMath.randomBoolean(0.1))
-		{
-			XPFactory.spawnRandomXpOrb(getEntity().getWorld(), getEntity().getCenter());
-		}
     }
 
     /** Gets the player's experience.

@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.entity.components.IDComponent;
@@ -13,6 +14,8 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -34,6 +37,8 @@ public class GameRunner extends GameApplication
 	private static final Color COLOR_BG_GRID = Color.color(0.3, 0.3, 0.3);
 	/** Color of the experience bar. **/
 	private static final Color COLOR_XP_BAR = Color.color(0.2, 0.7, 1);
+	/** Chance to spawn an experience orb when the boss is damaged. **/
+	private static final double XP_ORB_SPAWN_ON_DAMAGE_CHANCE = 0.5;
 
 	/** Chance to receive some experience when the player hits the boss. **/
 	private static final double XP_ON_HIT_CHANCE = 0.4;
@@ -204,6 +209,15 @@ public class GameRunner extends GameApplication
                 if (FXGLMath.randomBoolean(XP_ON_HIT_CHANCE))
 				{
 					player.getComponent(PlayerComponent.class).addXP(1);
+				}
+
+				// Spawn some xp orbs sometimes, ejecting from the boss
+				if (FXGLMath.randomBoolean(XP_ORB_SPAWN_ON_DAMAGE_CHANCE))
+				{
+					Point2D spawn = boss.getCenter();
+					SpawnData data = new SpawnData(spawn);
+					Entity orb = new XPFactory().spawnXpOrb(data);
+					boss.getWorld().addEntity(orb);
 				}
             }
         });
