@@ -1,8 +1,10 @@
 package main.java;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.input.Input;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
@@ -33,6 +35,12 @@ public final class PlayerComponent extends Component
 	private static final double FIRE_INTERVAL_MULTIPLIER = 0.95;
     /** XP required to level up. **/
     public static final int XP_PER_LEVEL = 100;
+    /** Initial maximum health. **/
+    private static final int INIT_MAX_HEALTH = 100;
+	/** Minimum amount damage can increase by on level up. **/
+	private static final int MIN_HEALTH_CHANGE_PER_LEVEL = 5;
+	/** Maximum amount damage can increase by on level up. **/
+	private static final int MAX_HEALTH_CHANGE_PER_LEVEL = 10;
 
     private double speed;
     private Input input;
@@ -42,6 +50,8 @@ public final class PlayerComponent extends Component
     private double fireInterval;
 	/** Damage that the player's projectiles will deal. **/
 	private int damage = INIT_DAMAGE;
+	/** Maximum health. **/
+	private IntegerProperty maxHealth = new SimpleIntegerProperty(INIT_MAX_HEALTH);
 	/** Tracks the player's experience. **/
 	private IntegerProperty xp = new SimpleIntegerProperty();
 	/** Tracks the player's level. **/
@@ -199,6 +209,13 @@ public final class PlayerComponent extends Component
 		return getLevelProperty().multiply(XP_PER_LEVEL);
 	}
 
+	/** Gets the player's maximum health as an integer property.
+	 * @return player max health property. **/
+	public IntegerProperty getMaxHealthProperty()
+	{
+		return maxHealth;
+	}
+
 	/** Increase the player's experience and levels up when threashold is reached.
 	 * @param exp The amount of experience to add. **/
 	public void addXP(int exp)
@@ -221,5 +238,10 @@ public final class PlayerComponent extends Component
 		level.setValue(level.getValue() + 1);
 		damage += Math.ceil(Math.random() * MAX_DAMAGE_CHANGE_PER_LEVEL);
 		fireInterval *= FIRE_INTERVAL_MULTIPLIER;
+		maxHealth.setValue(maxHealth.getValue() + FXGLMath.random(MIN_HEALTH_CHANGE_PER_LEVEL, MAX_HEALTH_CHANGE_PER_LEVEL));
+
+		// heal the player on level up
+		HealthComponent health = entity.getComponent(HealthComponent.class);
+		health.setValue(maxHealth.getValue());
 	}
 }

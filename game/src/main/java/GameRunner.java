@@ -134,6 +134,7 @@ public class GameRunner extends GameApplication
         pbarPlayerHealth.setTranslateY(100);
         pbarPlayerHealth.makeHPBar();
         pbarPlayerHealth.currentValueProperty().bind(player.getComponent(HealthComponent.class).valueProperty());
+		pbarPlayerHealth.maxValueProperty().bind(p.getMaxHealthProperty());
 
 		ProgressBar pbarPlayerXP = new ProgressBar();
 		pbarPlayerXP.setTranslateX(50);
