@@ -280,4 +280,12 @@ public class BossComponent extends Component
 			_ramDirection = null;
 		}
 	}
+
+	/** 4 lasers matching the width of the boss, fired in each cardinal direction.
+	 * @param tpf Time per frame. **/
+	@HandlesAttack(attack = BossAttack.LASER)
+	public void attackLaser(double tpf)
+	{
+
+	}
 }
