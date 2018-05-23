@@ -47,9 +47,9 @@ public final class PlayerComponent extends Component
 	/** Initial critical hit multiplier of the player's projectiles. **/
 	private static final double INIT_CRIT_MULTIPLIER = 2;
 
+	/** Movement speed. **/
     private double speed;
-    private Input input;
-	private ProjectileFactory projFactory;
+	/** Time (in seconds) remaining to fire a projectile. **/
 	private double timeToFire = 0;
 	/** Time (in seconds) between firing projectiles. **/
     private double fireInterval;
@@ -66,12 +66,23 @@ public final class PlayerComponent extends Component
 	/** Tracks the player's level. **/
 	private IntegerProperty level = new SimpleIntegerProperty(1);
 
-    private Entity boss;
-
+	/** Indicates if the player is currently dashing. **/
     private boolean dashing = false;
+    /** When the player starts dashing, this is set, and the player begins a fixed path to this point. **/
     private Point2D dashTarget;
+    /** Time (in seconds) remaining to wait before next dash. **/
     private double dashCooldown = 0;
 
+    /** Keep track of the boss entity. **/
+	private Entity boss;
+	/** Use to read keyboard input. **/
+	private Input input;
+	/** Use this to spawn projectiles. **/
+	private ProjectileFactory projFactory;
+
+	/** Creates a PlayerComponent. Do not create multiple players.
+	 * @param input Use to read keyboard input.
+	 * @param factory Use this to spawn projectiles. **/
     public PlayerComponent(Input input, ProjectileFactory factory)
     {
         speed = DEFAULT_MOVE_SPEED;

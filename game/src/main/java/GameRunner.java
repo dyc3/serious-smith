@@ -19,33 +19,56 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-
 import java.util.Map;
 
+/** Main entry class for the application. **/
 public class GameRunner extends GameApplication
 {
-	/** Boss starting health. **/
-	private static final int BOSS_HEALTH = 1000000;
+	/** Width of the application window. **/
+	private static final int WINDOW_WIDTH = 1280;
+	/** Height of the application window. **/
+	private static final int WINDOW_HEIGHT = 720;
+	/** Title of the application window. **/
+	private static final String WINDOW_TITLE = "Serious Smith";
+	/** Version of the program. **/
+	private static final String VERSION = "0.2";
+
+	/** X offset for fixed HUD elements. **/
+	private static final int UI_HUD_OFFSET_X = 50;
+	/** Y offset for fixed HUD elements. **/
+	private static final int UI_HUD_OFFSET_Y = 100;
+	/** Y spacing for fixed HUD elements. **/
+	private static final int UI_HUD_SPACING_Y = 20;
+
 	/** Boss health bar offset on the x axis. **/
-	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
+	private static final int UI_HUD_BOSS_HEALTH_BAR_WIDTH = 140;
 	/** Boss health bar offset on the y axis. **/
-	private static final int BOSS_HEALTH_BAR_OFFSET_Y = -20;
+	private static final int UI_HUD_BOSS_HEALTH_BAR_OFFSET_Y = -20;
 	/** Color of the background. **/
 	private static final Color COLOR_BG = Color.color(0.2, 0.2, 0.2);
 	/** Color of the background grid lines. **/
 	private static final Color COLOR_BG_GRID = Color.color(0.3, 0.3, 0.3);
 	/** Color of the experience bar. **/
 	private static final Color COLOR_XP_BAR = Color.color(0.2, 0.7, 1);
+
+	/** Boss starting health. **/
+	private static final int BOSS_HEALTH = 1000000;
+	/** Width and height of the boss. **/
+	private static final int BOSS_SIZE = 100;
+	/** Width and height of the player. **/
+	private static final int PLAYER_SIZE = 25;
 	/** Chance to spawn an experience orb when the boss is damaged. **/
 	private static final double XP_ORB_SPAWN_ON_DAMAGE_CHANCE = 0.5;
-
 	/** Chance to receive some experience when the player hits the boss. **/
 	private static final double XP_ON_HIT_CHANCE = 0.4;
 
+	/** Quick reference to the player. **/
     private Entity player;
-    private Entity boss;
+	/** Quick reference to the boss. **/
+	private Entity boss;
 
-    /** Program entry. **/
+    /** Program entry.
+	 * @param args command line arguments. **/
     public static void main(String[] args)
     {
         launch(args);
@@ -55,10 +78,10 @@ public class GameRunner extends GameApplication
 	@Override
     protected void initSettings(GameSettings settings)
     {
-        settings.setWidth(1280);
-        settings.setHeight(720);
-        settings.setTitle("Serious Smith");
-        settings.setVersion("0.1");
+        settings.setWidth(WINDOW_WIDTH);
+        settings.setHeight(WINDOW_HEIGHT);
+        settings.setTitle(WINDOW_TITLE);
+        settings.setVersion(VERSION);
     }
 
     /** Initialize the game. Sets up background and builds player and boss entities. Binds camera to player. **/
@@ -70,8 +93,9 @@ public class GameRunner extends GameApplication
 		getGameWorld().addEntityFactory(projectileFactory);
 
 		// set up background
-        Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500,
-                getWidth() * 1000, getHeight() * 1000);
+		int bgWidth = getWidth() * 1000;
+		int bgHeight = getHeight() * 1000;
+        Rectangle bg0 = new Rectangle(-bgWidth / 2, -bgHeight / 2, bgWidth, bgHeight);
         bg0.setFill(COLOR_BG);
         bg0.setBlendMode(BlendMode.DARKEN);
 
@@ -87,7 +111,7 @@ public class GameRunner extends GameApplication
                 .with(new IrremovableComponent())
                 .buildAndAttach(getGameWorld());
 
-        Rectangle rectPlayer = new Rectangle(0, 0, 25, 25);
+        Rectangle rectPlayer = new Rectangle(0, 0, PLAYER_SIZE, PLAYER_SIZE);
         rectPlayer.setFill(Color.BLUE);
         player = Entities.builder()
                 .type(EntType.PLAYER)
@@ -99,7 +123,7 @@ public class GameRunner extends GameApplication
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
-        Rectangle rectBoss = new Rectangle(0, 0, 100, 100);
+        Rectangle rectBoss = new Rectangle(0, 0, BOSS_SIZE, BOSS_SIZE);
         rectBoss.setFill(Color.RED);
         boss = Entities.builder()
                 .type(EntType.BOSS)
@@ -120,25 +144,26 @@ public class GameRunner extends GameApplication
     @Override
     protected void initInput()
     {
-
+		// NOTE: We handle all player controls in PlayerComponent.
     }
 
     /** Initializes UI elements, including health bars hovering over entities in the world. **/
     @Override
     protected void initUI()
     {
+    	int hudElementCount = 0;
     	PlayerComponent p = player.getComponent(PlayerComponent.class);
 
         ProgressBar pbarPlayerHealth = new ProgressBar();
-        pbarPlayerHealth.setTranslateX(50);
-        pbarPlayerHealth.setTranslateY(100);
+        pbarPlayerHealth.setTranslateX(UI_HUD_OFFSET_X);
+        pbarPlayerHealth.setTranslateY(UI_HUD_OFFSET_Y + (UI_HUD_SPACING_Y * hudElementCount++));
         pbarPlayerHealth.makeHPBar();
         pbarPlayerHealth.currentValueProperty().bind(player.getComponent(HealthComponent.class).valueProperty());
 		pbarPlayerHealth.maxValueProperty().bind(p.getMaxHealthProperty());
 
 		ProgressBar pbarPlayerXP = new ProgressBar();
-		pbarPlayerXP.setTranslateX(50);
-		pbarPlayerXP.setTranslateY(120);
+		pbarPlayerXP.setTranslateX(UI_HUD_OFFSET_X);
+		pbarPlayerXP.setTranslateY(UI_HUD_OFFSET_Y + (UI_HUD_SPACING_Y * hudElementCount++));
 		pbarPlayerXP.setFill(COLOR_XP_BAR);
 		pbarPlayerXP.setMinValue(0);
 		pbarPlayerXP.currentValueProperty().bind(p.getXpProperty());
@@ -148,7 +173,7 @@ public class GameRunner extends GameApplication
 		getGameScene().addUINode(pbarPlayerXP);
 
         ProgressBar pbarBossHealth = new ProgressBar();
-        pbarBossHealth.setWidth(120);
+        pbarBossHealth.setWidth(UI_HUD_BOSS_HEALTH_BAR_WIDTH);
         pbarBossHealth.makeHPBar();
 		pbarBossHealth.setMaxValue(BOSS_HEALTH);
 		pbarBossHealth.setLabelVisible(true);
@@ -157,7 +182,9 @@ public class GameRunner extends GameApplication
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
                 .with(new IrremovableComponent())
-                .with(new ParentFollowerComponent(boss, BOSS_HEALTH_BAR_OFFSET_X, BOSS_HEALTH_BAR_OFFSET_Y))
+                .with(new ParentFollowerComponent(boss,
+						(BOSS_SIZE - UI_HUD_BOSS_HEALTH_BAR_WIDTH) / 2,
+						UI_HUD_BOSS_HEALTH_BAR_OFFSET_Y))
                 .buildAndAttach(getGameWorld());
     }
 
