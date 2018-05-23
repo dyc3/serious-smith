@@ -10,5 +10,7 @@ public enum EntType
 	/** Indicates the entity is the boss. **/
     BOSS,
 	/** Indicates the entity is a projectile from the boss. **/
-    BOSS_PROJECTILE
+    BOSS_PROJECTILE,
+	/** Indicates the entity is an experience orb. **/
+	XP_ORB
 }

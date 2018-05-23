@@ -1,8 +1,10 @@
 package main.java;
 
 import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.entity.components.IDComponent;
@@ -12,6 +14,7 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
+import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -27,11 +30,22 @@ public class GameRunner extends GameApplication
 	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
 	/** Boss health bar offset on the y axis. **/
 	private static final int BOSS_HEALTH_BAR_OFFSET_Y = -20;
+	/** Color of the background. **/
+	private static final Color COLOR_BG = Color.color(0.2, 0.2, 0.2);
+	/** Color of the background grid lines. **/
+	private static final Color COLOR_BG_GRID = Color.color(0.3, 0.3, 0.3);
+	/** Color of the experience bar. **/
+	private static final Color COLOR_XP_BAR = Color.color(0.2, 0.7, 1);
+	/** Chance to spawn an experience orb when the boss is damaged. **/
+	private static final double XP_ORB_SPAWN_ON_DAMAGE_CHANCE = 0.5;
+
+	/** Chance to receive some experience when the player hits the boss. **/
+	private static final double XP_ON_HIT_CHANCE = 0.4;
 
     private Entity player;
     private Entity boss;
 
-    /** Program entry **/
+    /** Program entry. **/
     public static void main(String[] args)
     {
         launch(args);
@@ -58,7 +72,7 @@ public class GameRunner extends GameApplication
 		// set up background
         Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500,
                 getWidth() * 1000, getHeight() * 1000);
-        bg0.setFill(Color.color(0.2, 0.2, 0.2, 1));
+        bg0.setFill(COLOR_BG);
         bg0.setBlendMode(BlendMode.DARKEN);
 
         EntityView bg = new EntityView();
@@ -80,7 +94,8 @@ public class GameRunner extends GameApplication
                 .at(0, 300)
                 .viewFromNodeWithBBox(rectPlayer)
                 .with(new HealthComponent(100))
-                .with(new PlayerComponent(getInput(), projectileFactory))
+				.with(new IDComponent("player", 0))
+				.with(new PlayerComponent(getInput(), projectileFactory))
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
@@ -112,13 +127,25 @@ public class GameRunner extends GameApplication
     @Override
     protected void initUI()
     {
+    	PlayerComponent p = player.getComponent(PlayerComponent.class);
+
         ProgressBar pbarPlayerHealth = new ProgressBar();
         pbarPlayerHealth.setTranslateX(50);
         pbarPlayerHealth.setTranslateY(100);
         pbarPlayerHealth.makeHPBar();
         pbarPlayerHealth.currentValueProperty().bind(player.getComponent(HealthComponent.class).valueProperty());
+		pbarPlayerHealth.maxValueProperty().bind(p.getMaxHealthProperty());
 
-        getGameScene().addUINode(pbarPlayerHealth);
+		ProgressBar pbarPlayerXP = new ProgressBar();
+		pbarPlayerXP.setTranslateX(50);
+		pbarPlayerXP.setTranslateY(120);
+		pbarPlayerXP.setFill(COLOR_XP_BAR);
+		pbarPlayerXP.setMinValue(0);
+		pbarPlayerXP.currentValueProperty().bind(p.getXpProperty());
+		pbarPlayerXP.maxValueProperty().bind(p.getXpToNextLevelBinding());
+
+		getGameScene().addUINode(pbarPlayerHealth);
+		getGameScene().addUINode(pbarPlayerXP);
 
         ProgressBar pbarBossHealth = new ProgressBar();
         pbarBossHealth.setWidth(120);
@@ -150,7 +177,7 @@ public class GameRunner extends GameApplication
         for (double x = background.getX(); x < background.getX() + background.getWidth(); x += gridSize)
         {
             Line line = new Line(x, background.getY(), x, background.getY() + background.getHeight());
-            line.setStroke(Color.color(0.3, 0.3, 0.3, 1));
+            line.setStroke(COLOR_BG_GRID);
             line.setStrokeWidth(1);
             bg.addNode(line);
         }
@@ -158,7 +185,7 @@ public class GameRunner extends GameApplication
         for (double y = background.getY(); y < background.getY() + background.getHeight(); y += gridSize)
         {
             Line line = new Line(background.getX(), y, background.getX() + background.getWidth(), y);
-            line.setStroke(Color.color(0.3, 0.3, 0.3, 1));
+            line.setStroke(COLOR_BG_GRID);
             line.setStrokeWidth(1);
             bg.addNode(line);
         }
@@ -178,6 +205,20 @@ public class GameRunner extends GameApplication
                 BaseProjectileComponent proj = projectile.getComponent(PlayerProjectileComponent.class);
                 health.setValue(health.getValue() - proj.calcDamage());
                 projectile.removeFromWorld();
+
+                if (FXGLMath.randomBoolean(XP_ON_HIT_CHANCE))
+				{
+					player.getComponent(PlayerComponent.class).addXP(1);
+				}
+
+				// Spawn some xp orbs sometimes, ejecting from the boss
+				if (FXGLMath.randomBoolean(XP_ORB_SPAWN_ON_DAMAGE_CHANCE))
+				{
+					Point2D spawn = boss.getCenter();
+					SpawnData data = new SpawnData(spawn);
+					Entity orb = new XPFactory().spawnXpOrb(data);
+					boss.getWorld().addEntity(orb);
+				}
             }
         });
 
@@ -205,6 +246,19 @@ public class GameRunner extends GameApplication
 					HealthComponent health = player.getComponent(HealthComponent.class);
 					health.setValue(health.getValue() - b.getRamAttackDamage());
 				}
+			}
+		});
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.XP_ORB)
+		{
+			/** Handle collisions between players and experience orbs. **/
+			@Override
+			protected void onCollisionBegin(Entity entPlayer, Entity entOrb)
+			{
+				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
+				XpOrbComponent orb = entOrb.getComponent(XpOrbComponent.class);
+				player.addXP(orb.getExperience());
+				entOrb.removeFromWorld();
 			}
 		});
     }
