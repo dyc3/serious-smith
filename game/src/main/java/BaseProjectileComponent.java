@@ -1,5 +1,6 @@
 package main.java;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.extra.entity.components.ProjectileComponent;
 import javafx.geometry.Point2D;
 
@@ -54,7 +55,7 @@ public class BaseProjectileComponent extends ProjectileComponent
 		this.critChance = critChance;
 		this.critMultiplier = critMultiplier;
 
-		this.isCritical = Math.random() < this.critChance;
+		this.isCritical = FXGLMath.randomBoolean(this.critChance);
 	}
 
 	/** Update the projectile every tick.
