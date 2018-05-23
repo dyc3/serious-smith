@@ -28,6 +28,12 @@ public class GameRunner extends GameApplication
 	private static final int BOSS_HEALTH_BAR_OFFSET_X = -10;
 	/** Boss health bar offset on the y axis. **/
 	private static final int BOSS_HEALTH_BAR_OFFSET_Y = -20;
+	/** Color of the background. **/
+	private static final Color COLOR_BG = Color.color(0.2, 0.2, 0.2);
+	/** Color of the background grid lines. **/
+	private static final Color COLOR_BG_GRID = Color.color(0.3, 0.3, 0.3);
+	/** Color of the experience bar. **/
+	private static final Color COLOR_XP_BAR = Color.color(0.2, 0.7, 1);
 
 	/** Chance to receive some experience when the player hits the boss. **/
 	private static final double XP_ON_HIT_CHANCE = 0.4;
@@ -62,7 +68,7 @@ public class GameRunner extends GameApplication
 		// set up background
         Rectangle bg0 = new Rectangle(-getWidth() * 500, -getHeight() * 500,
                 getWidth() * 1000, getHeight() * 1000);
-        bg0.setFill(Color.color(0.2, 0.2, 0.2, 1));
+        bg0.setFill(COLOR_BG);
         bg0.setBlendMode(BlendMode.DARKEN);
 
         EntityView bg = new EntityView();
@@ -128,7 +134,7 @@ public class GameRunner extends GameApplication
 		ProgressBar pbarPlayerXP = new ProgressBar();
 		pbarPlayerXP.setTranslateX(50);
 		pbarPlayerXP.setTranslateY(120);
-		pbarPlayerXP.setFill(Color.color(0.2, 0.7, 1));
+		pbarPlayerXP.setFill(COLOR_XP_BAR);
 		pbarPlayerXP.setMinValue(0);
 		pbarPlayerXP.currentValueProperty().bind(p.getXpProperty());
 		pbarPlayerXP.maxValueProperty().bind(p.getXpToNextLevelBinding());
@@ -166,7 +172,7 @@ public class GameRunner extends GameApplication
         for (double x = background.getX(); x < background.getX() + background.getWidth(); x += gridSize)
         {
             Line line = new Line(x, background.getY(), x, background.getY() + background.getHeight());
-            line.setStroke(Color.color(0.3, 0.3, 0.3, 1));
+            line.setStroke(COLOR_BG_GRID);
             line.setStrokeWidth(1);
             bg.addNode(line);
         }
@@ -174,7 +180,7 @@ public class GameRunner extends GameApplication
         for (double y = background.getY(); y < background.getY() + background.getHeight(); y += gridSize)
         {
             Line line = new Line(background.getX(), y, background.getX() + background.getWidth(), y);
-            line.setStroke(Color.color(0.3, 0.3, 0.3, 1));
+            line.setStroke(COLOR_BG_GRID);
             line.setStrokeWidth(1);
             bg.addNode(line);
         }

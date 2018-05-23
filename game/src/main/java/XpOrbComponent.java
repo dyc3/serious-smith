@@ -15,6 +15,7 @@ public class XpOrbComponent extends Component
 	/** Amount of experience that this orb contains. **/
 	private int experience = 0;
 
+	/** The player that the orb moves toward. **/
 	private Entity player = null;
 
 	/** Creates a new experience orb and calculates it's worth. **/
@@ -37,7 +38,8 @@ public class XpOrbComponent extends Component
 		getEntity().translateTowards(player.getCenter(), XP_ORB_SPEED / (dist / 2.0) * tpf);
 	}
 
-	/** Gets how much experience this orb is worth. **/
+	/** Gets how much experience this orb is worth.
+	 * @return integer > 0 **/
 	public int getExperience()
 	{
 		return experience;

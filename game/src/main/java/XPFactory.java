@@ -18,6 +18,8 @@ public class XPFactory implements EntityFactory
 {
 	/** The size of the experience orbs. **/
 	private static final int XP_ORB_SIZE = 3;
+	/** How big of a square area around the player to spawn experience orbs in. **/
+	private static final int XP_SPAWN_AREA_SIZE = 1000;
 
 	/** Spawns an experience orb.
 	 * @param data Attributes to spawn the projectile with, eg. position.
@@ -34,13 +36,15 @@ public class XPFactory implements EntityFactory
 				.build();
 	}
 
-	/** Spawns an experience orb at a random position. **/
+	/** Spawns an experience orb at a random position.
+	 * @param world World to spawn the orb in.
+	 * @param playerPos Position of the player. **/
 	public static void spawnRandomXpOrb(GameWorld world, Point2D playerPos)
 	{
 		Point2D spawn = FXGLMath.randomPoint(new Rectangle2D(
-				playerPos.getX() - 500,
-				playerPos.getY() - 500,
-				1000,1000));
+				playerPos.getX() - (XP_SPAWN_AREA_SIZE / 2),
+				playerPos.getY() - (XP_SPAWN_AREA_SIZE / 2),
+				XP_SPAWN_AREA_SIZE, XP_SPAWN_AREA_SIZE));
 		SpawnData data = new SpawnData(spawn);
 		Entity orb = new XPFactory().spawnXpOrb(data);
 		world.addEntity(orb);

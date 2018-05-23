@@ -29,7 +29,8 @@ public class PlayerComponent extends Component
     private static final int INIT_DAMAGE = 4;
     /** Maximum amount damage can increase by on level up. **/
     private static final int MAX_DAMAGE_CHANGE_PER_LEVEL = 8;
-    private static final double FIRE_INTERVAL_MULTIPLIER = 0.95;
+	/** Multiply fireInterval by this value on level up. **/
+	private static final double FIRE_INTERVAL_MULTIPLIER = 0.95;
     /** XP required to level up. **/
     public static final int XP_PER_LEVEL = 100;
 
@@ -37,7 +38,8 @@ public class PlayerComponent extends Component
     private Input input;
 	private ProjectileFactory projFactory;
 	private double timeToFire = 0;
-    private double fireInterval; // seconds between firing projectiles
+	/** Time (in seconds) between firing projectiles. **/
+    private double fireInterval;
 
 	private int damage = INIT_DAMAGE;
 	/** Tracks the player's experience. **/
@@ -59,6 +61,11 @@ public class PlayerComponent extends Component
 		this.projFactory = factory;
     }
 
+
+	/**
+	 * Gets the direction the player is moving in based on input.
+	 * @return
+	 */
     private Point2D getMoveDirection()
     {
         int x = 0, y = 0;
