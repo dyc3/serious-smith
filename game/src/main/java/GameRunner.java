@@ -10,12 +10,14 @@ import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.entity.view.EntityView;
+import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -121,7 +123,7 @@ public class GameRunner extends GameApplication
     protected void initInput()
     {
 
-    }
+	}
 
     /** Initializes UI elements, including health bars hovering over entities in the world. **/
     @Override

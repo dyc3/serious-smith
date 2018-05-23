@@ -2,6 +2,10 @@ package main.java;
 
 import com.almasb.fxgl.entity.*;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.particle.ParticleComponent;
+import com.almasb.fxgl.particle.ParticleEmitter;
+import com.almasb.fxgl.particle.ParticleEmitters;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -30,6 +34,8 @@ public class ProjectileFactory implements EntityFactory
 					.with(new CollidableComponent(true))
 					.build();
 	}
+	
+
 
 	/** Spawns a dumb projectile fired by the boss.
 	 * Specify size using `data.put("size", int);`
@@ -40,13 +46,22 @@ public class ProjectileFactory implements EntityFactory
 	@Spawns("proj_dumb")
 	public Entity spawnDumbProjectile(SpawnData data)
 	{
+		ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
+		emitter.setStartColor(Color.LIGHTYELLOW);
+		emitter.setEndColor(Color.RED);
+		emitter.setBlendMode(BlendMode.SRC_OVER);
+		emitter.setSize(8, 10);
+		emitter.setEmissionRate(1);
+
 		int size = data.get("size");
 		return Entities.builder()
+				.with(new ParticleComponent(emitter))
 				.from(data)
 				.type(EntType.BOSS_PROJECTILE)
 				.viewFromNodeWithBBox(new Circle(0, 0, size, Color.ORANGE))
 				.with(new BaseProjectileComponent(data.get("direction"), data.get("speed")))
 				.with(new CollidableComponent(true))
 				.build();
+
 	}
 }

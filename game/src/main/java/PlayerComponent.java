@@ -1,5 +1,6 @@
 package main.java;
 
+
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -11,6 +12,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
+
 
 /** Controls the player. Should not be extended. **/
 public final class PlayerComponent extends Component
@@ -254,6 +256,7 @@ public final class PlayerComponent extends Component
 		{
 			this.xp.set(this.xp.getValue() - getXpToNextLevel());
 			levelUp();
+
 		}
 	}
 
@@ -272,5 +275,6 @@ public final class PlayerComponent extends Component
 		// heal the player on level up
 		HealthComponent health = entity.getComponent(HealthComponent.class);
 		health.setValue(maxHealth.getValue());
+
 	}
 }

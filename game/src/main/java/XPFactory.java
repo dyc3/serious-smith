@@ -8,8 +8,12 @@ import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.particle.ParticleComponent;
+import com.almasb.fxgl.particle.ParticleEmitter;
+import com.almasb.fxgl.particle.ParticleEmitters;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -34,6 +38,9 @@ public class XPFactory implements EntityFactory
 				.with(new CollidableComponent(true))
 				.with(new XpOrbComponent())
 				.build();
+
+
+
 	}
 
 	/** Spawns an experience orb at a random position.
@@ -47,6 +54,18 @@ public class XPFactory implements EntityFactory
 				XP_SPAWN_AREA_SIZE, XP_SPAWN_AREA_SIZE));
 		SpawnData data = new SpawnData(spawn);
 		Entity orb = new XPFactory().spawnXpOrb(data);
+
+		/*ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
+		emitter.setStartColor(Color.LIGHTYELLOW);
+		emitter.setEndColor(Color.RED);
+		emitter.setBlendMode(BlendMode.SRC_OVER);
+		emitter.setSize(5, 10);
+		emitter.setEmissionRate(1);
+
+		orb.addComponent(new ParticleComponent(emitter));*/
+
 		world.addEntity(orb);
+
+
 	}
 }
