@@ -2,12 +2,13 @@ package main.java;
 
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 import java.lang.reflect.InvocationTargetException;
@@ -53,6 +54,7 @@ public class BossComponent extends Component
 	/** Amount of damage to deal to the player each frame the collide with laser. **/
 	public static final int LASER_ATTACK_DAMAGE = 1;
 	private static final int LASER_ATTACK_BEAM_LENGTH = 8000;
+	private static final Color LASER_ATTACK_BEAM_COLOR = Color.color(0.9, 0.1, 0.1);
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;
@@ -313,7 +315,15 @@ public class BossComponent extends Component
 			{
 				double width = entity.getWidth();
 				Rectangle beam = new Rectangle(0, 0, width, LASER_ATTACK_BEAM_LENGTH);
-				beam.setFill(Color.WHITE);
+				LinearGradient gradient = new LinearGradient(0, 0,
+						1, 0,
+						true,
+						CycleMethod.NO_CYCLE,
+						new Stop(0, LASER_ATTACK_BEAM_COLOR),
+						new Stop(0.4, Color.WHITE),
+						new Stop(0.6, Color.WHITE),
+						new Stop(1, LASER_ATTACK_BEAM_COLOR));
+				beam.setFill(gradient);
 
 				_lasers[i] = Entities.builder()
 						.type(EntType.BOSS_LASER)
