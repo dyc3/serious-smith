@@ -67,6 +67,8 @@ public class GameRunner extends GameApplication
     private Entity player;
 	/** Quick reference to the boss. **/
 	private Entity boss;
+	/** Quick reference to the camera holder. **/
+	private Entity camHolder;
 
     /** Program entry.
 	 * @param args command line arguments. **/
@@ -137,8 +139,14 @@ public class GameRunner extends GameApplication
                 .with(new CollidableComponent(true))
                 .buildAndAttach(getGameWorld());
 
+		camHolder = Entities.builder()
+				.with(new IDComponent("camera holder", 0))
+				.with(new ParentFollowerComponent(player, 0, 0))
+				.with(new CameraShakerComponent())
+				.buildAndAttach(getGameWorld());
+
         Viewport viewport = getGameScene().getViewport();
-        viewport.bindToEntity(player,
+        viewport.bindToEntity(camHolder,
                        (getWidth() / 2) - (player.getWidth() / 2),
                        (getHeight() / 2) - (player.getHeight() / 2));
     }
@@ -260,6 +268,12 @@ public class GameRunner extends GameApplication
 				BaseProjectileComponent proj = projectile.getComponent(BaseProjectileComponent.class);
 				health.setValue(health.getValue() - proj.calcDamage());
 				projectile.removeFromWorld();
+
+				CameraShakerComponent shaker = camHolder.getComponent(CameraShakerComponent.class);
+				if (shaker.getShake() < 6)
+				{
+					shaker.addShake(2);
+				}
 			}
 		});
 
@@ -274,6 +288,9 @@ public class GameRunner extends GameApplication
 					b.endAttack();
 					HealthComponent health = player.getComponent(HealthComponent.class);
 					health.setValue(health.getValue() - b.getRamAttackDamage());
+
+					camHolder.getComponent(CameraShakerComponent.class)
+							.setShake(BossComponent.RAM_ATTACK_CAMERA_SHAKE);
 				}
 			}
 		});

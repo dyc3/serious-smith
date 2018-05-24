@@ -50,6 +50,8 @@ public class BossComponent extends Component
 	private static final int RAM_ATTACK_DURATION = 2;
 	/** Damage of ram attack. **/
 	public static final int RAM_ATTACK_DAMAGE = 40;
+  /** Camera shake factor on collision with player. **/
+	public static final float RAM_ATTACK_CAMERA_SHAKE = 5;
 	/** Number of beams in the laser attack. **/
 	private static final int LASER_ATTACK_NUM_BEAMS = 2;
 	/** Maximum duration (in seconds) of laser attack. **/
