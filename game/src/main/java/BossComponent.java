@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.Glow;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
@@ -55,6 +56,8 @@ public class BossComponent extends Component
 	public static final int LASER_ATTACK_DAMAGE = 1;
 	private static final int LASER_ATTACK_BEAM_LENGTH = 8000;
 	private static final Color LASER_ATTACK_BEAM_COLOR = Color.color(0.9, 0.1, 0.1);
+	/** Glow strength of the lasers. Set to 0 to disable glow. **/
+	private static final double LASER_ATTACK_BEAM_GLOW = 0.8;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;
@@ -324,6 +327,10 @@ public class BossComponent extends Component
 						new Stop(0.6, Color.WHITE),
 						new Stop(1, LASER_ATTACK_BEAM_COLOR));
 				beam.setFill(gradient);
+				if (LASER_ATTACK_BEAM_GLOW > 0)
+				{
+					beam.setEffect(new Glow(LASER_ATTACK_BEAM_GLOW));
+				}
 
 				_lasers[i] = Entities.builder()
 						.type(EntType.BOSS_LASER)
