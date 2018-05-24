@@ -287,7 +287,8 @@ public class GameRunner extends GameApplication
 					HealthComponent health = player.getComponent(HealthComponent.class);
 					health.setValue(health.getValue() - b.getRamAttackDamage());
 
-					camHolder.getComponent(CameraShakerComponent.class).setShake(BossComponent.RAM_ATTACK_CAMERA_SHAKE);
+					camHolder.getComponent(CameraShakerComponent.class)
+							.setShake(BossComponent.RAM_ATTACK_CAMERA_SHAKE);
 				}
 			}
 		});

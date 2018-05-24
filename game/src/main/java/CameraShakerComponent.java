@@ -26,13 +26,15 @@ public class CameraShakerComponent extends Component
 		}
 	}
 
-	/** Sets the shake factor. **/
+	/** Sets the shake factor.
+	 * @param amount Shake factor **/
 	public void setShake(float amount)
 	{
 		shakeAmount = amount;
 	}
 
-	/** Adds shake on top of the current shake factor. **/
+	/** Adds shake on top of the current shake factor.
+	 * @param amount Shake factor **/
 	public void addShake(float amount)
 	{
 		shakeAmount += amount;
