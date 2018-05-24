@@ -134,7 +134,7 @@ public class BossComponent extends Component
 		}
 		else
 		{
-			return BossAttack.LASER;
+			return BossAttack.STAR;
 		}
 	}
 
