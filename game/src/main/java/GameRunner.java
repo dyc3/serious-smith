@@ -289,5 +289,17 @@ public class GameRunner extends GameApplication
 				entOrb.removeFromWorld();
 			}
 		});
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_LASER)
+		{
+			/** Handle collisions between players and lasers. **/
+			@Override
+			protected void onCollision(Entity entPlayer, Entity entLaser)
+			{
+				System.out.println("collide laser");
+				HealthComponent health = entPlayer.getComponent(HealthComponent.class);
+				health.setValue(health.getValue() - BossComponent.LASER_ATTACK_DAMAGE);
+			}
+		});
     }
 }

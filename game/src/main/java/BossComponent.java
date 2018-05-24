@@ -5,6 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -317,6 +318,7 @@ public class BossComponent extends Component
 				_lasers[i] = Entities.builder()
 						.type(EntType.BOSS_LASER)
 						.viewFromNodeWithBBox(beam)
+						.with(new CollidableComponent(true))
 						.buildAndAttach(entity.getWorld());
 			}
 		}
