@@ -1,5 +1,6 @@
 package main.java;
 
+import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
@@ -10,7 +11,11 @@ import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.entity.view.EntityView;
+import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.particle.ParticleComponent;
+import com.almasb.fxgl.particle.ParticleEmitter;
+import com.almasb.fxgl.particle.ParticleEmitters;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
@@ -40,6 +45,7 @@ public class GameRunner extends GameApplication
 	private static final Color COLOR_XP_BAR = Color.color(0.2, 0.7, 1);
 	/** Chance to spawn an experience orb when the boss is damaged. **/
 	private static final double XP_ORB_SPAWN_ON_DAMAGE_CHANCE = 0.5;
+
 
 	/** Chance to receive some experience when the player hits the boss. **/
 	private static final double XP_ON_HIT_CHANCE = 0.4;
@@ -91,10 +97,12 @@ public class GameRunner extends GameApplication
 
         Rectangle rectPlayer = new Rectangle(0, 0, 25, 25);
         rectPlayer.setFill(Color.BLUE);
+
         player = Entities.builder()
                 .type(EntType.PLAYER)
                 .at(0, 300)
                 .viewFromNodeWithBBox(rectPlayer)
+				//.viewFromTexture("serioussmith.png")
                 .with(new HealthComponent(100))
 				.with(new IDComponent("player", 0))
 				.with(new PlayerComponent(getInput(), projectileFactory))
@@ -103,10 +111,14 @@ public class GameRunner extends GameApplication
 
         Rectangle rectBoss = new Rectangle(0, 0, 100, 100);
         rectBoss.setFill(Color.RED);
+
+
+
         boss = Entities.builder()
                 .type(EntType.BOSS)
                 .at(0, 0)
                 .viewFromNodeWithBBox(rectBoss)
+				.viewFromTexture("thefalsegod.png")
                 .with(new HealthComponent(BOSS_HEALTH))
                 .with(new BossComponent(projectileFactory))
                 .with(new IDComponent("boss", 0))
@@ -122,7 +134,14 @@ public class GameRunner extends GameApplication
     @Override
     protected void initInput()
     {
+		/*Input input = getInput();
 
+		input.addAction(new UserAction("Play Sound") {
+			@Override
+			protected void onActionBegin() {
+				getAudioPlayer().playSound("Jump4.wav");
+			}
+		}, KeyCode.SHIFT);*/
 	}
 
     /** Initializes UI elements, including health bars hovering over entities in the world. **/
@@ -229,6 +248,7 @@ public class GameRunner extends GameApplication
 			@Override
 			protected void onCollisionBegin(Entity player, Entity projectile)
 			{
+				FXGL.getAudioPlayer().playSound("PlayerDamage1.wav");
 				HealthComponent health = player.getComponent(HealthComponent.class);
 				BaseProjectileComponent proj = projectile.getComponent(BaseProjectileComponent.class);
 				health.setValue(health.getValue() - proj.calcDamage());
@@ -257,6 +277,7 @@ public class GameRunner extends GameApplication
 			@Override
 			protected void onCollisionBegin(Entity entPlayer, Entity entOrb)
 			{
+				FXGL.getAudioPlayer().playSound("ExpPickUp1.wav");
 				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
 				XpOrbComponent orb = entOrb.getComponent(XpOrbComponent.class);
 				player.addXP(orb.getExperience());

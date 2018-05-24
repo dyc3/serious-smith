@@ -22,10 +22,19 @@ public class ProjectileFactory implements EntityFactory
 	@Spawns("proj_player")
 	public Entity spawnPlayerProjectile(SpawnData data)
 	{
+		ParticleEmitter playerProjectileEmitter = ParticleEmitters.newFireEmitter();
+		playerProjectileEmitter.setStartColor(Color.LIGHTYELLOW);
+		playerProjectileEmitter.setEndColor(Color.GREENYELLOW);
+		playerProjectileEmitter.setBlendMode(BlendMode.SRC_ATOP);
+		playerProjectileEmitter.setSize(2, 4);
+		playerProjectileEmitter.setEmissionRate(.5);
+
 		return Entities.builder()
+				    .with(new ParticleComponent(playerProjectileEmitter))
 					.from(data)
 					.type(EntType.PROJECTILE)
 					.viewFromNodeWithBBox(new Circle(0, 0, PLAYER_PROJECTILE_SIZE, Color.ORANGE))
+					.viewFromTexture("projectile1.png")
 					.with(new PlayerProjectileComponent(
 							data.get("target"),
 							data.get("damage"),
@@ -34,7 +43,7 @@ public class ProjectileFactory implements EntityFactory
 					.with(new CollidableComponent(true))
 					.build();
 	}
-	
+
 
 
 	/** Spawns a dumb projectile fired by the boss.
@@ -46,16 +55,8 @@ public class ProjectileFactory implements EntityFactory
 	@Spawns("proj_dumb")
 	public Entity spawnDumbProjectile(SpawnData data)
 	{
-		ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
-		emitter.setStartColor(Color.LIGHTYELLOW);
-		emitter.setEndColor(Color.RED);
-		emitter.setBlendMode(BlendMode.SRC_OVER);
-		emitter.setSize(8, 10);
-		emitter.setEmissionRate(1);
-
 		int size = data.get("size");
 		return Entities.builder()
-				.with(new ParticleComponent(emitter))
 				.from(data)
 				.type(EntType.BOSS_PROJECTILE)
 				.viewFromNodeWithBBox(new Circle(0, 0, size, Color.ORANGE))

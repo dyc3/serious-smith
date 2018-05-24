@@ -1,17 +1,24 @@
 package main.java;
 
 
+import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.particle.ParticleComponent;
+import com.almasb.fxgl.particle.ParticleEmitter;
+import com.almasb.fxgl.particle.ParticleEmitters;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 
 /** Controls the player. Should not be extended. **/
@@ -127,6 +134,8 @@ public final class PlayerComponent extends Component
             double dashX = entity.getPosition().getX() + move.getX();
             double dashY = entity.getPosition().getY() + move.getY();
             dashTarget = new Point2D(dashX, dashY);
+            //plays dash noise
+			FXGL.getAudioPlayer().playSound("Jump4.wav");
 
 			// reset time to fire so that the increased fire rate when dashing is consistent
             timeToFire = 0;
@@ -170,6 +179,7 @@ public final class PlayerComponent extends Component
 			data.put("critChance", getCritChance());
 			data.put("critMultiplier", getCritMultiplier());
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
+			FXGL.getAudioPlayer().playSound("PlayerProjectileNoise1.wav");
         }
     }
 
@@ -256,13 +266,13 @@ public final class PlayerComponent extends Component
 		{
 			this.xp.set(this.xp.getValue() - getXpToNextLevel());
 			levelUp();
-
 		}
 	}
 
 	/** Increase the player's level by one and buff stats. **/
 	public void levelUp()
 	{
+		FXGL.getAudioPlayer().playSound("Powerup1.wav");
 		level.setValue(level.getValue() + 1);
 		damage += FXGLMath.random(1, MAX_DAMAGE_CHANGE_PER_LEVEL);
 		fireInterval *= FIRE_INTERVAL_MULTIPLIER;
