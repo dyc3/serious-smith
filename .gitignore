@@ -77,3 +77,4 @@ fabric.properties
 system/
 *.bundle
 system/fxgl.bundle
+game/bin/*
