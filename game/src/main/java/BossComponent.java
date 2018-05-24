@@ -1,10 +1,19 @@
 package main.java;
 
+import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import javafx.geometry.Point2D;
-
+import javafx.scene.effect.Glow;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,8 +50,20 @@ public class BossComponent extends Component
 	private static final int RAM_ATTACK_DURATION = 2;
 	/** Damage of ram attack. **/
 	public static final int RAM_ATTACK_DAMAGE = 40;
-	/** Camera shake factor on collision with player. **/
+  /** Camera shake factor on collision with player. **/
 	public static final float RAM_ATTACK_CAMERA_SHAKE = 5;
+	/** Number of beams in the laser attack. **/
+	private static final int LASER_ATTACK_NUM_BEAMS = 2;
+	/** Maximum duration (in seconds) of laser attack. **/
+	private static final int LASER_ATTACK_DURATION = 12;
+	/** Amount of damage to deal to the player each frame the collide with laser. **/
+	public static final int LASER_ATTACK_DAMAGE = 1;
+	/** Laser beam length. **/
+	private static final int LASER_ATTACK_BEAM_LENGTH = 8000;
+	/** Laser beam color. **/
+	private static final Color LASER_ATTACK_BEAM_COLOR = Color.color(0.9, 0.1, 0.1);
+	/** Glow strength of the lasers. Set to 0 to disable glow. **/
+	private static final double LASER_ATTACK_BEAM_GLOW = 0.8;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;
@@ -104,20 +125,16 @@ public class BossComponent extends Component
 	 * @return The next attack to perform. **/
     private BossAttack nextAttack()
 	{
-		if (Math.random() < BIG_ATTACK_CHANCE)
+		if (FXGLMath.randomBoolean(BIG_ATTACK_CHANCE))
 		{
-			if (Math.random() <= 0.5)
-			{
-				return BossAttack.RAM;
-			}
-			else
-			{
-				return BossAttack.BURST;
-			}
+			return FXGLMath.random(new BossAttack[] {
+					BossAttack.RAM,
+					BossAttack.BURST,
+					BossAttack.LASER}).get();
 		}
 		else
 		{
-			return BossAttack.STAR;
+			return BossAttack.LASER;
 		}
 	}
 
@@ -207,6 +224,14 @@ public class BossComponent extends Component
 	{
 		timeUntilAttack = baseAttackInterval;
 		currentAttack = null;
+		if (_lasers != null)
+		{
+			for (Entity e : _lasers)
+			{
+				e.removeFromWorld();
+			}
+			_lasers = null;
+		}
 	}
 
 	/** Used to keep track of how many stars have fired during the current star attack. **/
@@ -280,6 +305,73 @@ public class BossComponent extends Component
 		{
 			endAttack();
 			_ramDirection = null;
+		}
+	}
+
+	/** Keep track of lasers used in the laser attack. **/
+	private Entity[] _lasers = null;
+	/** 4 lasers matching the width of the boss, fired in each cardinal direction.
+	 * @param tpf Time per frame. **/
+	@HandlesAttack(attack = BossAttack.LASER)
+	public void attackLaser(double tpf)
+	{
+		if (_lasers == null)
+		{
+			_lasers = new Entity[LASER_ATTACK_NUM_BEAMS];
+			for (int i = 0; i < LASER_ATTACK_NUM_BEAMS; i++)
+			{
+				System.out.println(entity.getRenderLayer().index());
+
+				double width = entity.getWidth();
+				Rectangle beam = new Rectangle(0, 0, width, LASER_ATTACK_BEAM_LENGTH);
+				LinearGradient gradient = new LinearGradient(0, 0,
+						1, 0,
+						true,
+						CycleMethod.NO_CYCLE,
+						new Stop(0, LASER_ATTACK_BEAM_COLOR),
+						new Stop(0.4, Color.WHITE),
+						new Stop(0.6, Color.WHITE),
+						new Stop(1, LASER_ATTACK_BEAM_COLOR));
+				beam.setFill(gradient);
+				if (LASER_ATTACK_BEAM_GLOW > 0)
+				{
+					beam.setEffect(new Glow(LASER_ATTACK_BEAM_GLOW));
+				}
+
+				_lasers[i] = Entities.builder()
+						.type(EntType.BOSS_LASER)
+						.viewFromNodeWithBBox(beam)
+						.renderLayer(new RenderLayer()
+						{
+							@Override
+							public String name()
+							{
+								return "lasers";
+							}
+
+							@Override
+							public int index()
+							{
+								return entity.getRenderLayer().index() - 1;
+							}
+						})
+						.with(new CollidableComponent(true))
+						.buildAndAttach(entity.getWorld());
+			}
+		}
+
+		for (int i = 0; i < _lasers.length; i++)
+		{
+			double angle = (360.0 / (_lasers.length * 2)) * i + (Math.max(0, attackTime - 2) * 10) % 360;
+			Point2D targetPos = entity.getCenter();
+			targetPos = targetPos.subtract(entity.getWidth() / 2, LASER_ATTACK_BEAM_LENGTH / 2);
+			_lasers[i].setPosition(targetPos);
+			_lasers[i].setRotation(angle);
+		}
+
+		if (attackTime > LASER_ATTACK_DURATION)
+		{
+			endAttack();
 		}
 	}
 }

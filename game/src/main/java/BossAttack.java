@@ -8,5 +8,7 @@ public enum BossAttack
 	/** See BossComponent. **/
 	BURST,
 	/** See BossComponent. **/
-	RAM
+	RAM,
+	/** See BossComponent. **/
+	LASER
 }

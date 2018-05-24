@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
@@ -110,6 +111,7 @@ public class GameRunner extends GameApplication
         // the background and screen bounds stay in the game world
         Entities.builder()
                 .viewFromNode(bg)
+				.renderLayer(RenderLayer.BACKGROUND)
                 .with(new IrremovableComponent())
                 .buildAndAttach(getGameWorld());
 
@@ -189,7 +191,7 @@ public class GameRunner extends GameApplication
 
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
-                .with(new IrremovableComponent())
+				.with(new IrremovableComponent())
                 .with(new ParentFollowerComponent(boss,
 						(BOSS_SIZE - UI_HUD_BOSS_HEALTH_BAR_WIDTH) / 2,
 						UI_HUD_BOSS_HEALTH_BAR_OFFSET_Y))
@@ -303,6 +305,17 @@ public class GameRunner extends GameApplication
 				XpOrbComponent orb = entOrb.getComponent(XpOrbComponent.class);
 				player.addXP(orb.getExperience());
 				entOrb.removeFromWorld();
+			}
+		});
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_LASER)
+		{
+			/** Handle collisions between players and lasers. **/
+			@Override
+			protected void onCollision(Entity entPlayer, Entity entLaser)
+			{
+				HealthComponent health = entPlayer.getComponent(HealthComponent.class);
+				health.setValue(health.getValue() - BossComponent.LASER_ATTACK_DAMAGE);
 			}
 		});
     }
