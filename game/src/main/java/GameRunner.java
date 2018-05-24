@@ -296,7 +296,6 @@ public class GameRunner extends GameApplication
 			@Override
 			protected void onCollision(Entity entPlayer, Entity entLaser)
 			{
-				System.out.println("collide laser");
 				HealthComponent health = entPlayer.getComponent(HealthComponent.class);
 				health.setValue(health.getValue() - BossComponent.LASER_ATTACK_DAMAGE);
 			}
