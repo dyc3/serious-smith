@@ -320,8 +320,6 @@ public class BossComponent extends Component
 			_lasers = new Entity[LASER_ATTACK_NUM_BEAMS];
 			for (int i = 0; i < LASER_ATTACK_NUM_BEAMS; i++)
 			{
-				System.out.println(entity.getRenderLayer().index());
-
 				double width = entity.getWidth();
 				Rectangle beam = new Rectangle(0, 0, width, LASER_ATTACK_BEAM_LENGTH);
 				LinearGradient gradient = new LinearGradient(0, 0,
