@@ -329,5 +329,10 @@ public class BossComponent extends Component
 			_lasers[i].setPosition(targetPos);
 			_lasers[i].setRotation(angle);
 		}
+
+		if (attackTime > LASER_ATTACK_DURATION)
+		{
+			endAttack();
+		}
 	}
 }
