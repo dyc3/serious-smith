@@ -1,6 +1,8 @@
 package main.java;
 
 import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.audio.Music;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
@@ -15,6 +17,7 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
+import com.gluonhq.charm.down.plugins.audio.Audio;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
@@ -196,6 +199,18 @@ public class GameRunner extends GameApplication
 						(BOSS_SIZE - UI_HUD_BOSS_HEALTH_BAR_WIDTH) / 2,
 						UI_HUD_BOSS_HEALTH_BAR_OFFSET_Y))
                 .buildAndAttach(getGameWorld());
+
+		// Play the background music.
+		// Normally, we should just run `getAudioPlayer().loopBGM("intense.mp3")`, but
+		// that doesn't work, because FXGL is stupid. So, as a workaround, we load the
+		// music as a `Sound`, then we get the `Audio`, set it to loop, and feed it
+		// into a `Music` object, and then play it.
+		Sound bgmSound = getAssetLoader().loadSound("intense.wav");
+		Audio bgmAudio = bgmSound.getAudio$fxgl_base();
+		bgmAudio.setLooping(true);
+		Music bgm = new Music(bgmAudio);
+		bgm.setCycleCount(Integer.MAX_VALUE);
+		getAudioPlayer().playMusic(bgm);
     }
 
     @Override
