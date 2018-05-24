@@ -24,4 +24,13 @@ public class ParentFollowerComponent extends Component
         entity.setX(following.getX() + offsetX);
         entity.setY(following.getY() + offsetY);
     }
+
+    /** Set the follower offset.
+	 * @param x Offset on the X axis.
+	 * @param y Offset on the Y axis. **/
+    public void setOffset(double x, double y)
+    {
+        offsetX = x;
+        offsetY = y;
+    }
 }
