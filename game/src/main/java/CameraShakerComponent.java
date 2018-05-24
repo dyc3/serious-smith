@@ -3,8 +3,10 @@ package main.java;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.component.Component;
 
+/** Used for camera shake. Requires ParentFollowerComponent to be present on the entity. **/
 public class CameraShakerComponent extends Component
 {
+	/** Shake factor. **/
 	private double shakeAmount = 0;
 
 	/** Update every tick.
@@ -24,13 +26,22 @@ public class CameraShakerComponent extends Component
 		}
 	}
 
+	/** Sets the shake factor. **/
 	public void setShake(float amount)
 	{
 		shakeAmount = amount;
 	}
 
+	/** Adds shake on top of the current shake factor. **/
 	public void addShake(float amount)
 	{
 		shakeAmount += amount;
+	}
+
+	/** Get the shake factor.
+	 * @return double >= 0 **/
+	public double getShake()
+	{
+		return shakeAmount;
 	}
 }

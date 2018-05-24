@@ -41,6 +41,8 @@ public class BossComponent extends Component
 	private static final int RAM_ATTACK_DURATION = 2;
 	/** Damage of ram attack. **/
 	public static final int RAM_ATTACK_DAMAGE = 40;
+	/** Camera shake factor on collision with player. **/
+	public static final float RAM_ATTACK_CAMERA_SHAKE = 5;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;

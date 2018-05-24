@@ -267,7 +267,11 @@ public class GameRunner extends GameApplication
 				health.setValue(health.getValue() - proj.calcDamage());
 				projectile.removeFromWorld();
 
-				camHolder.getComponent(CameraShakerComponent.class).setShake(2);
+				CameraShakerComponent shaker = camHolder.getComponent(CameraShakerComponent.class);
+				if (shaker.getShake() < 6)
+				{
+					shaker.addShake(2);
+				}
 			}
 		});
 
@@ -283,7 +287,7 @@ public class GameRunner extends GameApplication
 					HealthComponent health = player.getComponent(HealthComponent.class);
 					health.setValue(health.getValue() - b.getRamAttackDamage());
 
-					camHolder.getComponent(CameraShakerComponent.class).setShake(5);
+					camHolder.getComponent(CameraShakerComponent.class).setShake(BossComponent.RAM_ATTACK_CAMERA_SHAKE);
 				}
 			}
 		});
