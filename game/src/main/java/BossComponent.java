@@ -1,5 +1,6 @@
 package main.java;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -121,22 +122,14 @@ public class BossComponent extends Component
 	 * @return The next attack to perform. **/
     private BossAttack nextAttack()
 	{
-		return BossAttack.LASER;
-//		if (Math.random() < BIG_ATTACK_CHANCE)
-//		{
-//			if (Math.random() <= 0.5)
-//			{
-//				return BossAttack.RAM;
-//			}
-//			else
-//			{
-//				return BossAttack.BURST;
-//			}
-//		}
-//		else
-//		{
-//			return BossAttack.STAR;
-//		}
+		if (FXGLMath.randomBoolean(BIG_ATTACK_CHANCE))
+		{
+			return FXGLMath.random(new BossAttack[] {BossAttack.RAM, BossAttack.BURST, BossAttack.LASER}).get();
+		}
+		else
+		{
+			return BossAttack.STAR;
+		}
 	}
 
     /** Gets the closest player.
