@@ -339,7 +339,8 @@ public class BossComponent extends Component
 				_lasers[i] = Entities.builder()
 						.type(EntType.BOSS_LASER)
 						.viewFromNodeWithBBox(beam)
-						.renderLayer(new RenderLayer() {
+						.renderLayer(new RenderLayer()
+						{
 							@Override
 							public String name()
 							{
