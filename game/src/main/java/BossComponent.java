@@ -54,7 +54,9 @@ public class BossComponent extends Component
 	private static final int LASER_ATTACK_DURATION = 12;
 	/** Amount of damage to deal to the player each frame the collide with laser. **/
 	public static final int LASER_ATTACK_DAMAGE = 1;
+	/** Laser beam length. **/
 	private static final int LASER_ATTACK_BEAM_LENGTH = 8000;
+	/** Laser beam color. **/
 	private static final Color LASER_ATTACK_BEAM_COLOR = Color.color(0.9, 0.1, 0.1);
 	/** Glow strength of the lasers. Set to 0 to disable glow. **/
 	private static final double LASER_ATTACK_BEAM_GLOW = 0.8;
