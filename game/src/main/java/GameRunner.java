@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
@@ -108,6 +109,7 @@ public class GameRunner extends GameApplication
         // the background and screen bounds stay in the game world
         Entities.builder()
                 .viewFromNode(bg)
+				.renderLayer(RenderLayer.BACKGROUND)
                 .with(new IrremovableComponent())
                 .buildAndAttach(getGameWorld());
 

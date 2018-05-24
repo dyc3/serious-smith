@@ -3,6 +3,7 @@ package main.java;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -131,7 +132,7 @@ public class BossComponent extends Component
 		}
 		else
 		{
-			return BossAttack.STAR;
+			return BossAttack.LASER;
 		}
 	}
 
@@ -317,6 +318,8 @@ public class BossComponent extends Component
 			_lasers = new Entity[LASER_ATTACK_NUM_BEAMS];
 			for (int i = 0; i < LASER_ATTACK_NUM_BEAMS; i++)
 			{
+				System.out.println(entity.getRenderLayer().index());
+
 				double width = entity.getWidth();
 				Rectangle beam = new Rectangle(0, 0, width, LASER_ATTACK_BEAM_LENGTH);
 				LinearGradient gradient = new LinearGradient(0, 0,
@@ -336,6 +339,19 @@ public class BossComponent extends Component
 				_lasers[i] = Entities.builder()
 						.type(EntType.BOSS_LASER)
 						.viewFromNodeWithBBox(beam)
+						.renderLayer(new RenderLayer() {
+							@Override
+							public String name()
+							{
+								return "lasers";
+							}
+
+							@Override
+							public int index()
+							{
+								return entity.getRenderLayer().index() - 1;
+							}
+						})
 						.with(new CollidableComponent(true))
 						.buildAndAttach(entity.getWorld());
 			}
