@@ -316,6 +316,9 @@ public class GameRunner extends GameApplication
 			{
 				HealthComponent health = entPlayer.getComponent(HealthComponent.class);
 				health.setValue(health.getValue() - BossComponent.LASER_ATTACK_DAMAGE);
+
+				camHolder.getComponent(CameraShakerComponent.class)
+						.setShake(5);
 			}
 		});
     }
