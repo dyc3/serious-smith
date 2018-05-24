@@ -46,7 +46,7 @@ public class BossComponent extends Component
 	/** Damage of ram attack. **/
 	public static final int RAM_ATTACK_DAMAGE = 40;
 	/** Number of beams in the laser attack. **/
-	private static final int LASER_ATTACK_NUM_BEAMS = 4;
+	private static final int LASER_ATTACK_NUM_BEAMS = 2;
 	/** Maximum duration (in seconds) of laser attack. **/
 	private static final int LASER_ATTACK_DURATION = 12;
 	/** Amount of damage to deal to the player each frame the collide with laser. **/
@@ -323,7 +323,7 @@ public class BossComponent extends Component
 
 		for (int i = 0; i < _lasers.length; i++)
 		{
-			double angle = (360.0 / (double)_lasers.length) * (double)i + (Math.max(0, attackTime - 2) * 10) % 360;
+			double angle = (360.0 / (_lasers.length * 2)) * i + (Math.max(0, attackTime - 2) * 10) % 360;
 			Point2D targetPos = entity.getCenter();
 			targetPos = targetPos.subtract(entity.getWidth() / 2, LASER_ATTACK_BEAM_LENGTH / 2);
 			_lasers[i].setPosition(targetPos);
