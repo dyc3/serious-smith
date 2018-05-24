@@ -218,11 +218,14 @@ public class BossComponent extends Component
 	{
 		timeUntilAttack = baseAttackInterval;
 		currentAttack = null;
-		for (Entity e : _lasers)
+		if (_lasers != null)
 		{
-			e.removeFromWorld();
+			for (Entity e : _lasers)
+			{
+				e.removeFromWorld();
+			}
+			_lasers = null;
 		}
-		_lasers = null;
 	}
 
 	/** Used to keep track of how many stars have fired during the current star attack. **/
