@@ -252,6 +252,13 @@ public final class PlayerComponent extends Component
 		return maxHealth;
 	}
 
+	/** Gets if the player is dashing.
+	 * @return true if the player is dashing, false if not. **/
+	public boolean getIsDashing()
+	{
+		return dashing;
+	}
+
 	/** Increase the player's experience and levels up when threashold is reached.
 	 * @param exp The amount of experience to add. **/
 	public void addXP(int exp)
@@ -283,5 +290,16 @@ public final class PlayerComponent extends Component
 		// heal the player on level up
 		HealthComponent health = entity.getComponent(HealthComponent.class);
 		health.setValue(maxHealth.getValue());
+	}
+
+	/** Shortcut to deals damage to the player.
+	 * @param amount The amount of damage to deal. **/
+	public void dealDamage(int amount)
+	{
+		if (getIsDashing())
+			return;
+
+		HealthComponent health = entity.getComponent(HealthComponent.class);
+		health.setValue(health.getValue() - amount);
 	}
 }

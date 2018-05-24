@@ -277,11 +277,11 @@ public class GameRunner extends GameApplication
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_PROJECTILE)
 		{
 			@Override
-			protected void onCollisionBegin(Entity player, Entity projectile)
+			protected void onCollisionBegin(Entity entPlayer, Entity projectile)
 			{
-				HealthComponent health = player.getComponent(HealthComponent.class);
+				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
 				BaseProjectileComponent proj = projectile.getComponent(BaseProjectileComponent.class);
-				health.setValue(health.getValue() - proj.calcDamage());
+				player.dealDamage(proj.calcDamage());
 				projectile.removeFromWorld();
 
 				CameraShakerComponent shaker = camHolder.getComponent(CameraShakerComponent.class);
@@ -295,14 +295,14 @@ public class GameRunner extends GameApplication
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS)
 		{
 			@Override
-			protected void onCollisionBegin(Entity player, Entity boss)
+			protected void onCollisionBegin(Entity entPlayer, Entity entBoss)
 			{
-				BossComponent b = boss.getComponent(BossComponent.class);
-				if (b.getCurrentAttack() == BossAttack.RAM)
+				BossComponent boss = entBoss.getComponent(BossComponent.class);
+				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
+				if (boss.getCurrentAttack() == BossAttack.RAM)
 				{
-					b.endAttack();
-					HealthComponent health = player.getComponent(HealthComponent.class);
-					health.setValue(health.getValue() - b.getRamAttackDamage());
+					boss.endAttack();
+					player.dealDamage(boss.getRamAttackDamage());
 
 					camHolder.getComponent(CameraShakerComponent.class)
 							.setShake(BossComponent.RAM_ATTACK_CAMERA_SHAKE);
@@ -329,8 +329,8 @@ public class GameRunner extends GameApplication
 			@Override
 			protected void onCollision(Entity entPlayer, Entity entLaser)
 			{
-				HealthComponent health = entPlayer.getComponent(HealthComponent.class);
-				health.setValue(health.getValue() - BossComponent.LASER_ATTACK_DAMAGE);
+				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
+				player.dealDamage(BossComponent.LASER_ATTACK_DAMAGE);
 
 				camHolder.getComponent(CameraShakerComponent.class)
 						.setShake(5);
