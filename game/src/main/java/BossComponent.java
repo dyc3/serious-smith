@@ -124,7 +124,10 @@ public class BossComponent extends Component
 	{
 		if (FXGLMath.randomBoolean(BIG_ATTACK_CHANCE))
 		{
-			return FXGLMath.random(new BossAttack[] {BossAttack.RAM, BossAttack.BURST, BossAttack.LASER}).get();
+			return FXGLMath.random(new BossAttack[] {
+					BossAttack.RAM,
+					BossAttack.BURST,
+					BossAttack.LASER}).get();
 		}
 		else
 		{
