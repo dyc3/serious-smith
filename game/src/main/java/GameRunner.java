@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
@@ -181,7 +182,7 @@ public class GameRunner extends GameApplication
 
         Entities.builder()
                 .viewFromNode(pbarBossHealth)
-                .with(new IrremovableComponent())
+				.with(new IrremovableComponent())
                 .with(new ParentFollowerComponent(boss,
 						(BOSS_SIZE - UI_HUD_BOSS_HEALTH_BAR_WIDTH) / 2,
 						UI_HUD_BOSS_HEALTH_BAR_OFFSET_Y))

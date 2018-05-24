@@ -1,10 +1,14 @@
 package main.java;
 
+import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
-
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,6 +45,13 @@ public class BossComponent extends Component
 	private static final int RAM_ATTACK_DURATION = 2;
 	/** Damage of ram attack. **/
 	public static final int RAM_ATTACK_DAMAGE = 40;
+	/** Number of beams in the laser attack. **/
+	private static final int LASER_ATTACK_NUM_BEAMS = 4;
+	/** Maximum duration (in seconds) of laser attack. **/
+	private static final int LASER_ATTACK_DURATION = 12;
+	/** Amount of damage to deal to the player each frame the collide with laser. **/
+	public static final int LASER_ATTACK_DAMAGE = 1;
+	private static final int LASER_ATTACK_BEAM_LENGTH = 8000;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;
@@ -102,21 +113,22 @@ public class BossComponent extends Component
 	 * @return The next attack to perform. **/
     private BossAttack nextAttack()
 	{
-		if (Math.random() < BIG_ATTACK_CHANCE)
-		{
-			if (Math.random() <= 0.5)
-			{
-				return BossAttack.RAM;
-			}
-			else
-			{
-				return BossAttack.BURST;
-			}
-		}
-		else
-		{
-			return BossAttack.STAR;
-		}
+		return BossAttack.LASER;
+//		if (Math.random() < BIG_ATTACK_CHANCE)
+//		{
+//			if (Math.random() <= 0.5)
+//			{
+//				return BossAttack.RAM;
+//			}
+//			else
+//			{
+//				return BossAttack.BURST;
+//			}
+//		}
+//		else
+//		{
+//			return BossAttack.STAR;
+//		}
 	}
 
     /** Gets the closest player.
@@ -205,6 +217,11 @@ public class BossComponent extends Component
 	{
 		timeUntilAttack = baseAttackInterval;
 		currentAttack = null;
+		for (Entity e : _lasers)
+		{
+			e.removeFromWorld();
+		}
+		_lasers = null;
 	}
 
 	/** Used to keep track of how many stars have fired during the current star attack. **/
@@ -281,11 +298,36 @@ public class BossComponent extends Component
 		}
 	}
 
+	/** Keep track of lasers used in the laser attack. **/
+	private Entity[] _lasers = null;
 	/** 4 lasers matching the width of the boss, fired in each cardinal direction.
 	 * @param tpf Time per frame. **/
 	@HandlesAttack(attack = BossAttack.LASER)
 	public void attackLaser(double tpf)
 	{
+		if (_lasers == null)
+		{
+			_lasers = new Entity[LASER_ATTACK_NUM_BEAMS];
+			for (int i = 0; i < LASER_ATTACK_NUM_BEAMS; i++)
+			{
+				double width = entity.getWidth();
+				Rectangle beam = new Rectangle(0, 0, width, LASER_ATTACK_BEAM_LENGTH);
+				beam.setFill(Color.WHITE);
 
+				_lasers[i] = Entities.builder()
+						.type(EntType.BOSS_LASER)
+						.viewFromNodeWithBBox(beam)
+						.buildAndAttach(entity.getWorld());
+			}
+		}
+
+		for (int i = 0; i < _lasers.length; i++)
+		{
+			double angle = (360.0 / (double)_lasers.length) * (double)i + (Math.max(0, attackTime - 2) * 10) % 360;
+			Point2D targetPos = entity.getCenter();
+			targetPos = targetPos.subtract(entity.getWidth() / 2, LASER_ATTACK_BEAM_LENGTH / 2);
+			_lasers[i].setPosition(targetPos);
+			_lasers[i].setRotation(angle);
+		}
 	}
 }
