@@ -224,6 +224,8 @@ public class BossComponent extends Component
 	{
 		timeUntilAttack = baseAttackInterval;
 		currentAttack = null;
+
+		_ramDirection = null;
 		if (_lasers != null)
 		{
 			for (Entity e : _lasers)
