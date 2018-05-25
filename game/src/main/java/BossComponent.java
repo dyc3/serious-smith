@@ -1,5 +1,7 @@
 package main.java;
 
+import com.almasb.fxgl.app.FXGL;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
@@ -82,6 +84,8 @@ public class BossComponent extends Component
     private double attackTime = 0;
 
     private ProjectileFactory projFactory;
+
+    private Sound sndLaser = FXGL.getAssetLoader().loadSound("laser2.wav");
 
     public BossComponent(ProjectileFactory factory)
     {
@@ -235,6 +239,7 @@ public class BossComponent extends Component
 			}
 			_lasers = null;
 		}
+		FXGL.getAudioPlayer().stopSound(sndLaser);
 	}
 
 	/** Used to keep track of how many stars have fired during the current star attack. **/
@@ -320,6 +325,8 @@ public class BossComponent extends Component
 	{
 		if (_lasers == null)
 		{
+			FXGL.getAudioPlayer().playSound(sndLaser);
+
 			_lasers = new Entity[LASER_ATTACK_NUM_BEAMS];
 			for (int i = 0; i < LASER_ATTACK_NUM_BEAMS; i++)
 			{
