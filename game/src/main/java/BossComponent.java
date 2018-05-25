@@ -14,6 +14,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 import java.lang.reflect.InvocationTargetException;
@@ -67,6 +68,26 @@ public class BossComponent extends Component
 	/** Glow strength of the lasers. Set to 0 to disable glow. **/
 	private static final double LASER_ATTACK_BEAM_GLOW = 0.8;
 	private static final double LASER_ATTACK_ROTATE_SPEED = 30;
+	/** Size of the zen balls. **/
+	public static final int ZEN_ATTACK_SIZE = 10;
+	/** Color of passive zen balls. **/
+	public static final Color ZEN_ATTACK_COLOR_PASSIVE = Color.color(1.0, 0.6, 0.8);
+	/** Color of active zen balls. **/
+	public static final Color ZEN_ATTACK_COLOR_ACTIVE = Color.color(1.0, 0.6, 0.25);
+	/** Strength of zen ball glow **/
+	public static final double ZEN_ATTACK_GLOW = 0.8;
+	/** Maximum speed that the zen balls will spin around the boss in passive mode. **/
+	private static final double ZEN_ATTACK_MAX_SPIN_SPEED = 10;
+	/** Target radius around the boss for spining balls **/
+	private static final int ZEN_ATTACK_SPIN_RADIUS = 150;
+	/** Time (in seconds) during the attack that the boss starts hurling balls at the player. **/
+	private static final int ZEN_ATTACK_ATTACK_TIME = 5;
+	/** Time (in seconds) between spawning zen balls from the boss. **/
+	private static final double ZEN_ATTACK_SPAWN_INTERVAL = 0.3;
+	/** Time (in seconds) between firing zen balls at the player. **/
+	private static final double ZEN_ATTACK_FIRE_INTERVAL = 0.5;
+	/** Amount of damage each zen ball will deal **/
+	private static final int ZEN_ATTACK_DAMAGE = 20;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;
@@ -92,13 +113,8 @@ public class BossComponent extends Component
     	this.projFactory = factory;
         this.baseAttackInterval = DEFAULT_BASE_ATTACK_INTERVAL;
         this.timeUntilAttack = baseAttackInterval;
-    }
 
-    public BossComponent(ProjectileFactory factory, double baseAttackInterval)
-    {
-		this.projFactory = factory;
-        this.baseAttackInterval = baseAttackInterval;
-        this.timeUntilAttack = baseAttackInterval;
+        FXGL.getEventBus().addEventHandler(GameEndEvent.LOSE, event -> onGameLose());
     }
 
 	/** Update every tick.
@@ -135,7 +151,9 @@ public class BossComponent extends Component
 			return FXGLMath.random(new BossAttack[] {
 					BossAttack.RAM,
 					BossAttack.BURST,
-					BossAttack.LASER}).get();
+					BossAttack.LASER,
+					BossAttack.ZEN
+			}).get();
 		}
 		else
 		{
@@ -184,6 +202,12 @@ public class BossComponent extends Component
 	public int getRamAttackDamage()
 	{
 		return RAM_ATTACK_DAMAGE;
+	}
+
+	private void onGameLose()
+	{
+		baseAttackInterval = Integer.MAX_VALUE;
+		endAttack();
 	}
 
 	/** Finds the method that the current attack uses, and execute it with parameters.
@@ -239,6 +263,17 @@ public class BossComponent extends Component
 			}
 			_lasers = null;
 		}
+		if (_zenProj != null)
+		{
+			for (Entity e : _zenProj)
+			{
+				e.removeFromWorld();
+			}
+			_zenProj = null;
+		}
+		_zenSpin = 0;
+		_zenLastAttack = 0;
+		_zenSpawned = 0;
 		FXGL.getAudioPlayer().stopSound(sndLaser);
 	}
 
@@ -381,6 +416,115 @@ public class BossComponent extends Component
 		if (attackTime > LASER_ATTACK_DURATION)
 		{
 			endAttack();
+		}
+	}
+
+	/** Keep track of projectiles used in zen attack. **/
+	private ArrayList<Entity> _zenProj = null;
+	/** Max zen balls to spawn during this attack. **/
+	private int _zenMaxBalls;
+	/** Tracks angle offset. **/
+	private double _zenSpin = 0;
+	/** Attack time stamp of the last spawn/fire event. **/
+	private double _zenLastAttack = 0;
+	/** Number of zen balls spawned. **/
+	private int _zenSpawned = 0;
+	/** Glowing projectiles are accumulated around the boss, then they are thrown at the player.
+	 * @param tpf Time per frame. **/
+	@HandlesAttack(attack = BossAttack.ZEN)
+	public void attackZen(double tpf)
+	{
+		if (_zenProj == null)
+		{
+			_zenProj = new ArrayList<>();
+			_zenMaxBalls = FXGLMath.random(8, 14);
+			System.out.println("_zenMaxBalls = " + _zenMaxBalls);
+		}
+
+		if (_zenSpawned < _zenMaxBalls)
+		{
+			if (attackTime - _zenLastAttack > ZEN_ATTACK_SPAWN_INTERVAL)
+			{
+				Circle ball = new Circle(ZEN_ATTACK_SIZE);
+				ball.setFill(ZEN_ATTACK_COLOR_PASSIVE);
+				ball.setEffect(new Glow(ZEN_ATTACK_GLOW));
+
+				Entity zenBall = Entities.builder()
+						.at(entity.getCenter().subtract(ZEN_ATTACK_SIZE, ZEN_ATTACK_SIZE))
+						.type(EntType.BOSS_PROJECTILE_ZEN)
+						.viewFromNodeWithBBox(ball)
+						.with(new ZenBallProjectileComponent(ZEN_ATTACK_DAMAGE))
+						.with(new CollidableComponent(true))
+						.buildAndAttach(entity.getWorld());
+				_zenProj.add(zenBall);
+
+				_zenLastAttack = attackTime;
+				_zenSpawned++;
+			}
+		}
+
+		_zenSpin += Math.min(tpf * Math.pow(attackTime, 3) + 2, ZEN_ATTACK_MAX_SPIN_SPEED);
+		_zenSpin %= 360;
+
+		// attacking
+		if (attackTime >= ZEN_ATTACK_ATTACK_TIME && _zenSpawned >= _zenMaxBalls)
+		{
+			if (attackTime - _zenLastAttack > ZEN_ATTACK_FIRE_INTERVAL)
+			{
+				_zenLastAttack = attackTime;
+				boolean hasFired = false;
+				for (int i = 0; i < _zenProj.size(); i++)
+				{
+					Entity ball = _zenProj.get(i);
+					try
+					{
+						ZenBallProjectileComponent zen = ball.getComponent(ZenBallProjectileComponent.class);
+						if (zen.isPassiveMode())
+						{
+							zen.setTarget(getPlayer().getCenter());
+							zen.setPassiveMode(false);
+							hasFired = true;
+							_zenProj.remove(i--);
+							break;
+						}
+					}
+					catch (IllegalArgumentException e)
+					{
+						// this means the zen ball was destroyed
+						System.out.println("remove zen ball at " + i);
+						_zenProj.remove(i--);
+					}
+				}
+
+				if (!hasFired)
+				{
+					endAttack();
+					return;
+				}
+			}
+		}
+
+		// spinning
+		ArrayList<Point2D> points = Utils.pointsOnCircle(ZEN_ATTACK_SPIN_RADIUS, _zenProj.size(), _zenSpin);
+		for (int i = 0; i < _zenProj.size(); i++)
+		{
+			Entity ball = _zenProj.get(i);
+			try
+			{
+				ZenBallProjectileComponent zen = ball.getComponent(ZenBallProjectileComponent.class);
+
+				if (zen.isPassiveMode())
+				{
+					Point2D target = entity.getCenter().add(points.get(i)).subtract(ZEN_ATTACK_SIZE, ZEN_ATTACK_SIZE);
+					zen.setTarget(target);
+				}
+			}
+			catch (IllegalArgumentException e)
+			{
+				// this means the zen ball was destroyed
+				System.out.println("remove zen ball at " + i);
+				_zenProj.remove(i--);
+			}
 		}
 	}
 }

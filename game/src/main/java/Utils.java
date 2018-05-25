@@ -7,9 +7,6 @@ import java.util.ArrayList;
 /** Misc helper functions. **/
 public final class Utils
 {
-	/** Number of degrees in a circle. **/
-	private static final double FULL_CIRCLE = 360;
-
 	/** This constructor should not be used. **/
 	private Utils()
 	{
@@ -23,7 +20,10 @@ public final class Utils
 	public static Point2D polarToCartesian(double radius, double theta)
 	{
 		double rad = Math.toRadians(theta);
-		return new Point2D(radius * Math.cos(rad), radius * Math.sin(rad));
+		double x = radius * Math.cos(rad);
+		double y = radius * Math.sin(rad);
+		double precision = 100000.0;
+		return new Point2D(Math.round(x * precision) / precision, Math.round(y * precision) / precision);
 	}
 
 	/** Convert polar coordinates (r, theta) to cartesian coordinates (x, y).
@@ -70,7 +70,7 @@ public final class Utils
 		ArrayList<Point2D> points = new ArrayList<Point2D>();
 		for (int i = 0; i < parts; i++)
 		{
-			double angle = i * (FULL_CIRCLE / parts) + angleOffset;
+			double angle = i * (360 / parts) + angleOffset;
 			Point2D point = polarToCartesian(radius, angle);
 			points.add(point);
 		}
@@ -86,5 +86,17 @@ public final class Utils
 		Point2D offset = new Point2D((Math.random() * (range * 2)  - range),
 				(Math.random() * (range * 2)  - range));
 		return point.add(offset);
+	}
+
+	public static double lerp(double a, double b, double f)
+	{
+		return (a * (1.0f - f)) + (b * f);
+	}
+
+	public static Point2D lerpPoint2D(Point2D from, Point2D to, double amount)
+	{
+		double x = lerp(from.getX(), to.getX(), amount);
+		double y = lerp(from.getY(), to.getY(), amount);
+		return new Point2D(x, y);
 	}
 }

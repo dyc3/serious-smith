@@ -10,5 +10,7 @@ public enum BossAttack
 	/** See BossComponent. **/
 	RAM,
 	/** See BossComponent. **/
-	LASER
+	LASER,
+	/** See BossComponent. **/
+	ZEN
 }
