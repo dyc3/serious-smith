@@ -22,7 +22,6 @@ import com.almasb.fxgl.ui.ProgressBar;
 import com.gluonhq.charm.down.plugins.audio.Audio;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -83,6 +82,7 @@ public class GameRunner extends GameApplication
 	private ProgressBar pbarPlayerHealth;
 	private ProgressBar pbarPlayerXP;
 	private ProgressBar pbarBossHealth;
+	/** The entity that holds pbarBossHealth over the boss. **/
 	private Entity entpbarBossHealth;
 	private Text textGameOver;
 	private Text textStartOver;
