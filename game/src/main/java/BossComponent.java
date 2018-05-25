@@ -64,6 +64,7 @@ public class BossComponent extends Component
 	private static final Color LASER_ATTACK_BEAM_COLOR = Color.color(0.9, 0.1, 0.1);
 	/** Glow strength of the lasers. Set to 0 to disable glow. **/
 	private static final double LASER_ATTACK_BEAM_GLOW = 0.8;
+	private static final double LASER_ATTACK_ROTATE_SPEED = 30;
 
 	/** The probability of doing a big attack. **/
 	private static final double BIG_ATTACK_CHANCE = 0.5;
@@ -362,7 +363,8 @@ public class BossComponent extends Component
 
 		for (int i = 0; i < _lasers.length; i++)
 		{
-			double angle = (360.0 / (_lasers.length * 2)) * i + (Math.max(0, attackTime - 2) * 10) % 360;
+			double angle = (360.0 / (_lasers.length * 2)) * i +
+					(Math.max(0, attackTime - 2) * LASER_ATTACK_ROTATE_SPEED) % 360;
 			Point2D targetPos = entity.getCenter();
 			targetPos = targetPos.subtract(entity.getWidth() / 2, LASER_ATTACK_BEAM_LENGTH / 2);
 			_lasers[i].setPosition(targetPos);

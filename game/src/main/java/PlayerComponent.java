@@ -16,7 +16,7 @@ import javafx.scene.input.KeyCode;
 public final class PlayerComponent extends Component
 {
     /** Movement speed. **/
-    private static final double DEFAULT_MOVE_SPEED = 200;
+    private static final double DEFAULT_MOVE_SPEED = 300;
     /** Time between auto fire in seconds. **/
     private static final double DEFAULT_FIRE_INTERVAL = 0.25;
     /** Distance to travel while dashing. **/
