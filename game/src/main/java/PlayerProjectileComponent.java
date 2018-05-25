@@ -34,16 +34,23 @@ public class PlayerProjectileComponent extends BaseProjectileComponent
     @Override
     public void onUpdate(double tpf)
     {
-        super.onUpdate(tpf);
-
-        if (player == null)
+        try
 		{
-			player = entity.getWorld().getEntityByID("player", 0).get().getComponent(PlayerComponent.class);
-			setBaseDamage(player.getDamage());
-		}
+			super.onUpdate(tpf);
 
-        this.setDirection(calcVector());
-        this.setSpeed(PLAYER_PROJECTILE_SPEED);
+			if (player == null)
+			{
+				player = entity.getWorld().getEntityByID("player", 0).get().getComponent(PlayerComponent.class);
+				setBaseDamage(player.getDamage());
+			}
+
+			this.setDirection(calcVector());
+			this.setSpeed(PLAYER_PROJECTILE_SPEED);
+		}
+		catch (java.util.NoSuchElementException e)
+		{
+			entity.removeFromWorld();
+		}
     }
 
 	/** Calculate the direction the projectile will go in every tick.
