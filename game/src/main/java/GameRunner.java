@@ -445,6 +445,21 @@ public class GameRunner extends GameApplication
 						.setShake(5);
 			}
 		});
+
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_PROJECTILE_ZEN)
+		{
+			@Override
+			protected void onCollisionBegin(Entity entPlayer, Entity projectile)
+			{
+				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
+				BaseProjectileComponent proj = projectile.getComponent(ZenBallProjectileComponent.class);
+				player.dealDamage(proj.calcDamage());
+				projectile.removeFromWorld();
+
+				CameraShakerComponent shaker = camHolder.getComponent(CameraShakerComponent.class);
+				shaker.setShake(10);
+			}
+		});
     }
 
     /** Called when the game is won. **/

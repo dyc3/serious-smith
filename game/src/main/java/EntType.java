@@ -13,6 +13,7 @@ public enum EntType
     BOSS_PROJECTILE,
 	/** Indicates the entity is a laser from the boss's laser attack. **/
 	BOSS_LASER,
+	BOSS_PROJECTILE_ZEN,
 	/** Indicates the entity is an experience orb. **/
 	XP_ORB
 }
