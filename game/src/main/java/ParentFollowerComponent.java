@@ -33,4 +33,9 @@ public class ParentFollowerComponent extends Component
         offsetX = x;
         offsetY = y;
     }
+
+    public void setTarget(Entity target)
+	{
+		following = target;
+	}
 }
