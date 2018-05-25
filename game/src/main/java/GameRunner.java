@@ -6,9 +6,11 @@ import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.EntityEvent;
 import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.event.EventTrigger;
 import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
@@ -18,6 +20,7 @@ import com.almasb.fxgl.scene.Viewport;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.ui.ProgressBar;
 import com.gluonhq.charm.down.plugins.audio.Audio;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
@@ -152,6 +155,20 @@ public class GameRunner extends GameApplication
         viewport.bindToEntity(camHolder,
                        (getWidth() / 2) - (player.getWidth() / 2),
                        (getHeight() / 2) - (player.getHeight() / 2));
+
+        // set up win/lose events
+		getEventBus().addEventTrigger(new EventTrigger<>(
+				() -> boss.getComponent(HealthComponent.class).getValue() <= 0,
+				() -> new GameEndEvent(GameEndEvent.WIN, true)
+		));
+
+		getEventBus().addEventTrigger(new EventTrigger<>(
+				() -> player.getComponent(HealthComponent.class).getValue() <= 0,
+				() -> new GameEndEvent(GameEndEvent.LOSE, false)
+		));
+
+		getEventBus().addEventHandler(GameEndEvent.WIN, event -> onWin());
+		getEventBus().addEventHandler(GameEndEvent.LOSE, event -> onLose());
     }
 
     @Override
@@ -337,4 +354,14 @@ public class GameRunner extends GameApplication
 			}
 		});
     }
+
+	protected void onWin()
+	{
+		System.out.println("Game won");
+	}
+
+	protected void onLose()
+	{
+		System.out.println("Game lost");
+	}
 }
