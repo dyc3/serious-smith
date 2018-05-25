@@ -86,6 +86,7 @@ public class GameRunner extends GameApplication
 	private Entity entpbarBossHealth;
 	private Text textGameOver;
 	private Text textStartOver;
+	private Sound sndXpPickup = getAssetLoader().loadSound("xp_pickup.wav");
 
 	private UserAction actionRestart = new UserAction("restart game") {
 		@Override
@@ -425,6 +426,9 @@ public class GameRunner extends GameApplication
 				XpOrbComponent orb = entOrb.getComponent(XpOrbComponent.class);
 				player.addXP(orb.getExperience());
 				entOrb.removeFromWorld();
+
+				getAudioPlayer().stopSound(sndXpPickup);
+				getAudioPlayer().playSound(sndXpPickup);
 			}
 		});
 
