@@ -78,3 +78,4 @@ system/
 *.bundle
 system/fxgl.bundle
 game/bin/*
+profiles/
