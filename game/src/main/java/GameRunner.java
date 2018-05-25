@@ -117,6 +117,8 @@ public class GameRunner extends GameApplication
         settings.setVersion(VERSION);
     }
 
+    /** Set up the game objects for a new game.
+	 * @param restart Set to false if first time set up. Set to true to reset the game (after game end). **/
     protected void setupGame(boolean restart)
 	{
 		if (restart)
@@ -441,6 +443,7 @@ public class GameRunner extends GameApplication
 		});
     }
 
+    /** Called when the game is won. **/
 	protected void onWin()
 	{
 		System.out.println("Game won");
@@ -453,6 +456,7 @@ public class GameRunner extends GameApplication
 		getInput().rebind(actionRestart, MouseButton.PRIMARY);
 	}
 
+	/** Called when the game is lost. **/
 	protected void onLose()
 	{
 		System.out.println("Game lost");
