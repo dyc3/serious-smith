@@ -22,6 +22,7 @@ public class ProjectileFactory implements EntityFactory
 					.from(data)
 					.type(EntType.PROJECTILE)
 					.viewFromNodeWithBBox(new Circle(0, 0, PLAYER_PROJECTILE_SIZE, Color.ORANGE))
+					.viewFromTexture("tennis.png")
 					.with(new PlayerProjectileComponent(
 							data.get("target"),
 							data.get("damage"),

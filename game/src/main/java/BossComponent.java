@@ -54,7 +54,7 @@ public class BossComponent extends Component
 	/** Damage of ram attack. **/
 	public static final int RAM_ATTACK_DAMAGE = 40;
 	/** Camera shake factor on collision with player. **/
-	public static final float RAM_ATTACK_CAMERA_SHAKE = 5;
+	public static final float RAM_ATTACK_CAMERA_SHAKE = 10;
 	/** Number of beams in the laser attack. **/
 	private static final int LASER_ATTACK_NUM_BEAMS = 2;
 	/** Maximum duration (in seconds) of laser attack. **/
@@ -90,7 +90,7 @@ public class BossComponent extends Component
 	private static final int ZEN_ATTACK_DAMAGE = 20;
 
 	/** The probability of doing a big attack. **/
-	private static final double BIG_ATTACK_CHANCE = 0.5;
+	private static final double BIG_ATTACK_CHANCE = 0.75;
 
     /** The minimum amount of time between attacks in seconds. Actual attack intervals may vary
      * depending on previous attack performed. **/
@@ -107,6 +107,9 @@ public class BossComponent extends Component
     private ProjectileFactory projFactory;
 
     private Sound sndLaser = FXGL.getAssetLoader().loadSound("laser2.wav");
+	private Sound sndRamIncoming = FXGL.getAssetLoader().loadSound("ram_incoming.wav");
+	private Sound sndZenSpawn = FXGL.getAssetLoader().loadSound("zen_spawn.wav");
+	private Sound sndZenActivate = FXGL.getAssetLoader().loadSound("zen_activate.wav");
 
     public BossComponent(ProjectileFactory factory)
     {
@@ -275,6 +278,7 @@ public class BossComponent extends Component
 		_zenLastAttack = 0;
 		_zenSpawned = 0;
 		FXGL.getAudioPlayer().stopSound(sndLaser);
+		FXGL.getAudioPlayer().stopSound(sndRamIncoming);
 	}
 
 	/** Used to keep track of how many stars have fired during the current star attack. **/
@@ -341,6 +345,7 @@ public class BossComponent extends Component
 		if (_ramDirection == null)
 		{
 			_ramDirection = getPlayer().getCenter().subtract(entity.getCenter());
+			FXGL.getAudioPlayer().playSound(sndRamIncoming);
 		}
 		getEntity().translateTowards(entity.getPosition().add(_ramDirection), RAM_ATTACK_SPEED * tpf);
 
@@ -460,6 +465,8 @@ public class BossComponent extends Component
 
 				_zenLastAttack = attackTime;
 				_zenSpawned++;
+
+				FXGL.getAudioPlayer().playSound(sndZenSpawn);
 			}
 		}
 
@@ -485,6 +492,7 @@ public class BossComponent extends Component
 							zen.setPassiveMode(false);
 							hasFired = true;
 							_zenProj.remove(i--);
+							FXGL.getAudioPlayer().playSound(sndZenActivate);
 							break;
 						}
 					}

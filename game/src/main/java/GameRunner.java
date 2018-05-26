@@ -1,5 +1,6 @@
 package main.java;
 
+import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.audio.Sound;
@@ -40,7 +41,7 @@ public class GameRunner extends GameApplication
 	/** Title of the application window. **/
 	private static final String WINDOW_TITLE = "Serious Smith";
 	/** Version of the program. **/
-	private static final String VERSION = "0.2";
+	private static final String VERSION = "0.3";
 
 	/** X offset for fixed HUD elements. **/
 	private static final int UI_HUD_OFFSET_X = 50;
@@ -86,7 +87,9 @@ public class GameRunner extends GameApplication
 	private Entity entpbarBossHealth;
 	private Text textGameOver;
 	private Text textStartOver;
+	private Sound sndHit = getAssetLoader().loadSound("hit.wav");
 	private Sound sndXpPickup = getAssetLoader().loadSound("xp_pickup.wav");
+	private Sound sndRamCollide = getAssetLoader().loadSound("ram_collide.wav");
 
 	private UserAction actionRestart = new UserAction("restart game") {
 		@Override
@@ -116,6 +119,7 @@ public class GameRunner extends GameApplication
         settings.setHeight(WINDOW_HEIGHT);
         settings.setTitle(WINDOW_TITLE);
         settings.setVersion(VERSION);
+        settings.setMenuEnabled(true);
     }
 
     /** Set up the game objects for a new game.
@@ -160,6 +164,7 @@ public class GameRunner extends GameApplication
 				.type(EntType.PLAYER)
 				.at(0, 300)
 				.viewFromNodeWithBBox(rectPlayer)
+				.viewFromTexture("serioussmith-small.png")
 				.with(new HealthComponent(100))
 				.with(new IDComponent("player", 0))
 				.with(new PlayerComponent(getInput(), projectileFactory))
@@ -172,6 +177,7 @@ public class GameRunner extends GameApplication
 				.type(EntType.BOSS)
 				.at(0, 0)
 				.viewFromNodeWithBBox(rectBoss)
+				.viewFromTexture("thefalsegod.png")
 				.with(new HealthComponent(BOSS_HEALTH))
 				.with(new BossComponent(projectileFactory))
 				.with(new IDComponent("boss", 0))
@@ -245,6 +251,19 @@ public class GameRunner extends GameApplication
                 .buildAndAttach(getGameWorld());
 
 		setupGame(false);
+
+		// Play the background music.
+		// Normally, we should just run `getAudioPlayer().loopBGM("intense.mp3")`, but
+		// that doesn't work, because FXGL is stupid. So, as a workaround, we load the
+		// music as a `Sound`, then we get the `Audio`, set it to loop, and feed it
+		// into a `Music` object, and then play it.
+		Sound bgmSound = getAssetLoader().loadSound("intense.wav");
+		//noinspection KotlinInternalInJava
+		Audio bgmAudio = bgmSound.getAudio$fxgl_base();
+		bgmAudio.setLooping(true);
+		Music bgm = new Music(bgmAudio);
+		bgm.setCycleCount(Integer.MAX_VALUE);
+		getAudioPlayer().playMusic(bgm);
     }
 
     @Override
@@ -305,18 +324,6 @@ public class GameRunner extends GameApplication
 		textStartOver.setY(getHeight() / 2 + 100);
 		textStartOver.setVisible(false);
 		getGameScene().addUINode(textStartOver);
-
-		// Play the background music.
-		// Normally, we should just run `getAudioPlayer().loopBGM("intense.mp3")`, but
-		// that doesn't work, because FXGL is stupid. So, as a workaround, we load the
-		// music as a `Sound`, then we get the `Audio`, set it to loop, and feed it
-		// into a `Music` object, and then play it.
-		Sound bgmSound = getAssetLoader().loadSound("intense.wav");
-		Audio bgmAudio = bgmSound.getAudio$fxgl_base();
-		bgmAudio.setLooping(true);
-		Music bgm = new Music(bgmAudio);
-		bgm.setCycleCount(Integer.MAX_VALUE);
-		getAudioPlayer().playMusic(bgm);
     }
 
     @Override
@@ -377,7 +384,9 @@ public class GameRunner extends GameApplication
 					Entity orb = new XPFactory().spawnXpOrb(data);
 					boss.getWorld().addEntity(orb);
 				}
-            }
+
+				getAudioPlayer().playSound(sndHit);
+			}
         });
 
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_PROJECTILE)
@@ -395,6 +404,8 @@ public class GameRunner extends GameApplication
 				{
 					shaker.addShake(2);
 				}
+
+				getAudioPlayer().playSound(sndHit);
 			}
 		});
 
@@ -412,6 +423,8 @@ public class GameRunner extends GameApplication
 
 					camHolder.getComponent(CameraShakerComponent.class)
 							.setShake(BossComponent.RAM_ATTACK_CAMERA_SHAKE);
+
+					getAudioPlayer().playSound(sndRamCollide);
 				}
 			}
 		});
@@ -427,13 +440,19 @@ public class GameRunner extends GameApplication
 				player.addXP(orb.getExperience());
 				entOrb.removeFromWorld();
 
-				getAudioPlayer().stopSound(sndXpPickup);
 				getAudioPlayer().playSound(sndXpPickup);
 			}
 		});
 
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntType.PLAYER, EntType.BOSS_LASER)
 		{
+			int _skip = 0;
+			@Override
+			protected void onCollisionBegin(Entity entPlayer, Entity entLaser)
+			{
+				_skip = 0;
+			}
+
 			/** Handle collisions between players and lasers. **/
 			@Override
 			protected void onCollision(Entity entPlayer, Entity entLaser)
@@ -441,8 +460,12 @@ public class GameRunner extends GameApplication
 				PlayerComponent player = entPlayer.getComponent(PlayerComponent.class);
 				player.dealDamage(BossComponent.LASER_ATTACK_DAMAGE);
 
-				camHolder.getComponent(CameraShakerComponent.class)
-						.setShake(5);
+				camHolder.getComponent(CameraShakerComponent.class).setShake(5);
+
+				if (_skip++ % 5 == 0)
+				{
+					getAudioPlayer().playSound(sndHit);
+				}
 			}
 		});
 
@@ -458,6 +481,8 @@ public class GameRunner extends GameApplication
 
 				CameraShakerComponent shaker = camHolder.getComponent(CameraShakerComponent.class);
 				shaker.setShake(10);
+
+				getAudioPlayer().playSound(sndHit);
 			}
 		});
     }
@@ -466,7 +491,7 @@ public class GameRunner extends GameApplication
 	protected void onWin()
 	{
 		System.out.println("Game won");
-		boss.removeFromWorld();
+		boss.getView().setVisible(false);
 
 		textGameOver.setText("You Win!");
 		textGameOver.setVisible(true);
@@ -479,7 +504,7 @@ public class GameRunner extends GameApplication
 	protected void onLose()
 	{
 		System.out.println("Game lost");
-		player.removeFromWorld();
+		player.getView().setVisible(false);
 
 		textGameOver.setText("Game Over");
 		textGameOver.setVisible(true);

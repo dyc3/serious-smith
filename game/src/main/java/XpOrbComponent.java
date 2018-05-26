@@ -9,7 +9,7 @@ import javafx.geometry.Point2D;
 public class XpOrbComponent extends Component
 {
 	/** Speed of experience orb movement. **/
-	private static final double XP_ORB_SPEED = 5000;
+	private static final double XP_ORB_SPEED = 30;
 	/** Minimum amount of experience that an orb can hold. */
 	private static final int MIN_EXPERIENCE_PER_ORB = 4;
 	/** Maximum amount of experience that an orb can hold. */
@@ -46,9 +46,16 @@ public class XpOrbComponent extends Component
 	@Override
 	public void onUpdate(double tpf)
 	{
-		if (player == null)
+		try
 		{
-			player = entity.getWorld().getEntityByID("player", 0).get();
+			if (player == null)
+			{
+				player = entity.getWorld().getEntityByID("player", 0).get();
+			}
+		}
+		catch (Exception e)
+		{
+			entity.removeFromWorld();
 		}
 
 		if (ejectionSpeed > 0)
@@ -62,7 +69,8 @@ public class XpOrbComponent extends Component
 		}
 
 		double dist = entity.getCenter().distance(player.getCenter());
-		entity.translateTowards(player.getCenter(), XP_ORB_SPEED / (dist / 2.0) * tpf);
+		double speed = (XP_ORB_SPEED * PlayerComponent.DEFAULT_MOVE_SPEED) / (dist / 2.0);
+		entity.translateTowards(player.getCenter(), speed * tpf);
 	}
 
 	/** Gets how much experience this orb is worth.

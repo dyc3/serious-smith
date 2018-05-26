@@ -1,5 +1,7 @@
 package main.java;
 
+import com.almasb.fxgl.app.FXGL;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -16,7 +18,7 @@ import javafx.scene.input.KeyCode;
 public final class PlayerComponent extends Component
 {
     /** Movement speed. **/
-    private static final double DEFAULT_MOVE_SPEED = 300;
+    public static final double DEFAULT_MOVE_SPEED = 300;
     /** Time between auto fire in seconds. **/
     private static final double DEFAULT_FIRE_INTERVAL = 0.25;
     /** Distance to travel while dashing. **/
@@ -80,6 +82,10 @@ public final class PlayerComponent extends Component
 	/** Use this to spawn projectiles. **/
 	private ProjectileFactory projFactory;
 
+	private Sound sndFire = FXGL.getAssetLoader().loadSound("player_fire.wav");
+
+	private boolean dead = false;
+
 	/** Creates a PlayerComponent. Do not create multiple players.
 	 * @param input Use to read keyboard input.
 	 * @param factory Use this to spawn projectiles. **/
@@ -89,7 +95,9 @@ public final class PlayerComponent extends Component
         fireInterval = DEFAULT_FIRE_INTERVAL;
         this.input = input;
 		this.projFactory = factory;
-    }
+
+		FXGL.getEventBus().addEventHandler(GameEndEvent.LOSE, event -> { dead = true; });
+	}
 
 	/**
 	 * Gets the direction the player is moving in based on input.
@@ -123,6 +131,11 @@ public final class PlayerComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
+    	if (dead)
+		{
+			return;
+		}
+
         if (boss == null)
         {
             boss = getEntity().getWorld().getEntityByID("boss", 0).get();
@@ -166,7 +179,7 @@ public final class PlayerComponent extends Component
 
         // projectile firing
         timeToFire -= tpf;
-        if (input.isHeld(KeyCode.SPACE) && timeToFire <= 0)
+        if (timeToFire <= 0)
         {
             timeToFire = fireInterval;
             if (dashing)
@@ -179,6 +192,8 @@ public final class PlayerComponent extends Component
 			data.put("critChance", getCritChance());
 			data.put("critMultiplier", getCritMultiplier());
             getEntity().getWorld().addEntity(projFactory.spawnPlayerProjectile(data));
+			FXGL.getAudioPlayer().stopSound(sndFire);
+			FXGL.getAudioPlayer().playSound(sndFire);
         }
     }
 
