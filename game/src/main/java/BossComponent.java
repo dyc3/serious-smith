@@ -111,13 +111,15 @@ public class BossComponent extends Component
 	private Sound sndZenSpawn = FXGL.getAssetLoader().loadSound("zen_spawn.wav");
 	private Sound sndZenActivate = FXGL.getAssetLoader().loadSound("zen_activate.wav");
 
+	private boolean enable = true;
+
     public BossComponent(ProjectileFactory factory)
     {
     	this.projFactory = factory;
         this.baseAttackInterval = DEFAULT_BASE_ATTACK_INTERVAL;
         this.timeUntilAttack = baseAttackInterval;
 
-        FXGL.getEventBus().addEventHandler(GameEndEvent.LOSE, event -> onGameLose());
+		FXGL.getEventBus().addEventHandler(GameEndEvent.ANY, event -> onGameEnd());
     }
 
 	/** Update every tick.
@@ -125,6 +127,11 @@ public class BossComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
+    	if (!enable)
+		{
+			return;
+		}
+
         if (currentAttack != null)
         {
         	doAttack(tpf);
@@ -207,10 +214,11 @@ public class BossComponent extends Component
 		return RAM_ATTACK_DAMAGE;
 	}
 
-	private void onGameLose()
+	private void onGameEnd()
 	{
 		baseAttackInterval = Integer.MAX_VALUE;
 		endAttack();
+		enable = false;
 	}
 
 	/** Finds the method that the current attack uses, and execute it with parameters.
