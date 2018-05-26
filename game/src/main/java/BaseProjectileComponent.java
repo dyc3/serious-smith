@@ -14,7 +14,7 @@ public class BaseProjectileComponent extends ProjectileComponent
 	/** Default value of critMultiplier. **/
 	private static final double DEFAULT_CRIT_MULTIPLIER = 2;
 	/** Maximum lifetime of projectiles (in seconds). **/
-	private static final double MAX_LIFETIME = 60;
+	private static final double MAX_LIFETIME = 40;
 
 	/** The base damage the projectile will deal on collision. **/
     private int baseDamage;
