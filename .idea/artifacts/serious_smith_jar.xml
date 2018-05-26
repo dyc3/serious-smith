@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="serious-smith:jar">
+    <output-path>$PROJECT_DIR$/game/bin/artifacts/serious-smith</output-path>
+    <root id="archive" name="serious-smith.jar">
+      <element id="module-output" name="game" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-api/5.0.0/junit-jupiter-api-5.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-commons/1.0.0/junit-platform-commons-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/fxgl-0.5.0-uber.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
