@@ -1,5 +1,6 @@
 package main.java;
 
+import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.audio.Music;
@@ -120,6 +121,8 @@ public class GameRunner extends GameApplication
         settings.setTitle(WINDOW_TITLE);
         settings.setVersion(VERSION);
         settings.setMenuEnabled(true);
+		settings.setApplicationMode(ApplicationMode.RELEASE);
+		settings.setProfilingEnabled(false);
     }
 
     /** Set up the game objects for a new game.
