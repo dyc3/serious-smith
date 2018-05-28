@@ -9,6 +9,8 @@ import javafx.scene.shape.Circle;
 
 public class ZenBallProjectileComponent extends BaseProjectileComponent
 {
+	private static final boolean USE_LERP_MODE = true;
+
 	private Entity boss;
 	private Entity player;
 	private boolean passiveMode = true;
@@ -39,14 +41,21 @@ public class ZenBallProjectileComponent extends BaseProjectileComponent
 
 		if (passiveMode)
 		{
-			Point2D targetDir = target.subtract(entity.getCenter());
-			Point2D dir = Utils.lerpPoint2D(getDirection(), targetDir, tpf);
-			setDirection(dir);
+			if (USE_LERP_MODE)
+			{
+				entity.setPosition(Utils.lerpPoint2D(entity.getPosition(), target, tpf * 10));
+			}
+			else
+			{
+				Point2D targetDir = target.subtract(entity.getCenter());
+				Point2D dir = Utils.lerpPoint2D(getDirection(), targetDir, tpf);
+				setDirection(dir);
 
-			double dist = target.distance(entity.getCenter());
-			double distDir = getDirection().distance(targetDir);
-			double speed = dist * distDir * tpf * 6;
-			setSpeed(speed);
+				double dist = target.distance(entity.getCenter());
+				double distDir = getDirection().distance(targetDir);
+				double speed = dist * distDir * tpf * 6;
+				setSpeed(speed);
+			}
 		}
 
 		super.onUpdate(tpf);
@@ -63,15 +72,15 @@ public class ZenBallProjectileComponent extends BaseProjectileComponent
 
 		if (!passiveMode)
 		{
-			Point2D targetDir = target.subtract(entity.getPosition());
-			setDirection(targetDir);
-			setSpeed(1500);
-
 			ViewComponent viewComponent = entity.getViewComponent();
 			EntityView view = viewComponent.getView();
 			view.setEffect(new Glow(BossComponent.ZEN_ATTACK_GLOW * 2));
 			Circle c = (Circle)view.getNodes().get(0);
 			c.setFill(BossComponent.ZEN_ATTACK_COLOR_ACTIVE);
+
+			Point2D targetDir = player.getPosition().subtract(entity.getPosition());
+			setSpeed(1500); // setSpeed must come before setDirection
+			setDirection(targetDir);
 		}
 	}
 

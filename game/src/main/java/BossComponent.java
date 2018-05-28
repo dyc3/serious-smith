@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.RenderLayer;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.extra.entity.components.HealthComponent;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.Glow;
 import javafx.scene.paint.CycleMethod;
@@ -158,12 +159,20 @@ public class BossComponent extends Component
 	{
 		if (FXGLMath.randomBoolean(BIG_ATTACK_CHANCE))
 		{
-			return FXGLMath.random(new BossAttack[] {
-					BossAttack.RAM,
-					BossAttack.BURST,
-					BossAttack.LASER,
-					BossAttack.ZEN
-			}).get();
+			ArrayList<BossAttack> available = new ArrayList<>();
+			available.add(BossAttack.RAM);
+			available.add(BossAttack.BURST);
+
+			HealthComponent health = entity.getComponent(HealthComponent.class);
+			if (health.getValue() < 990000)
+			{
+				available.add(BossAttack.ZEN);
+			}
+			if (health.getValue() < 970000)
+			{
+				available.add(BossAttack.LASER);
+			}
+			return FXGLMath.random(available).get();
 		}
 		else
 		{
@@ -262,7 +271,10 @@ public class BossComponent extends Component
 	/** Ends the current attack. Each attack calls this method when they are done. **/
 	public void endAttack()
 	{
-		timeUntilAttack = baseAttackInterval;
+		HealthComponent health = entity.getComponent(HealthComponent.class);
+		double healthPercent = (double)health.getValue() / 1000000;
+
+		timeUntilAttack = Utils.lerp(baseAttackInterval * 0.5, baseAttackInterval, healthPercent);
 		currentAttack = null;
 
 		_ramDirection = null;
@@ -451,7 +463,7 @@ public class BossComponent extends Component
 		{
 			_zenProj = new ArrayList<>();
 			_zenMaxBalls = FXGLMath.random(8, 14);
-			System.out.println("_zenMaxBalls = " + _zenMaxBalls);
+			// System.out.println("_zenMaxBalls = " + _zenMaxBalls);
 		}
 
 		if (_zenSpawned < _zenMaxBalls)
