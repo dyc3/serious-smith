@@ -43,6 +43,7 @@ public class GameRunner extends GameApplication
 	private static final String WINDOW_TITLE = "Serious Smith";
 	/** Version of the program. **/
 	private static final String VERSION = "0.3";
+	private static final int GRID_SIZE = 100;
 
 	/** X offset for fixed HUD elements. **/
 	private static final int UI_HUD_OFFSET_X = 50;
@@ -234,8 +235,8 @@ public class GameRunner extends GameApplication
 		getGameWorld().addEntityFactory(projectileFactory);
 
 		// set up background
-		int bgWidth = getWidth() * 1000;
-		int bgHeight = getHeight() * 1000;
+		int bgWidth = getWidth() * 5;
+		int bgHeight = getHeight() * 5;
         Rectangle bg0 = new Rectangle(-bgWidth / 2, -bgHeight / 2, bgWidth, bgHeight);
         bg0.setFill(COLOR_BG);
         bg0.setBlendMode(BlendMode.DARKEN);
@@ -340,9 +341,7 @@ public class GameRunner extends GameApplication
      * @param background Location and dimensions of the background to cover. **/
     private void drawBgGrid(EntityView bg, Rectangle background)
     {
-        int gridSize = 50;
-
-        for (double x = background.getX(); x < background.getX() + background.getWidth(); x += gridSize)
+        for (double x = background.getX(); x < background.getX() + background.getWidth(); x += GRID_SIZE)
         {
             Line line = new Line(x, background.getY(), x, background.getY() + background.getHeight());
             line.setStroke(COLOR_BG_GRID);
@@ -350,7 +349,7 @@ public class GameRunner extends GameApplication
             bg.addNode(line);
         }
 
-        for (double y = background.getY(); y < background.getY() + background.getHeight(); y += gridSize)
+        for (double y = background.getY(); y < background.getY() + background.getHeight(); y += GRID_SIZE)
         {
             Line line = new Line(background.getX(), y, background.getX() + background.getWidth(), y);
             line.setStroke(COLOR_BG_GRID);
