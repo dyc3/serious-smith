@@ -71,7 +71,7 @@ public class GameRunner extends GameApplication
 	/** Width and height of the player. **/
 	private static final int PLAYER_SIZE = 25;
 	/** Chance to spawn an experience orb when the boss is damaged. **/
-	private static final double XP_ORB_SPAWN_ON_DAMAGE_CHANCE = 0.5;
+	private static final double XP_ORB_SPAWN_ON_DAMAGE_CHANCE = 0.25;
 	/** Chance to receive some experience when the player hits the boss. **/
 	private static final double XP_ON_HIT_CHANCE = 0.4;
 

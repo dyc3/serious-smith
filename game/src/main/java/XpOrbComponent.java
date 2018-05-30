@@ -11,11 +11,11 @@ public class XpOrbComponent extends Component
 	/** Speed of experience orb movement. **/
 	private static final double XP_ORB_SPEED = 30;
 	/** Minimum amount of experience that an orb can hold. */
-	private static final int MIN_EXPERIENCE_PER_ORB = 4;
+	private static final int MIN_EXPERIENCE_PER_ORB = 6;
 	/** Maximum amount of experience that an orb can hold. */
-	private static final int MAX_EXPERIENCE_PER_ORB = 20;
+	private static final int MAX_EXPERIENCE_PER_ORB = 30;
 	/** Initial speed of ejection. **/
-	private static final double XP_ORB_EJECTION_SPEED = 7;
+	private static final double XP_ORB_EJECTION_SPEED = 8;
 	/** Ejection speed is decreased every frame by an amount multiplied by this factor. **/
 	private static final double XP_ORB_EJECTION_DECAY = 10;
 
@@ -69,6 +69,12 @@ public class XpOrbComponent extends Component
 		}
 
 		double dist = entity.getCenter().distance(player.getCenter());
+		if (dist < 25)
+		{
+			player.getComponent(PlayerComponent.class).addXP(getExperience());
+			entity.removeFromWorld();
+			return;
+		}
 		double speed = (XP_ORB_SPEED * PlayerComponent.DEFAULT_MOVE_SPEED) / (dist / 2.0);
 		entity.translateTowards(player.getCenter(), speed * tpf);
 	}
